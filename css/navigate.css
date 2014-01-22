@@ -1,0 +1,56 @@
+body {
+	margin-top: 50px; /* 50px is the height of the navbar - change this if the navbarn height changes */
+}
+
+.portfolio-item {
+	margin-bottom: 25px;
+}
+
+footer {
+	margin: 50px 0;
+}
+
+body {
+    background: #222222 url(../images/bg_tile.png);
+    color: #ddd;
+    margin-top: 22px; /* 50px is the height of the navbar - change this if the navbarn height changes */
+}
+
+body > .navbar .brand, body > .navbar .brand:hover {
+    color: #ccc;
+}
+
+body > .navbar li {
+    color: #999;
+    text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.125);
+    -webkit-transition: all .2s linear;
+    -moz-transition: all .2s linear;
+    transition: all .2s linear;
+}
+
+body > .navbar li:hover {
+    color: #ddd;
+    text-decoration: none;
+    text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.4);
+}
+
+.portfolio-item {
+    margin-bottom: 10px;
+}
+
+footer {
+    margin: 10px 0;
+}
+.modal {
+    background: #222222 url('../images/grid_tile.png');
+    color: #ddd;
+}
+
+.modal-header > .close {
+    color: #eee;
+}
+
+.modal-footer {
+    border: none;
+    background: #222 url('../images/grid_tile.png');
+}

@@ -1,0 +1,131 @@
+{% extends "layout.html" %}
+{% block content %}
+  <h2>Testing</h2>
+  <fieldset>
+            <legend>Set initial Volume(1-10)</legend>
+            <label for="volume">Volume (1-10)</label>
+            <input name="volume" min="1" max="10" type="range" step="1" value="5" onchange="updateAmplitude(this.value);"/>
+  </fieldset>
+   <fieldset>
+            <legend>Click on Play and then Select the Scenario and click "save" button to save result</legend>
+            <table>
+                 <tr>
+                     <td><button onclick="ScenarioTesting(1);">Play</button></td>
+                     <td><button onclick="ScenarioTesting(2);">Replay</button></td>
+                 </tr>
+                 <tr>
+                     <td><input type="radio" name="scenarioTest" value="1" onchange="ScenarioTesting(3);"/>Decreasing Pitch</td>
+                     <td><input type="radio" name="scenarioTest" value="3" onchange="ScenarioTesting(3);"/>Decrease Volume</td>
+                     <td><input type="radio" name="scenarioTest" value="5" onchange="ScenarioTesting(3);"/>Left to Right Speaker</td>
+                 </tr>
+                 <tr>
+                     <td><input type="radio" name="scenarioTest" value="2" onchange="ScenarioTesting(3);"/>Increase Pitch</td>
+                     <td><input type="radio" name="scenarioTest" value="4" onchange="ScenarioTesting(3);"/>Increase Volume</td>
+                     <td><input type="radio" name="scenarioTest" value="6" onchange="ScenarioTesting(3);"/>Right to Left Speaker</td>
+                 </tr>
+            </table>
+
+   </fieldset>
+  <form action="{{ url_for('testing') }}" method=post id="testForm_save">
+     <fieldset>
+        <legend>Total Scenario Played and Correct/Wrong Response</legend>
+        <table>
+        <tr><td>{{ form.hidden_tag() }}</td></tr>
+        <tr>
+            <td>{{ form.sample.label }}</td>
+            <td>{{ form.sample }}</td>
+            <td>{{ form.correct.label }}</td>
+            <td>{{ form.correct }}</td>
+            <td>{{ form.wrong.label }}</td>
+            <td>{{ form.wrong }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.save }}</td>
+        </tr>
+        </table>
+    </fieldset>
+  </form>
+  <fieldset>
+                <legend>Generate The Sample and select corresponding X,Y,Z and Click Check to Predict the Result</legend>
+                <table>
+                <tr>
+                    <td><button name="Play" onclick="generate();">Play</button></td>
+                    <td> <button name="Replay" onclick="replay();">Replay</button></td>
+                    <!--<button onclick="testing();">Check</button></td>-->
+                </tr>
+                </table>
+   </fieldset>
+  <fieldset>
+            <legend>X axis or Stereo Panning (-1-Left , 0-Both, 1-Right)</legend>
+                    <!--<input type="radio" name="X" value="-5" />-5
+                    <input type="radio" name="X" value="-4" />-4
+                    <input type="radio" name="X" value="-3" />-3
+                    <input type="radio" name="X" value="-2" />-2-->
+                    <input type="radio" name="X" value="-1" checked = "checked" />-1
+                    <input type="radio" name="X" value="0"  />0
+                    <input type="radio" name="X" value="1" />1
+                    <!--<input type="radio" name="X" value="2" />2
+                    <input type="radio" name="X" value="3" />3
+                    <input type="radio" name="X" value="4" />4
+                    <input type="radio" name="X" value="5" />5--><br>
+   </fieldset>
+  <fieldset>
+                <legend>Y axis or Pitch (1-Lowest, 11-Highest)</legend>
+                        <input type="radio" name="Y" value="1" checked = "checked" />1
+                        <input type="radio" name="Y" value="2" />2
+                        <input type="radio" name="Y" value="3" />3
+                        <input type="radio" name="Y" value="4" />4
+                        <input type="radio" name="Y" value="5" />5
+                        <input type="radio" name="Y" value="6" />6
+                        <input type="radio" name="Y" value="7" />7
+                        <input type="radio" name="Y" value="8" />8
+                        <input type="radio" name="Y" value="9" />9
+                        <input type="radio" name="Y" value="10" />10
+                        <input type="radio" name="Y" value="11" />11<br>
+    </fieldset>
+  <fieldset>
+                <legend>Z axis or Volume (1-Lowest, 11-Highest)</legend>
+                        <input type="radio" name="Z" value="1" checked = "checked" />1
+                        <input type="radio" name="Z" value="2" />2
+                        <input type="radio" name="Z" value="3" />3
+                        <input type="radio" name="Z" value="4" />4
+                        <input type="radio" name="Z" value="5" />5
+                        <input type="radio" name="Z" value="6" />6
+                        <input type="radio" name="Z" value="7" />7
+                        <input type="radio" name="Z" value="8" />8
+                        <input type="radio" name="Z" value="9" />9
+                        <input type="radio" name="Z" value="10" />10
+                        <input type="radio" name="Z" value="11" />11<br>
+    </fieldset>
+  <form action="{{ url_for('testing') }}" method=post id="testForm_check">
+
+    <fieldset>
+        <legend>Actual, Predicted Sample and Error (X:Y:Z)</legend>
+        <table>
+        <tr><td>{{ form.hidden_tag() }}</td></tr>
+
+        <tr>
+                <td>{{ form.actual.label }}</td>
+                <td>{{ form.actual }}</td>
+                <td>{{ form.predicted.label }}</td>
+                <td>{{ form.predicted }}</td>
+                <td>{{ form.error.label }}</td>
+                <td>{{ form.error }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.check (onclick="testing();") }}</td>
+        </tr>
+        </table>
+    </fieldset>
+  </form>
+{% endblock %}
+
+<!--<audio id="player" src="{{ url_for('static', filename='resource/training.wav') }}"></audio>
+  <audio id="player" src="static/resource/training.wav"></audio> this is also working>
+    <div>
+
+    <button onclick="audioControl();">Play</button>
+    <button onclick="document.getElementById('player').pause()">Pause</button>
+    <button onclick="document.getElementById('player').volume += 0.1">Vol+ </button>
+    <button onclick="document.getElementById('player').volume -= 0.1">Vol- </button>
+    </div>-->

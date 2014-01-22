@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h2>Experiment for Sound Perception</h2>
+    <h3>Please Enter Your Information<h3>
+    <form action="{{ url_for('home') }}" method=post>
+    <table>
+    <tr><td>{{ form.hidden_tag() }}</td></tr>
+    <tr>
+        <td>{{ form.firstname.label }}</td>
+        <td>{{ form.firstname }}</td>
+        <td>{% for message in form.firstname.errors %}
+            <div class="flash">{{ message }}</div>
+            {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <td>{{ form.lastname.label }}</td>
+        <td>{{ form.lastname }}</td>
+        <td>{% for message in form.lastname.errors %}
+            <div class="flash">{{ message }}</div>
+            {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <td>{{ form.gender.label }}</td>
+        <td>{{ form.gender }}</td>
+    </tr>
+    <tr>
+        <td>{{ form.age.label }} </td>
+        <td>{{ form.age }}</td>
+        <td>{% for message in form.age.errors %}
+            <div class="flash">{{ message }}</div>
+            {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <td>{{ form.blindtype.label }} </td>
+        <td>{{ form.blindtype }}</td>
+    </tr>
+    <tr>
+        <td>{{ form.email.label }} </td>
+        <td>{{ form.email }}</td>
+        <td>{% for message in form.email.errors %}
+            <div class="flash">{{ message }}</div>
+            {% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <td>{{ form.contact.label }} </td>
+        <td>{{ form.contact }}</td>
+        <td>{% for message in form.contact.errors %}
+            <div class="flash">{{ message }}</div>
+            {% endfor %}
+        </td>
+    </tr>
+    <tr><td>{{ form.submit }}</td></tr>
+    </table>
+  </form>
+{% endblock %}

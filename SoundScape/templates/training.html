@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <h2>Training</h2>
+  <p>Change the X, Y and Z axis to hear corresponding Tone</p>
+  <fieldset>
+            <legend>Set initial Volume(1-10)</legend>
+            <label for="volume">Volume (1-10)</label>
+            <input name="volume" min="1" max="10" type="range" step="1" value="5" onchange="updateAmplitude(this.value);"/>
+  </fieldset>
+  <fieldset>
+            <legend>X axis or Stereo Panning (-1-Left , 0-Both, 1-Right)</legend>
+                    <!--<input type="radio" name="X" value="-5" />-5
+                    <input type="radio" name="X" value="-4" />-4
+                    <input type="radio" name="X" value="-3" />-3
+                    <input type="radio" name="X" value="-2" />-2-->
+                    <input type="radio" name="X" value="-1" onchange="training();"/>-1
+                    <input type="radio" name="X" value="0" onchange="training();" checked = "checked" />0
+                    <input type="radio" name="X" value="1" onchange="training();"/>1
+                    <!--<input type="radio" name="X" value="2" />2
+                    <input type="radio" name="X" value="3" />3
+                    <input type="radio" name="X" value="4" />4
+                    <input type="radio" name="X" value="5" />5--><br>
+    </fieldset>
+  <fieldset>
+                <legend>Y axis or Pitch (1-Lowest, 11-Highest)</legend>
+                        <input type="radio" name="Y" value="1" onchange="training();" checked = "checked"/>1
+                        <input type="radio" name="Y" value="2" onchange="training();" />2
+                        <input type="radio" name="Y" value="3" onchange="training();" />3
+                        <input type="radio" name="Y" value="4" onchange="training();" />4
+                        <input type="radio" name="Y" value="5" onchange="training();" />5
+                        <input type="radio" name="Y" value="6" onchange="training();" />6
+                        <input type="radio" name="Y" value="7" onchange="training();" />7
+                        <input type="radio" name="Y" value="8" onchange="training();" />8
+                        <input type="radio" name="Y" value="9" onchange="training();" />9
+                        <input type="radio" name="Y" value="10" onchange="training();" />10
+                        <input type="radio" name="Y" value="11" onchange="training();" />11<br>
+    </fieldset>
+  <fieldset>
+                <legend>Z axis or Volume (1-Lowest, 11-Highest)</legend>
+                        <input type="radio" name="Z" value="1" onchange="training();" checked = "checked"/>1
+                        <input type="radio" name="Z" value="2" onchange="training();" />2
+                        <input type="radio" name="Z" value="3" onchange="training();" />3
+                        <input type="radio" name="Z" value="4" onchange="training();" />4
+                        <input type="radio" name="Z" value="5" onchange="training();" />5
+                        <input type="radio" name="Z" value="6" onchange="training();" />6
+                        <input type="radio" name="Z" value="7" onchange="training();" />7
+                        <input type="radio" name="Z" value="8" onchange="training();" />8
+                        <input type="radio" name="Z" value="9" onchange="training();" />9
+                        <input type="radio" name="Z" value="10" onchange="training();" />10
+                        <input type="radio" name="Z" value="11" onchange="training();" />11<br>
+    </fieldset>
+    <fieldset>
+                <legend>Two Continuous Tone with difference in Pitch, or Volume, or stereo</legend>
+                        <table>
+                            <tr>
+                                <td><button onclick="RandomTraining(1);">Decreasing Pitch</button></td>
+                                <td><button onclick="RandomTraining(3);">Decreasing Amplitude</button></td>
+                                <td><button onclick="RandomTraining(5);">Left to Right Speaker</button></td>
+                            </tr>
+                            <tr>
+                                <td><button onclick="RandomTraining(2);">Increasing Pitch</button></td>
+                                <td><button onclick="RandomTraining(4);">Increasing Amplitude</button></td>
+                                <td><button onclick="RandomTraining(6);">Right to Left Speaker</button></td>
+                        </table>
+    </fieldset>
+    <form action="{{ url_for('training') }}" method=post>
+    <table>
+    <tr><td>{{ form.hidden_tag() }}</td></tr>
+    <tr><td>{{ form.done }}</td></tr>
+    </table>
+  </form>
+{% endblock %}
+
+<!--<audio id="player" src="{{ url_for('static', filename='resource/training.wav') }}"></audio>
+  <audio id="player" src="static/resource/training.wav"></audio> this is also working>
+    <div>
+
+    <button onclick="audioControl();">Play</button>
+    <button onclick="document.getElementById('player').pause()">Pause</button>
+    <button onclick="document.getElementById('player').volume += 0.1">Vol+ </button>
+    <button onclick="document.getElementById('player').volume -= 0.1">Vol- </button>
+    </div>-->

@@ -231,13 +231,20 @@ function saveExperimentResults(){
   for(var i=3;i<ExperimentResults.length;i++){
     $.ajax({
       type: "POST",
-      url: "https://docs.google.com/forms/d/1HYqxuBrAA3idjzjqBLwCEGcnnL_WbOL6oCrBBvMF7sI/formResponse",
+      //url: "https://docs.google.com/forms/d/1HYqxuBrAA3idjzjqBLwCEGcnnL_WbOL6oCrBBvMF7sI/formResponse",
+      url: "https://docs.google.com/forms/d/1TwB7go7707PG1T1-gjeu5_tyxkBT2B3J-xDUzMbaXcc/formResponse",
       data: {
-        'entry.1510859924':NAME,
-        'entry.778651428':AGE,
-        'entry.986303272':PGENDER,
-        'entry.1076935975':PTYPE,
-        'entry.929436468':PMUSIC,
+          'entry.452712856':'USER_ID',
+          'entry.1217543975':'AGE',
+          'entry.1047119998':'EDUCATION',
+          'entry.1297203076':'MODE_OF_COMMUNICATION',
+          'entry.1383316539':'GENDER',
+          'entry.453829439':'PARTICIPANT_TYPE',
+          'entry.481881047':'MUSICAL_TRAINING',
+          'entry.1963578379':'MUSIC_KIND',
+          'entry.437891093':'HEARING_PROBLEM',
+          'entry.518374845':'KEYBOARD_FAMILIARITY',
+
         'entry.1891787709':ExperimentResults[i][0],
         'entry.737175385':ExperimentResults[i][1],
         'entry.340027160':ExperimentResults[i][2],

@@ -4,7 +4,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="description" content="Cognitive Science Project for Usability of Sound for Navigation">
-      <meta name="author" content="Sanchit Koustav Rishav">
+      <meta name="author" content="Sanchit Aggarwal & Koustav Ghoshal">
       <title>ViShruti</title>
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
@@ -52,10 +52,11 @@
                         <option value="UnSupervised">UnSupervised</option>
                         <option value="No_Training">No Training</option>
                         <option value="Testing">Testing</option>
-                        <option value="InCorrectVisualCue">InCorrect Visual Cue</option>
+                        <option value="Working_Memory">Working Memory</option>
+                        <!--<option value="InCorrectVisualCue">InCorrect Visual Cue</option>-->
                     </select>
                 </div>
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label class="sr-only" for="WorkingMemory">Working Memory</label>
                     <select class="form-control" id="WorkingMemory" placeholder="Working Memory" required disabled>
                         <option value="">--Working Memory--</option>
@@ -63,10 +64,10 @@
                         <option value="WM_Order_Descending">WM Order Descending</option>
                         <option value="WM_Order_Random">WM Order Random</option>
                     </select>
-                </div>
+                </div>-->
                 <div class="form-group">
                     <label class="sr-only" for="NoOfTrial">No Of Trial</label>
-                    <input type="number" class="form-control" id="NoOfTrial" placeholder="No Of Trial" min="1" required disabled>
+                    <input type="number" class="form-control" id="NoOfTrial" placeholder="Number of Trial" min="1" required disabled>
                 </div>
                 <div class="form-group">
                     <label class="sr-only" for="TestingPathLength">Testing Path Length</label>
@@ -76,18 +77,27 @@
                     <label class="sr-only" for="AccuracyThreshold">Accuracy Threshold</label>
                     <input type="number" class="form-control" id="AccuracyThreshold" placeholder="Accuracy Threshold" min="60" required disabled>
                 </div>
-                <label class="checkbox">
+                <div class="form-group">
+                    <label class="sr-only" for="InterStimulusInterval">ExperimentMode</label>
+                    <select class="form-control" id="InterStimulusInterval" placeholder="Inter-Stimulus Interval" required disabled>
+                        <option value="">--Inter-Stimulus-Interval--</option>
+                        <option value="25">25 milliseconds</option>
+                        <option value="50">50 milliseconds</option>
+                    </select>
+                </div>
+
+                <!--<label class="checkbox">
                     <input id="Reverse" type="checkbox" disabled> Reverse
-                </label>
+                </label>-->
             </form>
         </div>
 
       </div>
-      <div class="row pull-right">
-         <button id="StartExp" type="button" class="btn btn-primary" onclick="validateExperimentParams()" disabled>Start Experiment</button>
-         <button id="StopExp" type="button" class="btn btn-default" onclick="stopExperiment()" disabled>Stop Experiment</button>
-      </div>
-      <div class="row">
+       <div class="row pull-right">
+            <button id="StartExp" type="button" class="btn btn-primary" onclick="validateExperimentParams()" disabled>Start Experiment</button>
+            <button id="StopExp" type="button" class="btn btn-default" onclick="stopExperiment()" disabled>Stop Experiment</button>
+       </div>
+       <div class="row">
         <div id="MazeDiv" class="col-md-9">
             <canvas id="Maze_Canvas" width="860" height="490"></canvas>
         </div>

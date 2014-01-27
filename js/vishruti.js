@@ -1,12 +1,12 @@
 // Experiment Parameters
-var ExperimentMode,WorkingMemory,NoOfTrial,AccuracyThreshold,Reverse;
+var ExperimentMode,InterStimulusInterval,NoOfTrial,AccuracyThreshold,Reverse;
 var DisplayGrid = 0,VisualError = 0,AudioError = 0;  // Flag for Visual or Error Feedback and DisplayGrid
 var ExperimentResults = []; //To Store the Experiment Results and Export it to CSV or Spreadsheet
 var ExperimentEnd = 0;
 var WM_StepsInEachCue = [2,4,6,7,8];
 var initialNoofSteps = 10,TestingPathLength = 50;
 var VisualCue = 0;  //if 0 no visual cue, 1 - correct visual cue, 2 - incorrect visual cue
-var RandomOrder = 0,RandomorderCue = [2,2,2,2,4,4,4,4,6,6,6,6,7,7,7,7,8,8,8,8],ro_index = 0;
+var RandomOrder = 0,RandomorderCue = [2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10],ro_index = 0;
 // Participant Details
 var Form_pd,USERID,AGE,EDUCATION,MODEOFCOMM,GENDER,PARTICIPANT_TYPE,MUSICAL_TRAINING,MUSIC_KIND,HEARING_PROBLEM,KEYBOARD_FAMILIARITY;
 var ExperimentTime = 0,AvgAccuracy = 0,NTrial;
@@ -32,6 +32,7 @@ var CurrentCuePos = 0;
 var counter = 0;
 var start_x,start_y,inc_sx,inc_sy;
 var CurrentMode;
+var InterTrialInterval = 500;  //in milliseconds
 
 // Experiment List
 var ExperimentList = {'Audio_Error_FeedBack':1,
@@ -40,19 +41,21 @@ var ExperimentList = {'Audio_Error_FeedBack':1,
                       'UnSupervised':4,
                       'No_Training':5,
                       'Testing':6,
-                      'InCorrectVisualCue':7,
+                      'Working_Memory':7};
+                      /*'InCorrectVisualCue':7,
                       'WM_Order_Ascending':8,
                       'WM_Order_Descending':9,
-                      'WM_Order_Random':10};
+                      'WM_Order_Random':10};*/
 // To Validate Experiment Parameters
 function validateExperimentParams(){
   ExperimentMode = document.getElementById("ExperimentMode").value;
-  WorkingMemory = document.getElementById("WorkingMemory").value;
+  //WorkingMemory = document.getElementById("WorkingMemory").value;
   NoOfTrial = parseInt(document.getElementById("NoOfTrial").value);
   AccuracyThreshold = parseInt(document.getElementById("AccuracyThreshold").value);
   TestingPathLength = parseInt(document.getElementById("TestingPathLength").value);
-  Reverse = document.getElementById("Reverse").checked;
-  if(ExperimentMode=="" || WorkingMemory=="" || isNaN(NoOfTrial) || isNaN(AccuracyThreshold) || NoOfTrial <1 || AccuracyThreshold <60 || isNaN(TestingPathLength) || TestingPathLength <10){
+  InterStimulusInterval = parseInt(document.getElementById("InterStimulusInterval").value);
+  //Reverse = document.getElementById("Reverse").checked;
+  if(ExperimentMode=="" || isNaN(NoOfTrial) || isNaN(AccuracyThreshold) || NoOfTrial <1 || AccuracyThreshold <60 || isNaN(TestingPathLength) || TestingPathLength <10 || InterStimulusInterval==""){
     alert("Please Enter Valid Experiment Parameters");
   }
   else{
@@ -69,10 +72,11 @@ function setDisplayAndError(Key){
     case 4 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
     case 5 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
     case 6 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
-    case 7 :DisplayGrid = 1; VisualError = 0; AudioError = 0; VisualCue = 2; RandomOrder = 0; break;
-    case 8 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
+    case 7 :DisplayGrid = 0; VisualError = 0; AudioError = 0; VisualCue = 0; RandomOrder = 1; break;
+    /*case 8 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
     case 9 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; WM_StepsInEachCue.reverse(); break;
     case 10:DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 1; break;
+  */
   }
 }
 // To validate Participant Details
@@ -89,30 +93,30 @@ function participantDetails(){
     HEARING_PROBLEM = Form_pd.HEARING_PROBLEM.value;
     KEYBOARD_FAMILIARITY = Form_pd.KEYBOARD_FAMILIARITY.value;
 
-    if(USERID == "" || !isNaN(USERID) || isNaN(AGE) || AGE<1 || EDUCATION == "" || MODEOFCOMM == "" || GENDER == "" || PARTICIPANT_TYPE == "" || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || KEYBOARD_FAMILIARITY == ""){
+    if (!(USERID == "" || !isNaN(USERID) || isNaN(AGE) || AGE < 1 || EDUCATION == "" || MODEOFCOMM == "" || GENDER == "" || PARTICIPANT_TYPE == "" || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || KEYBOARD_FAMILIARITY == "")) {
+        ExperimentResults.push(['USER_ID', 'AGE', 'EDUCATION', 'MODE_OF_COMMUNICATION', 'GENDER', 'PARTICIPANT_TYPE', 'MUSICAL_TRAINING', 'MUSIC_KIND', 'HEARING_PROBLEM', 'KEYBOARD_FAMILIARITY', 'InterTrialInterval','InterStimulusInterval']);
+        ExperimentResults.push([USERID, AGE, EDUCATION, MODEOFCOMM, GENDER, PARTICIPANT_TYPE, MUSICAL_TRAINING, MUSIC_KIND, HEARING_PROBLEM, KEYBOARD_FAMILIARITY, InterTrialInterval, InterStimulusInterval]);
+        ExperimentResults.push(['Trial#', 'Direction', 'Cue Length', 'Experiment Mode', 'Accuracy Threshold', 'Total Steps', '#Hit', '#Miss', 'Accuracy', 'Recall', 'ResponseTime(in Sec)', 'Average Response Time (in Sec)', 'No of Trials', 'Input Time', 'Cue Direction Labels', 'Input Direction Labels']);
+        $('#contactModal').modal('hide');
+        if ($(".fa-user").hasClass('detailsAdded') == false) {
+            $(".fa-user").addClass('detailsAdded');
+        }
+        enableExperimentParams();
+    } else {
         alert("Please Enter Valid Participant Details");
-  }
-  else{
-    ExperimentResults.push(['USER_ID','AGE','EDUCATION','MODE_OF_COMMUNICATION','GENDER','PARTICIPANT_TYPE','MUSICAL_TRAINING','MUSIC_KIND','HEARING_PROBLEM','KEYBOARD_FAMILIARITY']);
-    ExperimentResults.push([USERID,AGE,EDUCATION,MODEOFCOMM,GENDER,PARTICIPANT_TYPE,MUSICAL_TRAINING,MUSIC_KIND,HEARING_PROBLEM,KEYBOARD_FAMILIARITY]);
-    ExperimentResults.push(['Trial#','Direction','Cue Length','Experiment Mode','Accuracy Threshold','Total Steps','#Hit','#Miss','Accuracy','Recall','ResponseTime(in Sec)','Average Response Time (in Sec)','No of Trials','Reverse','Cue Direction Labels','Input Direction Labels']);
-    $('#contactModal').modal('hide');
-    if ($(".fa-user").hasClass('detailsAdded') == false) {
-      $(".fa-user").addClass('detailsAdded');
     }
-    enableExperimentParams();
-  }
 }
 // To Enable Experiment Parameters Control
 function enableExperimentParams(){
   document.getElementById("ExperimentMode").disabled = false;
-  document.getElementById("WorkingMemory").disabled = false;
+  //document.getElementById("WorkingMemory").disabled = false;
   document.getElementById("NoOfTrial").disabled = false;
   document.getElementById("AccuracyThreshold").disabled = false;
-  document.getElementById("Reverse").disabled = false;
+  //document.getElementById("Reverse").disabled = false;
   document.getElementById("StartExp").disabled = false;
   document.getElementById("SavePD").disabled = true;
   document.getElementById("TestingPathLength").disabled = false;
+  document.getElementById("InterStimulusInterval").disabled = false;
 }
 // To Stop Experiment In Between
 function stopExperiment(){
@@ -124,7 +128,7 @@ function stopExperiment(){
     $('#StartExp').removeClass('btn-default');
     $('#StartExp').addClass('btn-primary');
     ExperimentTime = (new Date().getTime() - ExperimentTime)/1000;
-    alert("Experiment Finished !! \nThank You For Participating "+ NAME+ "\nYou Took : " + (ExperimentTime/60).toFixed(3) + " Minutes");
+    alert("Experiment Finished !! \nThank You For Participating "+ USERID+ "\nYou Took : " + (ExperimentTime/60).toFixed(3) + " Minutes");
     //saveExperimentResults
     saveExperimentResults();
     //Reload the page
@@ -147,33 +151,25 @@ function startExperiment(){
   document.getElementById("StopExp").disabled = false;
   document.getElementById("StartExp").disabled = true;
   document.getElementById("ExperimentMode").disabled = true;
-  document.getElementById("WorkingMemory").disabled = true;
+  //document.getElementById("WorkingMemory").disabled = true;
   document.getElementById("NoOfTrial").disabled = true;
   document.getElementById("AccuracyThreshold").disabled = true;
-  document.getElementById("Reverse").disabled = true;
+  //document.getElementById("Reverse").disabled = true;
   document.getElementById("TestingPathLength").disabled = true;
+  document.getElementById("InterStimulusInterval").disabled = true;
   $('#StartExp').removeClass('btn-primary');
   $('#StartExp').addClass('btn-default');
   $('#StopExp').removeClass('btn-default');
   $('#StopExp').addClass('btn-primary');
   alert("Experiment Is Going to start, Get Ready with Controls");
   ExperimentTime = new Date().getTime();
-  if(Reverse){
-    //Run working memory first  and then testing only
-    var Key = ExperimentList[WorkingMemory];
+  //Run training,testing
+  ExperimentModeTest();
+  var Key = ExperimentList[WorkingMemory];
     setDisplayAndError(Key);
     workingMemoryTest(4);
     workingMemoryTest(8);
-    ExperimentModeTest();
-  }
-  else{
-    //Run training,testing and then working memory at last
-    ExperimentModeTest();
-    var Key = ExperimentList[WorkingMemory];
-    setDisplayAndError(Key);
-    workingMemoryTest(4);
-    workingMemoryTest(8);
-  }
+  //}
   checkFunctionQueue = setInterval(function(){callNextFunction()},5000);
   FQCounter = FunctionQueue.length;
 }

@@ -46,6 +46,46 @@ var ExperimentList = {'Audio_Error_FeedBack':1,
                       'WM_Order_Ascending':8,
                       'WM_Order_Descending':9,
                       'WM_Order_Random':10};*/
+
+// To validate Participant Details
+function participantDetails(){
+    Form_pd = document.ParticipantDetail;
+    USERID = Form_pd.USERID.value;
+    AGE = Form_pd.AGE.value;
+    EDUCATION = Form_pd.EDUCATION.value;
+    MODEOFCOMM = Form_pd.MODEOFCOMM.value;
+    GENDER = Form_pd.GENDER.value;
+    PARTICIPANT_TYPE = Form_pd.PARTICIPANT_TYPE.value;
+    MUSICAL_TRAINING = Form_pd.MUSICAL_TRAINING.value;
+    MUSIC_KIND = Form_pd.MUSIC_KIND.value;
+    HEARING_PROBLEM = Form_pd.HEARING_PROBLEM.value;
+    KEYBOARD_FAMILIARITY = Form_pd.KEYBOARD_FAMILIARITY.value;
+
+    if (!(USERID == "" || isNaN(AGE) || AGE < 1 || EDUCATION == "" || MODEOFCOMM == "" || GENDER == "" || PARTICIPANT_TYPE == "" || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || KEYBOARD_FAMILIARITY == "")) {
+        ExperimentResults.push(['USER_ID', 'AGE', 'EDUCATION', 'MODE_OF_COMMUNICATION', 'GENDER', 'PARTICIPANT_TYPE', 'MUSICAL_TRAINING', 'MUSIC_KIND', 'HEARING_PROBLEM', 'KEYBOARD_FAMILIARITY', 'InterTrialInterval','InterStimulusInterval']);
+        ExperimentResults.push([USERID, AGE, EDUCATION, MODEOFCOMM, GENDER, PARTICIPANT_TYPE, MUSICAL_TRAINING, MUSIC_KIND, HEARING_PROBLEM, KEYBOARD_FAMILIARITY, InterTrialInterval, InterStimulusInterval]);
+        ExperimentResults.push(['Trial#', 'Direction', 'Cue Length', 'Experiment Mode', 'Accuracy Threshold', 'Total Steps', '#Hit', '#Miss', 'Accuracy', 'Recall', 'ResponseTime(in Sec)', 'Average Response Time (in Sec)', 'No of Trials', 'Input Time', 'Cue Direction Labels', 'Input Direction Labels']);
+        $('#contactModal').modal('hide');
+        if ($(".fa-user").hasClass('detailsAdded') == false) {
+            $(".fa-user").addClass('detailsAdded');
+        }
+        enableExperimentParams();
+    } else {
+        alert("Please Enter Valid Participant Details");
+    }
+}
+// To Enable Experiment Parameters Control
+function enableExperimentParams(){
+    document.getElementById("ExperimentMode").disabled = false;
+    //document.getElementById("WorkingMemory").disabled = false;
+    document.getElementById("NoOfTrial").disabled = false;
+    document.getElementById("AccuracyThreshold").disabled = false;
+    //document.getElementById("Reverse").disabled = false;
+    document.getElementById("StartExp").disabled = false;
+    document.getElementById("SavePD").disabled = true;
+    document.getElementById("TestingPathLength").disabled = false;
+    document.getElementById("InterStimulusInterval").disabled = false;
+}
 // To Validate Experiment Parameters
 function validateExperimentParams(){
   ExperimentMode = document.getElementById("ExperimentMode").value;
@@ -63,6 +103,34 @@ function validateExperimentParams(){
     startExperiment();
   }
 }
+// To start experiment and set the initial parameters
+function startExperiment(){
+    document.getElementById("StopExp").disabled = false;
+    document.getElementById("StartExp").disabled = true;
+    document.getElementById("ExperimentMode").disabled = true;
+    //document.getElementById("WorkingMemory").disabled = true;
+    document.getElementById("NoOfTrial").disabled = true;
+    document.getElementById("AccuracyThreshold").disabled = true;
+    //document.getElementById("Reverse").disabled = true;
+    document.getElementById("TestingPathLength").disabled = true;
+    document.getElementById("InterStimulusInterval").disabled = true;
+    $('#StartExp').removeClass('btn-primary');
+    $('#StartExp').addClass('btn-default');
+    $('#StopExp').removeClass('btn-default');
+    $('#StopExp').addClass('btn-primary');
+    alert("Experiment Is Going to start in , Get Ready with Controls");
+
+    ExperimentTime = new Date().getTime();
+    //Run training,testing
+    ExperimentModeTest();
+    var Key = ExperimentList[WorkingMemory];
+    setDisplayAndError(Key);
+    workingMemoryTest(4);
+    workingMemoryTest(8);
+    //}
+    checkFunctionQueue = setInterval(function(){callNextFunction()},5000);
+    FQCounter = FunctionQueue.length;
+}
 // To Set Display and Error
 function setDisplayAndError(Key){
   switch(Key){
@@ -79,45 +147,7 @@ function setDisplayAndError(Key){
   */
   }
 }
-// To validate Participant Details
-function participantDetails(){
-    Form_pd = document.ParticipantDetail;
-    USERID = Form_pd.USERID.value;
-    AGE = Form_pd.AGE.value;
-    EDUCATION = Form_pd.EDUCATION.value;
-    MODEOFCOMM = Form_pd.MODEOFCOMM.value;
-    GENDER = Form_pd.GENDER.value;
-    PARTICIPANT_TYPE = Form_pd.PARTICIPANT_TYPE.value;
-    MUSICAL_TRAINING = Form_pd.MUSICAL_TRAINING.value;
-    MUSIC_KIND = Form_pd.MUSIC_KIND.value;
-    HEARING_PROBLEM = Form_pd.HEARING_PROBLEM.value;
-    KEYBOARD_FAMILIARITY = Form_pd.KEYBOARD_FAMILIARITY.value;
 
-    if (!(USERID == "" || !isNaN(USERID) || isNaN(AGE) || AGE < 1 || EDUCATION == "" || MODEOFCOMM == "" || GENDER == "" || PARTICIPANT_TYPE == "" || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || KEYBOARD_FAMILIARITY == "")) {
-        ExperimentResults.push(['USER_ID', 'AGE', 'EDUCATION', 'MODE_OF_COMMUNICATION', 'GENDER', 'PARTICIPANT_TYPE', 'MUSICAL_TRAINING', 'MUSIC_KIND', 'HEARING_PROBLEM', 'KEYBOARD_FAMILIARITY', 'InterTrialInterval','InterStimulusInterval']);
-        ExperimentResults.push([USERID, AGE, EDUCATION, MODEOFCOMM, GENDER, PARTICIPANT_TYPE, MUSICAL_TRAINING, MUSIC_KIND, HEARING_PROBLEM, KEYBOARD_FAMILIARITY, InterTrialInterval, InterStimulusInterval]);
-        ExperimentResults.push(['Trial#', 'Direction', 'Cue Length', 'Experiment Mode', 'Accuracy Threshold', 'Total Steps', '#Hit', '#Miss', 'Accuracy', 'Recall', 'ResponseTime(in Sec)', 'Average Response Time (in Sec)', 'No of Trials', 'Input Time', 'Cue Direction Labels', 'Input Direction Labels']);
-        $('#contactModal').modal('hide');
-        if ($(".fa-user").hasClass('detailsAdded') == false) {
-            $(".fa-user").addClass('detailsAdded');
-        }
-        enableExperimentParams();
-    } else {
-        alert("Please Enter Valid Participant Details");
-    }
-}
-// To Enable Experiment Parameters Control
-function enableExperimentParams(){
-  document.getElementById("ExperimentMode").disabled = false;
-  //document.getElementById("WorkingMemory").disabled = false;
-  document.getElementById("NoOfTrial").disabled = false;
-  document.getElementById("AccuracyThreshold").disabled = false;
-  //document.getElementById("Reverse").disabled = false;
-  document.getElementById("StartExp").disabled = false;
-  document.getElementById("SavePD").disabled = true;
-  document.getElementById("TestingPathLength").disabled = false;
-  document.getElementById("InterStimulusInterval").disabled = false;
-}
 // To Stop Experiment In Between
 function stopExperiment(){
   if(ExperimentEnd){
@@ -146,33 +176,7 @@ function stopExperiment(){
     }
   }
 }
-// To start experiment and set the initial parameters
-function startExperiment(){
-  document.getElementById("StopExp").disabled = false;
-  document.getElementById("StartExp").disabled = true;
-  document.getElementById("ExperimentMode").disabled = true;
-  //document.getElementById("WorkingMemory").disabled = true;
-  document.getElementById("NoOfTrial").disabled = true;
-  document.getElementById("AccuracyThreshold").disabled = true;
-  //document.getElementById("Reverse").disabled = true;
-  document.getElementById("TestingPathLength").disabled = true;
-  document.getElementById("InterStimulusInterval").disabled = true;
-  $('#StartExp').removeClass('btn-primary');
-  $('#StartExp').addClass('btn-default');
-  $('#StopExp').removeClass('btn-default');
-  $('#StopExp').addClass('btn-primary');
-  alert("Experiment Is Going to start, Get Ready with Controls");
-  ExperimentTime = new Date().getTime();
-  //Run training,testing
-  ExperimentModeTest();
-  var Key = ExperimentList[WorkingMemory];
-    setDisplayAndError(Key);
-    workingMemoryTest(4);
-    workingMemoryTest(8);
-  //}
-  checkFunctionQueue = setInterval(function(){callNextFunction()},5000);
-  FQCounter = FunctionQueue.length;
-}
+
 // To run the selected mode
 function runMode(CueLength,PathLength,Direction,Trial,Mode){
   var i = 1;

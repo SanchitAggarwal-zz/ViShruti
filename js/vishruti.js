@@ -123,7 +123,7 @@ function startExperiment(){
     ExperimentTime = new Date().getTime();
     //Run training,testing
     ExperimentModeTest();
-    var Key = ExperimentList[WorkingMemory];
+    var Key = ExperimentList[ExperimentMode];
     setDisplayAndError(Key);
     workingMemoryTest(4);
     workingMemoryTest(8);
@@ -278,13 +278,11 @@ function saveExperimentResults(){
   savecsv.click();
   alert("Results saved Successfully");
 }
-
 var addToFunctionQueue =  function(fn, context, params) {
   return function() {
     fn.apply(context, params);
   };
 }
-
 function callNextFunction() {
   if(FQCounter<0){
     ExperimentEnd = 1;
@@ -303,7 +301,6 @@ function callNextFunction() {
       (FunctionQueue.shift())();}
   }
 }
-
 function onUserInput() {
   var waitTime = new Date().getTime();
   //var key_press = String.fromCharCode(event.keyCode);
@@ -401,9 +398,7 @@ function onUserInput() {
     }
 
 }
-
 document.onkeyup = onUserInput;
-
 function run_trial(TrialNo,CueLength,PathLength,Dir,Mode,Trial){
   if(Dir != Direction || Mode != CurrentMode){
     alert(Mode + " : " + Dir + " Direction are Used");

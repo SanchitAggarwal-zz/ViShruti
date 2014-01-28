@@ -6,7 +6,7 @@ var ExperimentEnd = 0;
 var WM_StepsInEachCue = [2,4,6,7,8];
 var initialNoofSteps = 10,TestingPathLength = 50;
 var VisualCue = 0;  //if 0 no visual cue, 1 - correct visual cue, 2 - incorrect visual cue
-var RandomOrder = 0,RandomorderCue = [2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10],ro_index = 0;
+var RandomOrder = 0,RandomorderCue = [2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8],ro_index = 0;
 // Participant Details
 var Form_pd,USERID,AGE,EDUCATION,MODEOFCOMM,GENDER,PARTICIPANT_TYPE,MUSICAL_TRAINING,MUSIC_KIND,HEARING_PROBLEM,KEYBOARD_FAMILIARITY;
 var ExperimentTime = 0,AvgAccuracy = 0,NTrial;
@@ -215,11 +215,12 @@ function ExperimentModeTest(){
       }
     }
     else if(Key == 7){
+        ExperimentEnd = 1;
         if(RandomOrder){
             for(var dir = 4;dir<=8;dir=dir+4){
-                runMode(0,216,dir,1,ExperimentMode);
-                runMode(0,216,dir,1,ExperimentMode);
-                runMode(0,216,dir,1,ExperimentMode);
+                runMode(0,105,dir,1,ExperimentMode);
+                runMode(0,105,dir,1,ExperimentMode);
+                runMode(0,105,dir,1,ExperimentMode);
             }
         }
     }
@@ -241,16 +242,16 @@ function saveExperimentResults(){
       //url: "https://docs.google.com/forms/d/1HYqxuBrAA3idjzjqBLwCEGcnnL_WbOL6oCrBBvMF7sI/formResponse",
       url: "https://docs.google.com/forms/d/1TwB7go7707PG1T1-gjeu5_tyxkBT2B3J-xDUzMbaXcc/formResponse",
       data: {
-          'entry.452712856' :'USERID',
-          'entry.1217543975':'AGE',
-          'entry.1047119998':'EDUCATION',
-          'entry.1297203076':'MODEOFCOMM',
-          'entry.1383316539':'GENDER',
-          'entry.453829439' :'PARTICIPANT_TYPE',
-          'entry.481881047' :'MUSICAL_TRAINING',
-          'entry.1963578379' :'MUSIC_KIND',
-          'entry.437891093' :'HEARING_PROBLEM',
-          'entry.518374845' :'KEYBOARD_FAMILIARITY',
+          'entry.452712856' :USERID,
+          'entry.1217543975':AGE,
+          'entry.1047119998':EDUCATION,
+          'entry.1297203076':MODEOFCOMM,
+          'entry.1383316539':GENDER,
+          'entry.453829439' :PARTICIPANT_TYPE,
+          'entry.481881047' :MUSICAL_TRAINING,
+          'entry.1963578379':MUSIC_KIND,
+          'entry.437891093' :HEARING_PROBLEM,
+          'entry.518374845' :KEYBOARD_FAMILIARITY,
           'entry.281696488' :ExperimentResults[i][0], //Trial#
           'entry.501651834' :ExperimentResults[i][1], //Direction
           'entry.486615617' :ExperimentResults[i][2], //Cue Length
@@ -372,7 +373,7 @@ function onUserInput() {
         var canvas = document.getElementById('Maze_Canvas');
         var savecanvas = document.createElement('a');
         savecanvas.href = canvas.toDataURL('image/png').replace('image/png');
-        savecanvas.download= NAME + "_" + CurrentMode + "_Dir_" + Direction + "_Trial_" + CurrentTrialNo +"_PL_" + TotalSteps + "_FI_" + FileIndex + ".png";
+        savecanvas.download= USERID + "_" + CurrentMode + "_Dir_" + Direction + "_Trial_" + CurrentTrialNo +"_PL_" + TotalSteps + "_FI_" + FileIndex + ".png";
         document.body.appendChild(savecanvas);
         savecanvas.click();
 

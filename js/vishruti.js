@@ -118,16 +118,9 @@ function startExperiment(){
     $('#StartExp').addClass('btn-default');
     $('#StopExp').removeClass('btn-default');
     $('#StopExp').addClass('btn-primary');
-    alert("Experiment Is Going to start in , Get Ready with Controls");
+    alert("Experiment Is Going to start in 5 sec , Get Ready with Controls");
 
     ExperimentTime = new Date().getTime();
-    //Run training,testing
-    ExperimentModeTest();
-    var Key = ExperimentList[ExperimentMode];
-    setDisplayAndError(Key);
-    workingMemoryTest(4);
-    workingMemoryTest(8);
-    //}
     checkFunctionQueue = setInterval(function(){callNextFunction()},5000);
     FQCounter = FunctionQueue.length;
 }
@@ -186,21 +179,21 @@ function runMode(CueLength,PathLength,Direction,Trial,Mode){
     i++;
   }
 }
-// configure runmode for working memory
+/*// configure runmode for working memory
 function workingMemoryTest(Direction){
   if(RandomOrder){
-    runMode(0,108,Direction,1,WorkingMemory);
-    runMode(0,108,Direction,1,WorkingMemory);
-    runMode(0,108,Direction,1,WorkingMemory);
+    runMode(0,176,Direction,1,ExperimentMode);
+    runMode(0,176,Direction,1,ExperimentMode);
+    runMode(0,176,Direction,1,ExperimentMode);
   }
   else{
     for(var i = 0;i<WM_StepsInEachCue.length;i++){
       var CueLength =  WM_StepsInEachCue[i];
       var PathLength = CueLength * initialNoofSteps;
-      runMode(CueLength,PathLength,Direction,1,WorkingMemory);
+      runMode(CueLength,PathLength,Direction,1,ExperimentMode);
     }
   }
-}
+}*/
 
 function ExperimentModeTest(){
   do{
@@ -215,6 +208,15 @@ function ExperimentModeTest(){
         runMode(1,TestingPathLength,dir,1,ExperimentMode);
         runMode(1,TestingPathLength,dir,1,ExperimentMode);
       }
+    }
+    else if(Key == 7){
+        if(RandomOrder){
+            for(var dir = 4;dir<=8;dir=dir+4){
+                runMode(0,176,dir,1,ExperimentMode);
+                runMode(0,176,dir,1,ExperimentMode);
+                runMode(0,176,dir,1,ExperimentMode);
+            }
+        }
     }
     else {
       for(var dir = 4;dir<=8;dir=dir+4){

@@ -138,7 +138,7 @@ function setDisplayAndError(Key){
     case 4 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
     case 5 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
     case 6 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
-    case 7 :DisplayGrid = 0; VisualError = 0; AudioError = 0; VisualCue = 0; RandomOrder = 1; break;
+    case 7 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 1; break;
     /*case 8 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
     case 9 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; WM_StepsInEachCue.reverse(); break;
     case 10:DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 1; break;
@@ -812,11 +812,12 @@ function playError(){
   audio.play();
 }
 function AddSilence(){
-  Sounds.push(silencefile);
+  //Sounds.push(silencefile);
+  Sounds.push("silent.wav");
 }
 function AddCueWave(x,y,z){
   var data = new Array();
-  var seconds = 0.25; //x==0?1:0.5;
+  var seconds = 0.5; //x==0?1:0.5;
   var frequencyHz = pitch[y+1];
   var amplitude = volume*z;
     //amplitude = x==0?0.25*amplitude:amplitude;

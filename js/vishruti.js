@@ -806,14 +806,14 @@ function NextCue(){
   CurrentCuePos = CurrentCuePos + Level;
 }
 function playError(){
-  //var audio = new Audio("1.wav");
-  var audio = new Audio("error500ms.mp3");
+  var audio = new Audio("1.wav");
+  //var audio = new Audio("error500ms.mp3");
   audio.load();
   audio.play();
 }
 function AddSilence(){
-  Sounds.push(silencefile);
-  //Sounds.push("silent.wav");
+  //Sounds.push(silencefile);
+  Sounds.push("silent.wav");
 }
 function AddCueWave(x,y,z){
   var data = new Array();

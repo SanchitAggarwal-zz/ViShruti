@@ -33,7 +33,7 @@ var CurrentCuePos = 0;
 var counter = 0;
 var start_x,start_y,inc_sx,inc_sy;
 var CurrentMode;
-var InterTrialInterval = 500;  //in milliseconds
+var InterTrialInterval = '500';  //in milliseconds
 var silencefile;
 
 // Experiment List
@@ -101,8 +101,8 @@ function validateExperimentParams(){
     alert("Please Enter Valid Experiment Parameters");
   }
   else{
-    var str1 = "silence ";
-    silencefile = str1.concat('silence',InterStimulusInterval,'.mp3');
+    var str1 = "silence";
+    silencefile = str1.concat(InterStimulusInterval,'.mp3');
     //call start experiment
     startExperiment();
   }
@@ -353,12 +353,17 @@ function onUserInput() {
        ResponseTime = ResponseTime + IntervalTime;
        IntervalTime = 0;
        count=0;
+       // inter-trial time between two sound patterns in working memory experiment
+       var str1 = "silence";
+       silencefile = str1.concat(InterTrialInterval,'.mp3');
+       AddSilence();
+       // play next audio sequence
        NextCue();
        playSounds();
        CueTime =  new Date().getTime();
     }
     if(next == TotalSteps){
-       alert("Get Ready For Next Trial in ");
+       alert("Get Ready For Next Trial");
        console.log("Next:"+next+"TotalSteps:"+TotalSteps);
     }
     next++;
@@ -395,6 +400,15 @@ function onUserInput() {
                 i++;
             }
         }
+        else{
+            if(CurrentTrialNo==NTrial){
+                ExperimentEnd = 1;
+                // clear the polling variable
+                alert('Average Accuracy '+ AvgAccuracy +' less than Accuracy Threshold '+ AccuracyThreshold +' After '+NTrial + ' Trials.Terminating Experiment');
+                clearInterval(checkFunctionQueue);
+                stopExperiment();
+            }
+        }
 
         next = 0;
         Hit = 0;
@@ -402,7 +416,6 @@ function onUserInput() {
         ResponseTime = 0;
         CurrentCuePos = 0;
         count=0;Recall=0;
-
         PopNextFunction = 1;
     }
 
@@ -765,6 +778,8 @@ function drawMetrics(){
   context.fillText(text, text_width, 105);
 }
 function NextCue(){
+  var str1 = "silence";
+  silencefile = str1.concat(InterStimulusInterval,'.mp3');
   if(RandomOrder){
     Level = RandomorderCue[ro_index++];
   }
@@ -812,8 +827,8 @@ function playError(){
   audio.play();
 }
 function AddSilence(){
-  //Sounds.push(silencefile);
-  Sounds.push("silent.wav");
+  Sounds.push(silencefile);
+  //Sounds.push("silent.wav");
 }
 function AddCueWave(x,y,z){
   var data = new Array();

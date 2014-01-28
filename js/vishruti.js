@@ -26,6 +26,7 @@ var expectedDirection = [13,23,33,12,22,32,11,21,31];
 var DirectionLabels = ['NW',' N','NE',' W',' C',' E','SW',' S','SE'];
 var CueLabels = [];
 var InputLabels = [];
+var InputTime = [];
 var CurrentTrialNo;
 var Sounds = [];
 var CurrentCuePos = 0;
@@ -33,6 +34,7 @@ var counter = 0;
 var start_x,start_y,inc_sx,inc_sy;
 var CurrentMode;
 var InterTrialInterval = 500;  //in milliseconds
+var silencefile;
 
 // Experiment List
 var ExperimentList = {'Audio_Error_FeedBack':1,
@@ -64,7 +66,7 @@ function participantDetails(){
     if (!(USERID == "" || isNaN(AGE) || AGE < 1 || EDUCATION == "" || MODEOFCOMM == "" || GENDER == "" || PARTICIPANT_TYPE == "" || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || KEYBOARD_FAMILIARITY == "")) {
         ExperimentResults.push(['USER_ID', 'AGE', 'EDUCATION', 'MODE_OF_COMMUNICATION', 'GENDER', 'PARTICIPANT_TYPE', 'MUSICAL_TRAINING', 'MUSIC_KIND', 'HEARING_PROBLEM', 'KEYBOARD_FAMILIARITY', 'InterTrialInterval','InterStimulusInterval']);
         ExperimentResults.push([USERID, AGE, EDUCATION, MODEOFCOMM, GENDER, PARTICIPANT_TYPE, MUSICAL_TRAINING, MUSIC_KIND, HEARING_PROBLEM, KEYBOARD_FAMILIARITY, InterTrialInterval, InterStimulusInterval]);
-        ExperimentResults.push(['Trial#', 'Direction', 'Cue Length', 'Experiment Mode', 'Accuracy Threshold', 'Total Steps', '#Hit', '#Miss', 'Accuracy', 'Recall', 'ResponseTime(in Sec)', 'Average Response Time (in Sec)', 'No of Trials', 'Input Time', 'Cue Direction Labels', 'Input Direction Labels']);
+        ExperimentResults.push(['Trial#', 'Direction', 'Cue Length', 'Experiment Mode', 'Accuracy Threshold', 'Total Steps', '#Hit', '#Miss', 'Accuracy', 'Recall', 'ResponseTime(in Sec)', 'Average Response Time (in Sec)', 'No of Trials', 'Input Time per response', 'Cue Direction Labels', 'Input Direction Labels','InterStimulusInterval']);
         $('#contactModal').modal('hide');
         if ($(".fa-user").hasClass('detailsAdded') == false) {
             $(".fa-user").addClass('detailsAdded');
@@ -93,12 +95,14 @@ function validateExperimentParams(){
   NoOfTrial = parseInt(document.getElementById("NoOfTrial").value);
   AccuracyThreshold = parseInt(document.getElementById("AccuracyThreshold").value);
   TestingPathLength = parseInt(document.getElementById("TestingPathLength").value);
-  InterStimulusInterval = parseInt(document.getElementById("InterStimulusInterval").value);
+  InterStimulusInterval = document.getElementById("InterStimulusInterval").value;
   //Reverse = document.getElementById("Reverse").checked;
   if(ExperimentMode=="" || isNaN(NoOfTrial) || isNaN(AccuracyThreshold) || NoOfTrial <1 || AccuracyThreshold <60 || isNaN(TestingPathLength) || TestingPathLength <10 || InterStimulusInterval==""){
     alert("Please Enter Valid Experiment Parameters");
   }
   else{
+    var str1 = "silence ";
+    silencefile = str1.concat('silence',InterStimulusInterval,'.mp3');
     //call start experiment
     startExperiment();
   }
@@ -121,6 +125,7 @@ function startExperiment(){
     alert("Experiment Is Going to start in 5 sec , Get Ready with Controls");
 
     ExperimentTime = new Date().getTime();
+    ExperimentModeTest();
     checkFunctionQueue = setInterval(function(){callNextFunction()},5000);
     FQCounter = FunctionQueue.length;
 }
@@ -212,9 +217,9 @@ function ExperimentModeTest(){
     else if(Key == 7){
         if(RandomOrder){
             for(var dir = 4;dir<=8;dir=dir+4){
-                runMode(0,176,dir,1,ExperimentMode);
-                runMode(0,176,dir,1,ExperimentMode);
-                runMode(0,176,dir,1,ExperimentMode);
+                runMode(0,216,dir,1,ExperimentMode);
+                runMode(0,216,dir,1,ExperimentMode);
+                runMode(0,216,dir,1,ExperimentMode);
             }
         }
     }
@@ -236,33 +241,33 @@ function saveExperimentResults(){
       //url: "https://docs.google.com/forms/d/1HYqxuBrAA3idjzjqBLwCEGcnnL_WbOL6oCrBBvMF7sI/formResponse",
       url: "https://docs.google.com/forms/d/1TwB7go7707PG1T1-gjeu5_tyxkBT2B3J-xDUzMbaXcc/formResponse",
       data: {
-          'entry.452712856':'USER_ID',
+          'entry.452712856' :'USERID',
           'entry.1217543975':'AGE',
           'entry.1047119998':'EDUCATION',
-          'entry.1297203076':'MODE_OF_COMMUNICATION',
+          'entry.1297203076':'MODEOFCOMM',
           'entry.1383316539':'GENDER',
-          'entry.453829439':'PARTICIPANT_TYPE',
-          'entry.481881047':'MUSICAL_TRAINING',
-          'entry.1963578379':'MUSIC_KIND',
-          'entry.437891093':'HEARING_PROBLEM',
-          'entry.518374845':'KEYBOARD_FAMILIARITY',
-
-        'entry.1891787709':ExperimentResults[i][0],
-        'entry.737175385':ExperimentResults[i][1],
-        'entry.340027160':ExperimentResults[i][2],
-        'entry.683725841':ExperimentResults[i][3],
-        'entry.2045031371':ExperimentResults[i][4],
-        'entry.652331003':ExperimentResults[i][5],
-        'entry.602285332':ExperimentResults[i][6],
-        'entry.1475633329':ExperimentResults[i][7],
-        'entry.576205458':ExperimentResults[i][8],
-        'entry.1073508233':ExperimentResults[i][9],
-        'entry.2128413320':ExperimentResults[i][10],
-        'entry.1591415018':ExperimentResults[i][11],
-        'entry.1242321072':ExperimentResults[i][12],
-        'entry.573480899':ExperimentResults[i][13],
-        'entry.1254272312':ExperimentResults[i][14],
-        'entry.256825709':ExperimentResults[i][15]
+          'entry.453829439' :'PARTICIPANT_TYPE',
+          'entry.481881047' :'MUSICAL_TRAINING',
+          'entry.1963578379' :'MUSIC_KIND',
+          'entry.437891093' :'HEARING_PROBLEM',
+          'entry.518374845' :'KEYBOARD_FAMILIARITY',
+          'entry.281696488' :ExperimentResults[i][0], //Trial#
+          'entry.501651834' :ExperimentResults[i][1], //Direction
+          'entry.486615617' :ExperimentResults[i][2], //Cue Length
+          'entry.56018046'  :ExperimentResults[i][3], //Experiment Mode
+          'entry.1372960057':ExperimentResults[i][4], //Accuracy Threshold
+          'entry.561470756' :ExperimentResults[i][5], //Total Steps
+          'entry.1450128684':ExperimentResults[i][6], //#Hit
+          'entry.631366225' :ExperimentResults[i][7], //#Hit
+          'entry.740927359' :ExperimentResults[i][8], //Accuracy
+          'entry.481811278' :ExperimentResults[i][9], //Recall
+          'entry.1724321037':ExperimentResults[i][10],//ResponseTime(in Sec)
+          'entry.1184871699':ExperimentResults[i][11],//Average Response Time (in Sec)
+          'entry.1943108855':ExperimentResults[i][12],//No of Trials
+          'entry.239911530' :ExperimentResults[i][13],//Input Time per response
+          'entry.786668683' :ExperimentResults[i][14],//Cue Direction Labels
+          'entry.2065638177':ExperimentResults[i][15],//Input Direction Labels
+          'entry.1313234140':ExperimentResults[i][16]//InterStimulusInterval
       }
     });
   }
@@ -275,7 +280,7 @@ function saveExperimentResults(){
   var savecsv         = document.createElement('a');
   savecsv.href        = 'data:attachment/csv,' + csvString;
   savecsv.target      = '_blank';
-  savecsv.download    = NAME +'.csv';
+  savecsv.download    = USERID +'.csv';
   document.body.appendChild(savecsv);
   savecsv.click();
   alert("Results saved Successfully");
@@ -343,6 +348,7 @@ function onUserInput() {
     drawControls(key_index_a>key_index_b?key_index_a:key_index_b);
     if(next==CurrentCuePos && CurrentCuePos<TotalSteps){
        //alert(CurrentCuePos);
+       InputTime.push(IntervalTime);
        ResponseTime = ResponseTime + IntervalTime;
        IntervalTime = 0;
        count=0;
@@ -351,7 +357,7 @@ function onUserInput() {
        CueTime =  new Date().getTime();
     }
     if(next == TotalSteps){
-       alert("Get Ready For Next Trial");
+       alert("Get Ready For Next Trial in ");
        console.log("Next:"+next+"TotalSteps:"+TotalSteps);
     }
     next++;
@@ -373,7 +379,7 @@ function onUserInput() {
         if(RandomOrder){
             Level = RandomorderCue.toString();
         }
-        ExperimentResults.push([CurrentTrialNo,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(Hit+Miss),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfTrial,Reverse,CueLabels.toString(),InputLabels.toString()]);
+        ExperimentResults.push([CurrentTrialNo,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(Hit+Miss),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfTrial,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval]);
         AvgAccuracy = ((CurrentTrialNo - 1)*AvgAccuracy + (100*Hit/(Hit+Miss)))/CurrentTrialNo;
         console.log(AvgAccuracy);
 
@@ -426,6 +432,7 @@ function run_trial(TrialNo,CueLength,PathLength,Dir,Mode,Trial){
   }
   CueLabels = [];
   InputLabels = [];
+  InputTime = [];
   generateMaze();
   NextCue();
   playSounds();
@@ -798,16 +805,17 @@ function NextCue(){
   CurrentCuePos = CurrentCuePos + Level;
 }
 function playError(){
-  var audio = new Audio("1.wav");
+  //var audio = new Audio("1.wav");
+  var audio = new Audio("error500ms.mp3");
   audio.load();
   audio.play();
 }
 function AddSilence(){
-  Sounds.push("silent.wav");
+  Sounds.push(silencefile);
 }
 function AddCueWave(x,y,z){
   var data = new Array();
-  var seconds = 0.5; //x==0?1:0.5;
+  var seconds = 0.25; //x==0?1:0.5;
   var frequencyHz = pitch[y+1];
   var amplitude = volume*z;
     //amplitude = x==0?0.25*amplitude:amplitude;

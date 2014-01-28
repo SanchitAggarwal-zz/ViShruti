@@ -812,8 +812,8 @@ function playError(){
   audio.play();
 }
 function AddSilence(){
-  //Sounds.push(silencefile);
-  Sounds.push("silent.wav");
+  Sounds.push(silencefile);
+  //Sounds.push("silent.wav");
 }
 function AddCueWave(x,y,z){
   var data = new Array();

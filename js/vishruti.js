@@ -20,10 +20,10 @@ var volume = 50; //amplitude of sine wave
 var next = 0;  // For Next move
 var ResponseTime = 0, CueTime = 0,IntervalTime = 0;
 var Hit = 0,Miss = 0,Recall = 0,count=0;
-var inputDirection_a = [36,38,33,37,12,39,35,40,34];
-var inputDirection_b = [103,104,105,100,101,102,97,98,99];
+var inputDirection_a = [36,38,33,37,12,39,35,40,34,32];   //added 32 for spacebar
+var inputDirection_b = [103,104,105,100,101,102,97,98,99,32]; //added 32 for spacebar
 var expectedDirection = [13,23,33,12,22,32,11,21,31];
-var DirectionLabels = ['NW',' N','NE',' W',' C',' E','SW',' S','SE'];
+var DirectionLabels = ['NW',' N','NE',' W',' C',' E','SW',' S','SE','Space'];
 var CueLabels = [];
 var InputLabels = [];
 var InputTime = [];
@@ -35,6 +35,7 @@ var start_x,start_y,inc_sx,inc_sy;
 var CurrentMode;
 var InterTrialInterval = '500';  //in milliseconds
 var silencefile;
+var spacebar = false;
 
 // Experiment List
 var ExperimentList = {'Audio_Error_FeedBack':1,
@@ -313,6 +314,16 @@ function onUserInput() {
   var waitTime = new Date().getTime();
   //var key_press = String.fromCharCode(event.keyCode);
   var key_code = event.keyCode;
+  var key_index_a = findIndex(inputDirection_a,key_code);
+  var key_index_b = findIndex(inputDirection_b,key_code);
+  if(key_index_a == -1 && key_index_b == -1){
+      console.log('Invalid Input');
+  }
+  else{
+       if(key_index_a == 9 ||key_index_b==9){
+           spacebar == false;
+       }
+  }
   if(next > 0 && next <= TotalSteps){
     console.log("Next:"+next+"TotalSteps:"+TotalSteps);
     var x =  Path[next-1][0];
@@ -629,8 +640,8 @@ function drawControls(key){
   var width = canvas.width;
   var height = canvas.height;
   var context = canvas.getContext('2d');
-  var BlockWidth = Math.ceil((width - 50 - 3 * 3)/3);
-  var BlockHeight = Math.ceil((height - 50 - 3 * 3)/3);
+  var BlockWidth = Math.ceil((width - 150 - 3 * 3)/3);
+  var BlockHeight = Math.ceil((height - 150 - 3 * 3)/3);
   var BlockColor = ['Blue','White'];
   context.beginPath();
   context.clearRect(0, 0, width, height);
@@ -681,6 +692,17 @@ function drawControls(key){
       y = y + BlockHeight + 3;
     }
   }
+    var spacebarwidth = x-3-BlockWidth/2;
+    x=25;
+    context.lineWidth = 1;
+    context.strokeStyle = 'Black';
+    context.fillStyle = BlockColor[key==9?0:1];
+    context.fillRect(x, y , spacebarwidth, 0.6*BlockHeight);
+    context.strokeRect(x, y , spacebarwidth, 0.6*BlockHeight);
+    context.fillStyle = "Black";
+    context.font = "bold 14px Arial";
+    var text = DirectionLabels[9];
+    context.fillText(text, x+spacebarwidth/3, y+BlockHeight/3);
 }
 function drawMetrics(){
   var canvas = document.getElementById('Maze_Canvas');

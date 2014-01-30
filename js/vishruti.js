@@ -48,7 +48,7 @@ var ExperimentList = {'Audio_Error_FeedBack':1,
                       'WM_Order_Ascending':8,
                       'WM_Order_Descending':9,
                       'WM_Order_Random':10};*/
-
+var audioEl;
 // To validate Participant Details
 function participantDetails(){
     Form_pd = document.ParticipantDetail;
@@ -405,7 +405,7 @@ function onUserInput() {
               }
               else{ //play next cues
                   // inter-trial time between two sound patterns in working memory experiment
-                  startexp = false;
+                  //startexp = false;
                   var str1 = "silence";
                   silencefile = str1.concat(InterTrialInterval,'.mp3');
                   AddSilence();
@@ -916,7 +916,7 @@ function AddCueWave(x,y,z){
   Sounds.push(wave.dataURI);
 }
 function playSounds(){
-  var audioEl = document.getElementById('audio');
+  audioEl = document.getElementById('audio');
   audioEl.load();
   //audioEl.removeEventListener('ended', playSounds);
   //console.log("sound"+Sounds[counter]);
@@ -926,11 +926,6 @@ function playSounds(){
     audioEl.play();
     //console.log("played"+Sounds[counter]);
     counter++;
-  }
-    else{
-      if(audioEl.ended){
-          startexp = true;
-      }
   }
 }
 function findIndex(search_array,key){

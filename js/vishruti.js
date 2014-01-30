@@ -48,7 +48,6 @@ var ExperimentList = {'Audio_Error_FeedBack':1,
                       'WM_Order_Ascending':8,
                       'WM_Order_Descending':9,
                       'WM_Order_Random':10};*/
-var audioEl;
 // To validate Participant Details
 function participantDetails(){
     Form_pd = document.ParticipantDetail;
@@ -319,6 +318,9 @@ function callNextFunction() {
 }
 function onUserInput() {
   var waitTime = new Date().getTime();
+  if(!Sounds[counter] && counter>0){
+      startexp = true;
+  }
   if(startexp){
       //var key_press = String.fromCharCode(event.keyCode);
       var key_code = event.keyCode;
@@ -405,7 +407,7 @@ function onUserInput() {
               }
               else{ //play next cues
                   // inter-trial time between two sound patterns in working memory experiment
-                  //startexp = false;
+                  startexp = false;
                   var str1 = "silence";
                   silencefile = str1.concat(InterTrialInterval,'.mp3');
                   AddSilence();
@@ -916,7 +918,8 @@ function AddCueWave(x,y,z){
   Sounds.push(wave.dataURI);
 }
 function playSounds(){
-  audioEl = document.getElementById('audio');
+  startexp = false;
+  var audioEl = document.getElementById('audio');
   audioEl.load();
   //audioEl.removeEventListener('ended', playSounds);
   //console.log("sound"+Sounds[counter]);

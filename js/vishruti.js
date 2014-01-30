@@ -73,7 +73,14 @@ function participantDetails(){
         }
         enableExperimentParams();
     } else {
-        alert("Please Enter Valid Participant Details");
+        //alert("Please Enter Valid Participant Details");
+        USERID = 'Test'; AGE = 25; EDUCATION = "abc"; MODEOFCOMM = "ENG"; GENDER = "MALE"; PARTICIPANT_TYPE = "NORMAL"; MUSICAL_TRAINING = "YES"; MUSIC_KIND = "def";
+        HEARING_PROBLEM = "YES"; KEYBOARD_FAMILIARITY = "YES";
+        $('#contactModal').modal('hide');
+        if ($(".fa-user").hasClass('detailsAdded') == false) {
+            $(".fa-user").addClass('detailsAdded');
+        }
+        enableExperimentParams();
     }
 }
 // To Enable Experiment Parameters Control
@@ -398,6 +405,7 @@ function onUserInput() {
               }
               else{ //play next cues
                   // inter-trial time between two sound patterns in working memory experiment
+                  startexp = false;
                   var str1 = "silence";
                   silencefile = str1.concat(InterTrialInterval,'.mp3');
                   AddSilence();
@@ -918,6 +926,11 @@ function playSounds(){
     audioEl.play();
     //console.log("played"+Sounds[counter]);
     counter++;
+  }
+    else{
+      if(audioEl.ended){
+          startexp = true;
+      }
   }
 }
 function findIndex(search_array,key){

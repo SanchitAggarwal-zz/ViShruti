@@ -320,7 +320,6 @@ function onUserInput() {
   }
   else{
        if(key_index_a == 9 ||key_index_b==9){
-           InputLabels.push(DirectionLabels[key_index_a]);
            while(next<=CurrentCuePos){
                var x =  Path[next-1][0];
                var y = Path[next-1][1];
@@ -329,29 +328,20 @@ function onUserInput() {
                var cue_code = 10 * (cue_x + 2) + (cue_y + 2);
                var cue_index = findIndex(expectedDirection,cue_code);
                CueLabels.push(DirectionLabels[cue_index]);
+               InputLabels.push('NoInput');
                next++;
            }
+           // Add marker in input and cue labels
            CueLabels.push(DirectionLabels[key_index_a]);
-           //alert(CurrentCuePos);
+           InputLabels.push(DirectionLabels[key_index_a]);
+
            InputTime.push(IntervalTime);
            ResponseTime = ResponseTime + IntervalTime;
            IntervalTime = 0;
            count=0;
-           // inter-trial time between two sound patterns in working memory experiment
-           var str1 = "silence";
-           silencefile = str1.concat(InterTrialInterval,'.mp3');
-           AddSilence();
-           // play next audio sequence
-           NextCue();
-           playSounds();
-           CueTime =  new Date().getTime();
-       }
-      else{
-           if(next>TotalSteps && PopNextFunction == 0){
-               if(next == TotalSteps){
-                   alert("Get Ready For Next Trial");
-                   console.log("Next:"+next+"TotalSteps:"+TotalSteps);
-               }
+           next = CurrentCuePos + 1;
+           if(next>TotalSteps && PopNextFunction == 0){ // pop next function for new trials
+               alert("Get Ready For Next Trial");
                console.log("Next:"+next+"TotalSteps:"+TotalSteps);
                drawMaze(Maze,MazeLength);
                drawMetrics();
@@ -401,57 +391,60 @@ function onUserInput() {
                count=0;Recall=0;
                PopNextFunction = 1;
            }
-           if(next > 0 && next <= TotalSteps){
-               console.log("Next:"+next+"TotalSteps:"+TotalSteps);
-               var x =  Path[next-1][0];
-               var y = Path[next-1][1];
-               var cue_x = Cue[next-1][0];
-               var cue_y = Cue[next-1][1]*-1;
-               var cue_code = 10 * (cue_x + 2) + (cue_y + 2);
-               var key_index_a = findIndex(inputDirection_a,key_code);
-               var key_index_b = findIndex(inputDirection_b,key_code);
-               var cue_index = findIndex(expectedDirection,cue_code);
-
-               var input_index = key_index_a > key_index_b ? key_index_a:key_index_b;
-               CueLabels.push(DirectionLabels[cue_index]);
-               InputLabels.push(DirectionLabels[input_index]);
-
-               if(key_index_a == cue_index || key_index_b == cue_index){
-                   IntervalTime = IntervalTime + (waitTime - CueTime )/1000;
-                   CueTime = new Date().getTime();
-                   count++;
-                   Hit++;
-                   if(VisualError){Maze[x][y] = 3;}
-               }
-               else{
-                   IntervalTime = IntervalTime + (waitTime - CueTime)/1000;
-                   CueTime = new Date().getTime();
-                   if(AudioError){playError();}
-                   Miss++;
-                   count--;
-                   if(VisualError){Maze[x][y] = 4;}
-               }
-               if(count==Level){Recall++;count=0;}
-               drawMaze(Maze,MazeLength);
-               drawMetrics();
-               drawControls(key_index_a>key_index_b?key_index_a:key_index_b);
-               /*if(next==CurrentCuePos && CurrentCuePos<TotalSteps && spacebar){
-                //alert(CurrentCuePos);
-                InputTime.push(IntervalTime);
-                ResponseTime = ResponseTime + IntervalTime;
-                IntervalTime = 0;
-                count=0;
-                // inter-trial time between two sound patterns in working memory experiment
-                var str1 = "silence";
-                silencefile = str1.concat(InterTrialInterval,'.mp3');
-                AddSilence();
-                // play next audio sequence
-                NextCue();
-                playSounds();
-                CueTime =  new Date().getTime();
-                }*/
-               next++;
+           else{ //play next cues
+               // inter-trial time between two sound patterns in working memory experiment
+               var str1 = "silence";
+               silencefile = str1.concat(InterTrialInterval,'.mp3');
+               AddSilence();
+               // play next audio sequence
+               NextCue();
+               playSounds();
+               CueTime =  new Date().getTime();
            }
+           drawMaze(Maze,MazeLength);
+           drawMetrics();
+           drawControls(key_index_a);
+       }
+       else{
+           console.log("Next:"+next+"TotalSteps:"+TotalSteps);
+           var x, y,cue_x,cue_y,cue_index;
+           var noextra = true;
+           if(next <= CurrentCuePos){
+               x =  Path[next-1][0];
+               y = Path[next-1][1];
+               cue_x = Cue[next-1][0];
+               cue_y = Cue[next-1][1]*-1;
+               cue_code = 10 * (cue_x + 2) + (cue_y + 2);
+               cue_index = findIndex(expectedDirection,cue_code);
+               CueLabels.push(DirectionLabels[cue_index]);
+           }
+           else{
+               noextra = false;
+               cue_index = -2;
+               CueLabels.push('NoCues');
+           }
+           var input_index = key_index_a > key_index_b ? key_index_a:key_index_b;
+           InputLabels.push(DirectionLabels[input_index]);
+           if(key_index_a == cue_index || key_index_b == cue_index){
+               IntervalTime = IntervalTime + (waitTime - CueTime )/1000;
+               CueTime = new Date().getTime();
+               count++;
+               Hit++;
+               if(VisualError && noextra){Maze[x][y] = 3;}
+           }
+           else{
+               IntervalTime = IntervalTime + (waitTime - CueTime)/1000;
+               CueTime = new Date().getTime();
+               if(AudioError){playError();}
+               Miss++;
+               count--;
+               if(VisualError && noextra){Maze[x][y] = 4;}
+           }
+           if(count==Level){Recall++;count=0;}
+           drawMaze(Maze,MazeLength);
+           drawMetrics();
+           drawControls(key_index_a>key_index_b?key_index_a:key_index_b);
+           next++;
        }
   }
 }

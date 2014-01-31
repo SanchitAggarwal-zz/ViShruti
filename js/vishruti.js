@@ -74,7 +74,7 @@ function participantDetails(){
         enableExperimentParams();
     } else {
         alert("Please Enter Valid Participant Details");
-//        USERID = 'Test'; AGE = 25; EDUCATION = "abc"; MODEOFCOMM = "ENG"; GENDER = "MALE"; PARTICIPANT_TYPE = "NORMAL"; MUSICAL_TRAINING = "YES"; MUSIC_KIND = "def";
+//       USERID = 'Test'; AGE = 25; EDUCATION = "abc"; MODEOFCOMM = "ENG"; GENDER = "MALE"; PARTICIPANT_TYPE = "NORMAL"; MUSICAL_TRAINING = "YES"; MUSIC_KIND = "def";
 //        HEARING_PROBLEM = "YES"; KEYBOARD_FAMILIARITY = "YES";
 //        $('#contactModal').modal('hide');
 //        if ($(".fa-user").hasClass('detailsAdded') == false) {

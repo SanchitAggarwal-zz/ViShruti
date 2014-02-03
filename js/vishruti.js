@@ -36,6 +36,7 @@ var CurrentMode;
 var InterTrialInterval = '500';  //in milliseconds
 var silencefile;
 var startexp = false;
+var cueno = 0;
 // Experiment List
 var ExperimentList = {'Audio_Error_FeedBack':1,
                       'Visual_Error_FeedBack':2,
@@ -85,24 +86,39 @@ function participantDetails(){
 // To Enable Experiment Parameters Control
 function enableExperimentParams(){
     document.getElementById("ExperimentMode").disabled = false;
-    //document.getElementById("WorkingMemory").disabled = false;
-    document.getElementById("NoOfTrial").disabled = false;
-    document.getElementById("AccuracyThreshold").disabled = false;
-    //document.getElementById("Reverse").disabled = false;
-    document.getElementById("StartExp").disabled = false;
-    document.getElementById("SavePD").disabled = true;
-    document.getElementById("TestingPathLength").disabled = false;
-    document.getElementById("InterStimulusInterval").disabled = false;
+    if(document.getElementById("ExperimentMode").selectedIndex.value == "Working_Memory"){
+        document.getElementById("NoOfTrial").disabled = true;
+        document.getElementById("AccuracyThreshold").disabled = true;
+        document.getElementById("StartExp").disabled = false;
+        document.getElementById("SavePD").disabled = true;
+        document.getElementById("TestingPathLength").disabled = true;
+        document.getElementById("InterStimulusInterval").disabled = false;
+    }
+    else{
+        document.getElementById("NoOfTrial").disabled = false;
+        document.getElementById("AccuracyThreshold").disabled = false;
+        document.getElementById("StartExp").disabled = false;
+        document.getElementById("SavePD").disabled = true;
+        document.getElementById("TestingPathLength").disabled = false;
+        document.getElementById("InterStimulusInterval").disabled = false;
+    }
 }
 // To Validate Experiment Parameters
 function validateExperimentParams(){
   ExperimentMode = document.getElementById("ExperimentMode").value;
-  //WorkingMemory = document.getElementById("WorkingMemory").value;
-  NoOfTrial = parseInt(document.getElementById("NoOfTrial").value);
-  AccuracyThreshold = parseInt(document.getElementById("AccuracyThreshold").value);
-  TestingPathLength = parseInt(document.getElementById("TestingPathLength").value);
-  InterStimulusInterval = document.getElementById("InterStimulusInterval").value;
-  //Reverse = document.getElementById("Reverse").checked;
+  if(ExperimentMode == "Working_Memory"){
+      NoOfTrial = 3;
+      AccuracyThreshold = 61;
+      TestingPathLength = 105;
+      InterStimulusInterval = document.getElementById("InterStimulusInterval").value;
+  }
+  else{
+      NoOfTrial = parseInt(document.getElementById("NoOfTrial").value);
+      AccuracyThreshold = parseInt(document.getElementById("AccuracyThreshold").value);
+      TestingPathLength = parseInt(document.getElementById("TestingPathLength").value);
+      InterStimulusInterval = document.getElementById("InterStimulusInterval").value;
+  }
+
   if(ExperimentMode=="" || isNaN(NoOfTrial) || isNaN(AccuracyThreshold) || NoOfTrial <1 || AccuracyThreshold <60 || isNaN(TestingPathLength) || TestingPathLength <10 || InterStimulusInterval==""){
     alert("Please Enter Valid Experiment Parameters");
   }
@@ -163,7 +179,7 @@ function stopExperiment(){
     $('#StartExp').removeClass('btn-default');
     $('#StartExp').addClass('btn-primary');
     ExperimentTime = (new Date().getTime() - ExperimentTime)/1000;
-    alert("Experiment Finished !! \nThank You For Participating "+ USERID+ "\nYou Took : " + (ExperimentTime/60).toFixed(3) + " Minutes");
+    alert("Experiment Finished !! \nThank You For Participating "+ USERID+ "\nYou Took : " + (ExperimentTime/60).toFixed(3) + " Minutes\n Have a Nice Day.");
     //saveExperimentResults
     saveExperimentResults();
     //Reload the page
@@ -291,7 +307,7 @@ function saveExperimentResults(){
   savecsv.download    = USERID +'.csv';
   document.body.appendChild(savecsv);
   savecsv.click();
-  alert("Results saved Successfully");
+  alert("Your results are saved successfully");
 }
 var addToFunctionQueue =  function(fn, context, params) {
   return function() {
@@ -341,7 +357,7 @@ function onUserInput() {
                   var cue_index = findIndex(expectedDirection,cue_code);
                   CueLabels.push(DirectionLabels[cue_index]);
                   InputLabels.push('NoInput');
-                  if(VisualError){Maze[x][y] = 4;}
+                  if(VisualError){Maze[x][y] = 4 * cueno%2 + 4;}
                   Miss++;
                   count--;
                   next++;
@@ -356,7 +372,7 @@ function onUserInput() {
               count=0;
               next = CurrentCuePos;
               if(CurrentCuePos==TotalSteps && PopNextFunction == 0){ // pop next function for new trials
-                  alert("Get Ready For Next Trial, Please press space bar after each response");
+                  alert("Get Ready For Next Map, Please press space bar after response for each trial.");
                   drawMaze(Maze,MazeLength);
                   drawMetrics();
                   if(CurrentMode == 'InCorrectVisualCue'){
@@ -388,10 +404,11 @@ function onUserInput() {
                       }
                   }
                   else{
-                      if(CurrentTrialNo==NTrial){
+                      var EKey = ExperimentList[ExperimentMode];
+                      if(CurrentTrialNo==NTrial && EKey < 4){
                           ExperimentEnd = 1;
                           // clear the polling variable
-                          alert('Average Accuracy '+ AvgAccuracy +' less than Accuracy Threshold '+ AccuracyThreshold +' After '+NTrial + ' Trials.Terminating Experiment');
+                          alert('Average Accuracy '+ AvgAccuracy +' less than Accuracy Threshold '+ AccuracyThreshold +' After '+NTrial + ' Trials.\nTerminating Experiment');
                           clearInterval(checkFunctionQueue);
                           stopExperiment();
                       }
@@ -403,6 +420,7 @@ function onUserInput() {
                   ResponseTime = 0;
                   CurrentCuePos = 0;
                   count=0;Recall=0;
+                  cueno = 0;
                   PopNextFunction = 1;
               }
               else{ //play next cues
@@ -444,7 +462,7 @@ function onUserInput() {
                   CueTime = new Date().getTime();
                   count++;
                   Hit++;
-                  if(VisualError && noextra){Maze[x][y] = 3;}
+                  if(VisualError && noextra){Maze[x][y] = 4 * cueno%2 + 3;}
               }
               else{
                   IntervalTime = IntervalTime + (waitTime - CueTime)/1000;
@@ -452,7 +470,7 @@ function onUserInput() {
                   if(AudioError){playError();}
                   Miss++;
                   count--;
-                  if(VisualError && noextra){Maze[x][y] = 4;}
+                  if(VisualError && noextra){Maze[x][y] = 4 * cueno%2 + 4;}
               }
               if(count==Level){Recall++;count=0;}
               drawMaze(Maze,MazeLength);
@@ -647,7 +665,7 @@ function drawMaze(Maze,MazeLength){
   var context = canvas.getContext('2d');
   var BlockWidth = Math.ceil((width - 50 - 3 * MazeLength)/MazeLength);
   var BlockHeight = Math.ceil((height - 50 - 3 * MazeLength)/MazeLength);
-  var BlockColor = ['Yellow','Black','Orange','Green','Red','Blue','White'];
+  var BlockColor = ['Yellow','Black','Orange','Green','Red','Blue','White','GreenYellow ','OrangeRed '];
   canvas.style.border = "black 5px solid";
   context.beginPath();
   context.clearRect(0, 0, width, height);
@@ -776,7 +794,7 @@ function drawMetrics(){
   context.fillText(text, text_width, 65);
 
   text_width = text_width + metrics.width + 10;
-  text = "Trial: ";
+  text = "Block: ";
   metrics = context.measureText(text);
   context.fillText(text, text_width, 65);
   text_width = text_width + metrics.width + 2;
@@ -831,6 +849,7 @@ function drawMetrics(){
   context.fillText(text, text_width, 105);
 }
 function NextCue(){
+  cueno = cueno + 1;
   var str1 = "silence";
   silencefile = str1.concat(InterStimulusInterval,'.mp3');
   if(RandomOrder){

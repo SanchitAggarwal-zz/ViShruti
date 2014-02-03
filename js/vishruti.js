@@ -37,6 +37,7 @@ var InterTrialInterval = '500';  //in milliseconds
 var silencefile;
 var startexp = false;
 var cueno = 0;
+var SelectedMode;
 // Experiment List
 var ExperimentList = {'Audio_Error_FeedBack':1,
                       'Visual_Error_FeedBack':2,
@@ -86,7 +87,15 @@ function participantDetails(){
 // To Enable Experiment Parameters Control
 function enableExperimentParams(){
     document.getElementById("ExperimentMode").disabled = false;
-    if(document.getElementById("ExperimentMode").selectedIndex.value == "Working_Memory"){
+    document.getElementById("NoOfTrial").disabled = false;
+    document.getElementById("AccuracyThreshold").disabled = false;
+    document.getElementById("StartExp").disabled = false;
+    document.getElementById("SavePD").disabled = true;
+    document.getElementById("TestingPathLength").disabled = false;
+    document.getElementById("InterStimulusInterval").disabled = false;
+}
+function disable(){
+    if(document.getElementById("ExperimentMode").value == "Working_Memory"){
         document.getElementById("NoOfTrial").disabled = true;
         document.getElementById("AccuracyThreshold").disabled = true;
         document.getElementById("StartExp").disabled = false;
@@ -106,6 +115,7 @@ function enableExperimentParams(){
 // To Validate Experiment Parameters
 function validateExperimentParams(){
   ExperimentMode = document.getElementById("ExperimentMode").value;
+  SelectedMode = document.getElementById("ExperimentMode").value;
   if(ExperimentMode == "Working_Memory"){
       NoOfTrial = 3;
       AccuracyThreshold = 61;
@@ -357,7 +367,7 @@ function onUserInput() {
                   var cue_index = findIndex(expectedDirection,cue_code);
                   CueLabels.push(DirectionLabels[cue_index]);
                   InputLabels.push('NoInput');
-                  if(VisualError){Maze[x][y] = 4 * cueno%2 + 4;}
+                  if(VisualError){Maze[x][y] = 4 * (cueno % 2) + 4;}
                   Miss++;
                   count--;
                   next++;
@@ -404,8 +414,8 @@ function onUserInput() {
                       }
                   }
                   else{
-                      var EKey = ExperimentList[ExperimentMode];
-                      if(CurrentTrialNo==NTrial && EKey < 4){
+                      var EKey = ExperimentList[SelectedMode];
+                      if(CurrentTrialNo==NTrial && EKey < 3){
                           ExperimentEnd = 1;
                           // clear the polling variable
                           alert('Average Accuracy '+ AvgAccuracy +' less than Accuracy Threshold '+ AccuracyThreshold +' After '+NTrial + ' Trials.\nTerminating Experiment');
@@ -462,7 +472,7 @@ function onUserInput() {
                   CueTime = new Date().getTime();
                   count++;
                   Hit++;
-                  if(VisualError && noextra){Maze[x][y] = 4 * cueno%2 + 3;}
+                  if(VisualError && noextra){Maze[x][y] = 4 * (cueno % 2) + 3;}
               }
               else{
                   IntervalTime = IntervalTime + (waitTime - CueTime)/1000;
@@ -470,7 +480,7 @@ function onUserInput() {
                   if(AudioError){playError();}
                   Miss++;
                   count--;
-                  if(VisualError && noextra){Maze[x][y] = 4 * cueno%2 + 4;}
+                  if(VisualError && noextra){Maze[x][y] = 4 * (cueno % 2) + 4;}
               }
               if(count==Level){Recall++;count=0;}
               drawMaze(Maze,MazeLength);
@@ -665,7 +675,7 @@ function drawMaze(Maze,MazeLength){
   var context = canvas.getContext('2d');
   var BlockWidth = Math.ceil((width - 50 - 3 * MazeLength)/MazeLength);
   var BlockHeight = Math.ceil((height - 50 - 3 * MazeLength)/MazeLength);
-  var BlockColor = ['Yellow','Black','Orange','Green','Red','Blue','White','GreenYellow ','OrangeRed '];
+  var BlockColor = ['Yellow','Black','Orange','DarkGreen','DarkRed','Blue','White','Teal','Tomato'];
   canvas.style.border = "black 5px solid";
   context.beginPath();
   context.clearRect(0, 0, width, height);

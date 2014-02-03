@@ -308,7 +308,7 @@ function saveExperimentResults(){
 
   var csvRows = [];
   for(var i=0, l=ExperimentResults.length; i<l; ++i){
-    csvRows.push(ExperimentResults[i].join(','));
+    csvRows.push(ExperimentResults[i].join(';'));
   }
   var csvString = csvRows.join("%0A");
   var savecsv         = document.createElement('a');

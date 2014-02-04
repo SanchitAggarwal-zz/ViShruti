@@ -273,7 +273,7 @@ function saveExperimentResults(){
     $.ajax({
       type: "POST",
       //url: "https://docs.google.com/forms/d/1HYqxuBrAA3idjzjqBLwCEGcnnL_WbOL6oCrBBvMF7sI/formResponse",
-      url: "https://docs.google.com/forms/d/1TwB7go7707PG1T1-gjeu5_tyxkBT2B3J-xDUzMbaXcc/formResponse",
+      url: "https://docs.google.com/forms/d/1XCgK4jjuhv2BBwQ8Muzmz2zMhmX3C6sf7pyf1Y6UhWE/formResponse",
       data: {
           'entry.452712856' :USERID,
           'entry.1217543975':AGE,
@@ -285,14 +285,14 @@ function saveExperimentResults(){
           'entry.1963578379':MUSIC_KIND,
           'entry.437891093' :HEARING_PROBLEM,
           'entry.518374845' :KEYBOARD_FAMILIARITY,
-          'entry.281696488' :ExperimentResults[i][0], //Trial#
+          'entry.281696488' :ExperimentResults[i][0], //Index#
           'entry.501651834' :ExperimentResults[i][1], //Direction
           'entry.486615617' :ExperimentResults[i][2], //Cue Length
           'entry.56018046'  :ExperimentResults[i][3], //Experiment Mode
           'entry.1372960057':ExperimentResults[i][4], //Accuracy Threshold
           'entry.561470756' :ExperimentResults[i][5], //Total Steps
           'entry.1450128684':ExperimentResults[i][6], //#Hit
-          'entry.631366225' :ExperimentResults[i][7], //#Hit
+          'entry.631366225' :ExperimentResults[i][7], //#Miss
           'entry.740927359' :ExperimentResults[i][8], //Accuracy
           'entry.481811278' :ExperimentResults[i][9], //Recall
           'entry.1724321037':ExperimentResults[i][10],//ResponseTime(in Sec)

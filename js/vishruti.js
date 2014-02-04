@@ -39,10 +39,10 @@ var startexp = false;
 var cueno = 0;
 var SelectedMode;
 // Experiment List
-var ExperimentList = {'Audio_Error_FeedBack':1,
-                      'Visual_Error_FeedBack':2,
+var ExperimentList = {'Audio_Error_FeedBack_Training':1,
+                      'Visual_Error_FeedBack_Training':2,
                       'User_Directed':3,
-                      'UnSupervised':4,
+                      'UnSupervised_Training':4,
                       'No_Training':5,
                       'Testing':6,
                       'Working_Memory':7};
@@ -67,7 +67,7 @@ function participantDetails(){
     if (!(USERID == "" || isNaN(AGE) || AGE < 1 || EDUCATION == "" || MODEOFCOMM == "" || GENDER == "" || PARTICIPANT_TYPE == "" || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || KEYBOARD_FAMILIARITY == "")) {
         ExperimentResults.push(['USER_ID', 'AGE', 'EDUCATION', 'MODE_OF_COMMUNICATION', 'GENDER', 'PARTICIPANT_TYPE', 'MUSICAL_TRAINING', 'MUSIC_KIND', 'HEARING_PROBLEM', 'KEYBOARD_FAMILIARITY', 'InterTrialInterval']);
         ExperimentResults.push([USERID, AGE, EDUCATION, MODEOFCOMM, GENDER, PARTICIPANT_TYPE, MUSICAL_TRAINING, MUSIC_KIND, HEARING_PROBLEM, KEYBOARD_FAMILIARITY, InterTrialInterval]);
-        ExperimentResults.push(['Trial#', 'Direction', 'Cue Length', 'Experiment Mode', 'Accuracy Threshold', 'Total Steps', '#Hit', '#Miss', 'Accuracy', 'Recall', 'ResponseTime(in Sec)', 'Average Response Time (in Sec)', 'No of Trials', 'Input Time per response', 'Cue Direction Labels', 'Input Direction Labels','InterStimulusInterval']);
+        ExperimentResults.push(['Index#', 'Direction', 'Cue Length', 'Experiment Mode', 'Accuracy Threshold', 'Total Steps', '#Hit', '#Miss', 'Accuracy', 'Recall', 'ResponseTime(in Sec)', 'Average Response Time (in Sec)', 'MaximumTrainingMaps', 'Input Time per response', 'Cue Direction Labels', 'Input Direction Labels','InterStimulusInterval']);
         $('#contactModal').modal('hide');
         if ($(".fa-user").hasClass('detailsAdded') == false) {
             $(".fa-user").addClass('detailsAdded');
@@ -375,7 +375,7 @@ function onUserInput() {
               // Add marker in input and cue labels
               CueLabels.push(DirectionLabels[key_index_a]);
               InputLabels.push(DirectionLabels[key_index_a]);
-
+              if(count==Level){Recall++;}
               InputTime.push(IntervalTime);
               ResponseTime = ResponseTime + IntervalTime;
               IntervalTime = 0;
@@ -398,8 +398,8 @@ function onUserInput() {
                   if(RandomOrder){
                       Level = RandomorderCue.toString();
                   }
-                  ExperimentResults.push([CurrentTrialNo,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(Hit+Miss),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfTrial,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval]);
-                  AvgAccuracy = ((CurrentTrialNo - 1)*AvgAccuracy + (100*Hit/(Hit+Miss)))/CurrentTrialNo;
+                  ExperimentResults.push([FileIndex,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(TotalSteps),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfTrial,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval]);
+                  AvgAccuracy = ((CurrentTrialNo - 1)*AvgAccuracy + (100*Hit/(TotalSteps)))/CurrentTrialNo;
                   console.log(AvgAccuracy);
 
                   if(AvgAccuracy >= AccuracyThreshold){
@@ -456,8 +456,7 @@ function onUserInput() {
                   y = Path[next][1];
                   cue_x = Cue[next][0];
                   cue_y = Cue[next][1]*-1;
-                  cue_code = 10 * (cue_x + 2) + (cue_y + 2);
-                  cue_index = findIndex(expectedDirection,cue_code);
+                  cue_code = 10 * (cue_x + 2) + (cue_ findIndex(expectedDirection,cue_code);
                   CueLabels.push(DirectionLabels[cue_index]);
               }
               else{
@@ -482,7 +481,7 @@ function onUserInput() {
                   count--;
                   if(VisualError && noextra){Maze[x][y] = 4 * (cueno % 2) + 4;}
               }
-              if(count==Level){Recall++;count=0;}
+              if(count==Level){Recall++;}
               drawMaze(Maze,MazeLength);
               drawMetrics();
               drawControls(key_index_a>key_index_b?key_index_a:key_index_b);
@@ -804,12 +803,12 @@ function drawMetrics(){
   context.fillText(text, text_width, 65);
 
   text_width = text_width + metrics.width + 10;
-  text = "Block: ";
+  text = "Map: ";
   metrics = context.measureText(text);
   context.fillText(text, text_width, 65);
   text_width = text_width + metrics.width + 2;
 
-  text = CurrentTrialNo.toString();
+  text = FileIndex.toString();
   metrics = context.measureText(text);
   context.fillText(text, text_width, 65);
 

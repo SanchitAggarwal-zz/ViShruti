@@ -456,7 +456,8 @@ function onUserInput() {
                   y = Path[next][1];
                   cue_x = Cue[next][0];
                   cue_y = Cue[next][1]*-1;
-                  cue_code = 10 * (cue_x + 2) + (cue_ findIndex(expectedDirection,cue_code);
+                  cue_code = 10 * (cue_x + 2) + (cue_y + 2);
+                  cue_index = findIndex(expectedDirection,cue_code);
                   CueLabels.push(DirectionLabels[cue_index]);
               }
               else{

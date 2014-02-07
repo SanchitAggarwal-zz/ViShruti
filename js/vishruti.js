@@ -405,7 +405,7 @@ function onUserInput() {
 
                   ExperimentResults.push([FileIndex,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(TotalSteps),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfTrial,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval,AvgAccuracy]);
 
-                  if(AvgAccuracy >= AccuracyThreshold && CurrentTrialNo>5){
+                  if(AvgAccuracy >= AccuracyThreshold && CurrentTrialNo>=5){
                       console.log("Avg Accuracy is greater than threshold ,switching to another mode");
                       var i = CurrentTrialNo;
                       while(i<NTrial){

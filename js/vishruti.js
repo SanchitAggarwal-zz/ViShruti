@@ -129,8 +129,8 @@ function validateExperimentParams(){
       InterStimulusInterval = document.getElementById("InterStimulusInterval").value;
   }
 
-  if(ExperimentMode=="" || isNaN(NoOfTrial) || isNaN(AccuracyThreshold) || NoOfTrial <1 || AccuracyThreshold <60 || isNaN(TestingPathLength) || TestingPathLength <10 || InterStimulusInterval==""){
-    alert("Please Enter Valid Experiment Parameters");
+  if(ExperimentMode=="" || isNaN(NoOfTrial) || isNaN(AccuracyThreshold) || NoOfTrial <5 || AccuracyThreshold <60 || isNaN(TestingPathLength) || TestingPathLength <10 || InterStimulusInterval==""){
+    alert("Please Enter Valid Experiment Parameters, No of Maps must be greater than 4");
   }
   else{
     var str1 = "silence";

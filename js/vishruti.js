@@ -67,7 +67,7 @@ function participantDetails(){
     if (!(USERID == "" || isNaN(AGE) || AGE < 1 || EDUCATION == "" || MODEOFCOMM == "" || GENDER == "" || PARTICIPANT_TYPE == "" || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || KEYBOARD_FAMILIARITY == "")) {
         ExperimentResults.push(['USER_ID', 'AGE', 'EDUCATION', 'MODE_OF_COMMUNICATION', 'GENDER', 'PARTICIPANT_TYPE', 'MUSICAL_TRAINING', 'MUSIC_KIND', 'HEARING_PROBLEM', 'KEYBOARD_FAMILIARITY', 'InterTrialInterval']);
         ExperimentResults.push([USERID, AGE, EDUCATION, MODEOFCOMM, GENDER, PARTICIPANT_TYPE, MUSICAL_TRAINING, MUSIC_KIND, HEARING_PROBLEM, KEYBOARD_FAMILIARITY, InterTrialInterval]);
-        ExperimentResults.push(['Index#', 'Direction', 'Cue Length', 'Experiment Mode', 'Accuracy Threshold', 'Total Steps', '#Hit', '#Miss', 'Accuracy', 'Recall', 'ResponseTime(in Sec)', 'Average Response Time (in Sec)', 'MaximumTrainingMaps', 'Input Time per response', 'Cue Direction Labels', 'Input Direction Labels','InterStimulusInterval']);
+        ExperimentResults.push(['Index#', 'Direction', '# of Stimuli per Trial', 'Experiment Mode', 'Accuracy Threshold', 'Total Steps in Map', '#Hit', '#Wrong Response', 'Accuracy', 'Recall', 'ResponseTime(in Sec)', 'Average Response Time (in Sec)', 'MaximumTrainingMaps', 'Input Time per response', 'Stimuli Direction Labels', 'Response Direction Labels','InterStimulusInterval','Average Accuracy']);
         $('#contactModal').modal('hide');
         if ($(".fa-user").hasClass('detailsAdded') == false) {
             $(".fa-user").addClass('detailsAdded');
@@ -292,16 +292,18 @@ function saveExperimentResults(){
           'entry.1372960057':ExperimentResults[i][4], //Accuracy Threshold
           'entry.561470756' :ExperimentResults[i][5], //Total Steps
           'entry.1450128684':ExperimentResults[i][6], //#Hit
-          'entry.631366225' :ExperimentResults[i][7], //#Miss
+          'entry.631366225' :ExperimentResults[i][7], //#Wrong Response
           'entry.740927359' :ExperimentResults[i][8], //Accuracy
           'entry.481811278' :ExperimentResults[i][9], //Recall
           'entry.1724321037':ExperimentResults[i][10],//ResponseTime(in Sec)
           'entry.1184871699':ExperimentResults[i][11],//Average Response Time (in Sec)
-          'entry.1943108855':ExperimentResults[i][12],//No of Trials
+          'entry.1943108855':ExperimentResults[i][12],//No of Training Maps
           'entry.239911530' :ExperimentResults[i][13],//Input Time per response
           'entry.786668683' :ExperimentResults[i][14],//Cue Direction Labels
           'entry.2065638177':ExperimentResults[i][15],//Input Direction Labels
-          'entry.1313234140':ExperimentResults[i][16]//InterStimulusInterval
+          'entry.1313234140':ExperimentResults[i][16],//InterStimulusInterval
+          'entry.263350514':ExperimentResults[i][17],// Average Accuracy after Nth Map
+          'entry.1348081382':InterTrialInterval // Inter Trial Interval
       }
     });
   }
@@ -383,6 +385,8 @@ function onUserInput() {
               next = CurrentCuePos;
               if(CurrentCuePos==TotalSteps && PopNextFunction == 0){ // pop next function for new trials
                   alert("Get Ready For Next Map, Please press space bar after response for each trial.");
+                  AvgAccuracy = ((CurrentTrialNo - 1)*AvgAccuracy + (100*Hit/(TotalSteps)))/CurrentTrialNo;
+                  console.log(AvgAccuracy);
                   drawMaze(Maze,MazeLength);
                   drawMetrics();
                   if(CurrentMode == 'InCorrectVisualCue'){
@@ -398,11 +402,10 @@ function onUserInput() {
                   if(RandomOrder){
                       Level = RandomorderCue.toString();
                   }
-                  ExperimentResults.push([FileIndex,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(TotalSteps),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfTrial,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval]);
-                  AvgAccuracy = ((CurrentTrialNo - 1)*AvgAccuracy + (100*Hit/(TotalSteps)))/CurrentTrialNo;
-                  console.log(AvgAccuracy);
 
-                  if(AvgAccuracy >= AccuracyThreshold){
+                  ExperimentResults.push([FileIndex,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(TotalSteps),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfTrial,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval,AvgAccuracy]);
+
+                  if(AvgAccuracy >= AccuracyThreshold && CurrentTrialNo>5){
                       console.log("Avg Accuracy is greater than threshold ,switching to another mode");
                       var i = CurrentTrialNo;
                       while(i<NTrial){
@@ -482,7 +485,6 @@ function onUserInput() {
                   count--;
                   if(VisualError && noextra){Maze[x][y] = 4 * (cueno % 2) + 4;}
               }
-              if(count==Level){Recall++;}
               drawMaze(Maze,MazeLength);
               drawMetrics();
               drawControls(key_index_a>key_index_b?key_index_a:key_index_b);
@@ -675,7 +677,7 @@ function drawMaze(Maze,MazeLength){
   var context = canvas.getContext('2d');
   var BlockWidth = Math.ceil((width - 50 - 3 * MazeLength)/MazeLength);
   var BlockHeight = Math.ceil((height - 50 - 3 * MazeLength)/MazeLength);
-  var BlockColor = ['Yellow','Black','Orange','DarkGreen','DarkRed','Blue','White','Teal','Tomato'];
+  var BlockColor = ['Yellow','Black','Orange','DarkGreen','DarkRed','Blue','White','Green','Red'];
   canvas.style.border = "black 5px solid";
   context.beginPath();
   context.clearRect(0, 0, width, height);
@@ -857,6 +859,16 @@ function drawMetrics(){
   text = " sec ";
   metrics = context.measureText(text);
   context.fillText(text, text_width, 105);
+
+  text_width = width;
+  text = "Average Accuracy:";
+  metrics = context.measureText(text);
+  context.fillText(text, text_width, 125);
+  text_width = text_width + metrics.width + 2;
+
+  text = AvgAccuracy.toFixed(3);
+  metrics = context.measureText(text);
+  context.fillText(text, text_width, 125);
 }
 function NextCue(){
   cueno = cueno + 1;

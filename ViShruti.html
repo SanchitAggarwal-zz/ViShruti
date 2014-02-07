@@ -66,8 +66,8 @@
                     </select>
                 </div>-->
                 <div class="form-group">
-                    <label class="sr-only" for="NoOfTrial">No Of Trial</label>
-                    <input type="number" class="form-control" id="NoOfTrial" placeholder="Number of Trial" min="1" required disabled>
+                    <label class="sr-only" for="NoOfTrial">No Of Maps for Training</label>
+                    <input type="number" class="form-control" id="NoOfTrial" placeholder="#Maps for Training" min="1" required disabled>
                 </div>
                 <div class="form-group">
                     <label class="sr-only" for="TestingPathLength">Testing Path Length</label>
@@ -180,6 +180,8 @@
                                     <option value="Normal">Normal</option>
                                     <option value="congenital Blind">Congenital Blind</option>
                                     <option value="Accidental Blind">Accidental Blind</option>
+                                    <option value="Night Blind">Night Blind</option>
+                                    <option value="Color Blind">Color Blind</option>
                                 </select>
                             </div>
                         </div>
@@ -240,7 +242,7 @@
                 <div class="modal-body">
                     <ul>
                       <li>This Experiment is Done in order to test navigation based on sound using combination of <b>PITCH(<i>y-Direction</i>) and PAN(<i>x-Direction</i>)</b> for representing 8-Directions.</li>
-                      <li>Listen to the sound cues and press the direction button (0-9),by guessing the source direction.</li>
+                      <li>Listen to the sound cues and press the direction button (0-9),by guessing the source direction.Press space bar after your response</li>
                       <li>Fill The <b>Participant Details</b> in order to fill the experiment parameters.</li>
                       <li><b>Start the Experiment</b> after filling the following experiment parameters:</li>
                       <li><b>Experiment Mode:</b> Select out of the six modes.<br>
@@ -250,16 +252,14 @@
                               <li><b> UnSupervised</b>, No feed back will be provided during training.</li>
                               <li><b> No_Training</b>, Direct Testing will be performed.</li>
                               <li><b> Testing</b>, Testing will be performed.</li>
-                              <li><b> InCorrectVisualCue</b>, In Correct Visual Cue but Correct Audio Cues will be given.</li>
                             </ul>
                       </li>
                       <li><b>Working Memory:</b> To Test Working Memory of Participant.<br>
                           Here Multiple Cues will be played Simultaneously and Participant has to Identify and recall Them.<br>
                           For Example if three cues (L,D,R) are played then key corresponding to them have to be pressed in order.
                       </li>
-                      <li><b>No of Trials - (Good if >=10) :</b> Trials in the experiment.</li>
+                      <li><b>No of Training Maps - (Good if >=10) :</b> Maps in the experiment.</li>
                       <li><b>Accuracy Threshold (>=60) :</b> To Move Participant to Testing Mode when the Training threshold is achieved.</li>
-                      <li><b>Reverse :</b> If checked then Working Memory is performed first and then Training, Testing is performed or vise-versa.</li>
                       <li><b>Testing Path Length(>=50)</b>Path Length for testing</li>
                     </ul>
                 </div>

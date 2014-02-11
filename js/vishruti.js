@@ -73,15 +73,20 @@ function participantDetails(){
             $(".fa-user").addClass('detailsAdded');
         }
         enableExperimentParams();
-    } else {
-        alert("Please Enter Valid Participant Details");
-//       USERID = 'Test'; AGE = 25; EDUCATION = "abc"; MODEOFCOMM = "ENG"; GENDER = "MALE"; PARTICIPANT_TYPE = "NORMAL"; MUSICAL_TRAINING = "YES"; MUSIC_KIND = "def";
-//        HEARING_PROBLEM = "YES"; KEYBOARD_FAMILIARITY = "YES";
-//        $('#contactModal').modal('hide');
-//        if ($(".fa-user").hasClass('detailsAdded') == false) {
-//            $(".fa-user").addClass('detailsAdded');
-//        }
-//        enableExperimentParams();
+    }
+    else {
+        if(document.getElementById("Dummy").checked){
+            USERID = 'Test'; AGE = 25; EDUCATION = "ABC"; MODEOFCOMM = "English"; GENDER = "Male"; PARTICIPANT_TYPE = "Normal"; MUSICAL_TRAINING = "Yes"; MUSIC_KIND = "ABC";
+            HEARING_PROBLEM = "No"; KEYBOARD_FAMILIARITY = "Yes";
+            $('#contactModal').modal('hide');
+            if ($(".fa-user").hasClass('detailsAdded') == false) {
+                $(".fa-user").addClass('detailsAdded');
+            }
+            enableExperimentParams();
+        }
+        else{
+            alert("Please Enter Valid Participant Details");
+        }
     }
 }
 // To Enable Experiment Parameters Control
@@ -92,7 +97,7 @@ function enableExperimentParams(){
     document.getElementById("StartExp").disabled = false;
     document.getElementById("SavePD").disabled = true;
     document.getElementById("TestingPathLength").disabled = false;
-    document.getElementById("InterStimulusInterval").disabled = false;
+    document.getElementById("Familirization").disabled = false;
 }
 function disable(){
     if(document.getElementById("ExperimentMode").value == "Working_Memory"){
@@ -102,6 +107,7 @@ function disable(){
         document.getElementById("SavePD").disabled = true;
         document.getElementById("TestingPathLength").disabled = true;
         document.getElementById("InterStimulusInterval").disabled = false;
+        document.getElementById("Familirization").disabled = false;
     }
     else{
         document.getElementById("NoOfTrial").disabled = false;
@@ -110,6 +116,7 @@ function disable(){
         document.getElementById("SavePD").disabled = true;
         document.getElementById("TestingPathLength").disabled = false;
         document.getElementById("InterStimulusInterval").disabled = false;
+        document.getElementById("Familirization").disabled = true;
     }
 }
 // To Validate Experiment Parameters
@@ -154,7 +161,7 @@ function startExperiment(){
     $('#StartExp').addClass('btn-default');
     $('#StopExp').removeClass('btn-default');
     $('#StopExp').addClass('btn-primary');
-    alert("Experiment Is Going to start in 5 sec , Get Ready with Controls");
+    alert("Get Ready with Controls, TPress the Enter Key to start the Experiment.");
     startexp = true;
     ExperimentTime = new Date().getTime();
     ExperimentModeTest();

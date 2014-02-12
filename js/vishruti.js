@@ -11,7 +11,8 @@ var RandomOrder = 0,RandomorderCue = [2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8]
 var Form_pd,USERID,AGE,EDUCATION,MODEOFCOMM,GENDER,PARTICIPANT_TYPE,MUSICAL_TRAINING,MUSIC_KIND,HEARING_PROBLEM,KEYBOARD_FAMILIARITY;
 var ExperimentTime = 0,AvgAccuracy = 0,NTrial;
 var FunctionQueue = [],FQCounter,checkFunctionQueue,PopNextFunction = 1,FileIndex = 0;
-
+var Familirization = false;
+var NoofFamiliarMap = 5, FamiliarizationCue = [2,2,2,2,2,3,3,3,3,3],FamiliarizationAccuracy = [];
 // variable for each trials and maze generation
 var Maze,Path,Cue,Direction,Level,TotalSteps,MazeLength;
 var pitch = [440,523,622];   //predefined notes in hz
@@ -38,6 +39,7 @@ var silencefile;
 var startexp = false;
 var cueno = 0;
 var SelectedMode;
+var InstructionFile = "./Instructions/";
 // Experiment List
 var ExperimentList = {'Audio_Error_FeedBack_Training':1,
                       'Visual_Error_FeedBack_Training':2,
@@ -63,7 +65,7 @@ function participantDetails(){
     MUSIC_KIND = Form_pd.MUSIC_KIND.value;
     HEARING_PROBLEM = Form_pd.HEARING_PROBLEM.value;
     KEYBOARD_FAMILIARITY = Form_pd.KEYBOARD_FAMILIARITY.value;
-
+    InstructionFile = InstructionFile.concat(MODEOFCOMM,'/',MODEOFCOMM,'_Ins_');
     if (!(USERID == "" || isNaN(AGE) || AGE < 1 || EDUCATION == "" || MODEOFCOMM == "" || GENDER == "" || PARTICIPANT_TYPE == "" || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || KEYBOARD_FAMILIARITY == "")) {
         ExperimentResults.push(['USER_ID', 'AGE', 'EDUCATION', 'MODE_OF_COMMUNICATION', 'GENDER', 'PARTICIPANT_TYPE', 'MUSICAL_TRAINING', 'MUSIC_KIND', 'HEARING_PROBLEM', 'KEYBOARD_FAMILIARITY', 'InterTrialInterval']);
         ExperimentResults.push([USERID, AGE, EDUCATION, MODEOFCOMM, GENDER, PARTICIPANT_TYPE, MUSICAL_TRAINING, MUSIC_KIND, HEARING_PROBLEM, KEYBOARD_FAMILIARITY, InterTrialInterval]);
@@ -98,6 +100,7 @@ function enableExperimentParams(){
     document.getElementById("SavePD").disabled = true;
     document.getElementById("TestingPathLength").disabled = false;
     document.getElementById("Familirization").disabled = false;
+    document.getElementById("InterStimulusInterval").disabled = false;
 }
 function disable(){
     if(document.getElementById("ExperimentMode").value == "Working_Memory"){
@@ -115,8 +118,17 @@ function disable(){
         document.getElementById("StartExp").disabled = false;
         document.getElementById("SavePD").disabled = true;
         document.getElementById("TestingPathLength").disabled = false;
-        document.getElementById("InterStimulusInterval").disabled = false;
+        document.getElementById("InterStimulusInterval").disabled = true;
         document.getElementById("Familirization").disabled = true;
+    }
+}
+
+function enableISI(){
+    if(document.getElementById("Familirization").checked){
+        document.getElementById("InterStimulusInterval").disabled = true;
+    }
+    else{
+        document.getElementById("InterStimulusInterval").disabled = false;
     }
 }
 // To Validate Experiment Parameters
@@ -124,22 +136,30 @@ function validateExperimentParams(){
   ExperimentMode = document.getElementById("ExperimentMode").value;
   SelectedMode = document.getElementById("ExperimentMode").value;
   if(ExperimentMode == "Working_Memory"){
-      NoOfTrial = 3;
+      NoOfTrial = 5;
       AccuracyThreshold = 61;
       TestingPathLength = 105;
-      InterStimulusInterval = document.getElementById("InterStimulusInterval").value;
+      //InterStimulusInterval = document.getElementById("InterStimulusInterval").value;
+      Familirization = document.getElementById("Familirization").value;
   }
   else{
       NoOfTrial = parseInt(document.getElementById("NoOfTrial").value);
       AccuracyThreshold = parseInt(document.getElementById("AccuracyThreshold").value);
       TestingPathLength = parseInt(document.getElementById("TestingPathLength").value);
-      InterStimulusInterval = document.getElementById("InterStimulusInterval").value;
+      //InterStimulusInterval = document.getElementById("InterStimulusInterval").value;
+      Familirization = false;
   }
 
   if(ExperimentMode=="" || isNaN(NoOfTrial) || isNaN(AccuracyThreshold) || NoOfTrial <5 || AccuracyThreshold <60 || isNaN(TestingPathLength) || TestingPathLength <10 || InterStimulusInterval==""){
-    alert("Please Enter Valid Experiment Parameters, No of Maps must be greater than 4");
+    alert("Please Enter Valid Experiment Parameters, No of Maps must be greater than equal to Five.");
   }
   else{
+    if(Familirization)  {
+        InterStimulusInterval = 50;
+    }
+      else{
+        InterStimulusInterval = document.getElementById("InterStimulusInterval").value;
+    }
     var str1 = "silence";
     silencefile = str1.concat(InterStimulusInterval,'.mp3');
     //call start experiment
@@ -156,12 +176,13 @@ function startExperiment(){
     document.getElementById("AccuracyThreshold").disabled = true;
     //document.getElementById("Reverse").disabled = true;
     document.getElementById("TestingPathLength").disabled = true;
-    document.getElementById("InterStimulusInterval").disabled = true;
+    document.getElementById("Familirization").disabled = true;
+    //document.getElementById("InterStimulusInterval").disabled = true;
     $('#StartExp').removeClass('btn-primary');
     $('#StartExp').addClass('btn-default');
     $('#StopExp').removeClass('btn-default');
     $('#StopExp').addClass('btn-primary');
-    alert("Get Ready with Controls, TPress the Enter Key to start the Experiment.");
+    //alert("Get Ready with Controls, Press the Enter Key to start the Experiment.");
     startexp = true;
     ExperimentTime = new Date().getTime();
     ExperimentModeTest();
@@ -248,19 +269,19 @@ function ExperimentModeTest(){
       ExperimentEnd = 1;
       for(var dir = 4;dir<=8;dir=dir+4){
         //alert(ExperimentMode + " : " + dir +" Direction are Used");
-        runMode(1,initialNoofSteps,dir,1,ExperimentMode);
-        runMode(1,TestingPathLength,dir,1,ExperimentMode);
-        runMode(1,TestingPathLength,dir,1,ExperimentMode);
-        runMode(1,TestingPathLength,dir,1,ExperimentMode);
+        //runMode(1,initialNoofSteps,dir,1,ExperimentMode);
+        runMode(1,TestingPathLength,dir,4,ExperimentMode);
+        //runMode(1,TestingPathLength,dir,1,ExperimentMode);
+        //runMode(1,TestingPathLength,dir,1,ExperimentMode);
       }
     }
     else if(Key == 7){
         ExperimentEnd = 1;
         if(RandomOrder){
             for(var dir = 4;dir<=8;dir=dir+4){
-                runMode(0,105,dir,1,ExperimentMode);
-                runMode(0,105,dir,1,ExperimentMode);
-                runMode(0,105,dir,1,ExperimentMode);
+                runMode(0,105,dir,5,ExperimentMode);
+                //runMode(0,105,dir,1,ExperimentMode);
+                //runMode(0,105,dir,1,ExperimentMode);
             }
         }
     }
@@ -274,7 +295,6 @@ function ExperimentModeTest(){
   }while(!ExperimentEnd); //alert("Experiment Mode Ended");
   ExperimentEnd = 0;
 }
-
 function saveExperimentResults(){
   for(var i=3;i<ExperimentResults.length;i++){
     $.ajax({
@@ -391,7 +411,9 @@ function onUserInput() {
               count=0;
               next = CurrentCuePos;
               if(CurrentCuePos==TotalSteps && PopNextFunction == 0){ // pop next function for new trials
-                  alert("Get Ready For Next Map, Please press space bar after response for each trial.");
+                  AddInstruction(InstructionFile.concat('NextMap.wav'));
+                  playSounds();
+                  alert("Current Map is Finished.Press Enter for Next Map.");
                   AvgAccuracy = ((CurrentTrialNo - 1)*AvgAccuracy + (100*Hit/(TotalSteps)))/CurrentTrialNo;
                   console.log(AvgAccuracy);
                   drawMaze(Maze,MazeLength);
@@ -503,6 +525,8 @@ function onUserInput() {
 document.onkeyup = onUserInput;
 function run_trial(TrialNo,CueLength,PathLength,Dir,Mode,Trial){
   if(Dir != Direction || Mode != CurrentMode){
+    AddInstruction(InstructionFile.concat(Mode,'_',Dir,'_Direction.wav'));
+    playSounds();
     alert(Mode + " : " + Dir + " Direction are Used");
   }
   console.log('TrialNo '+TrialNo+'CueLength '+CueLength+ 'PathLength ' + PathLength+ 'Direction ' + Dir +'Mode '+Mode+'Trial '+Trial);
@@ -1033,3 +1057,7 @@ function shuffle(o){ //v1.0
   for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
   return o;
 };
+function AddInstruction(Instruction){
+    Sounds.push(Instruction);
+    //Sounds.push("silent.wav");
+}

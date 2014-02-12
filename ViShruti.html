@@ -77,25 +77,27 @@
                     <label class="sr-only" for="AccuracyThreshold">Accuracy Threshold</label>
                     <input type="number" class="form-control" id="AccuracyThreshold" placeholder="Accuracy Threshold" min="50" required disabled>
                 </div>
-                <!--<div class="form-group">
+                <div class="form-group">
                     <label class="sr-only" for="InterStimulusInterval">ExperimentMode</label>
-                    <select class="form-control" id="InterStimulusInterval" placeholder="Inter-Stimulus Interval" required disabled>
+                    <select class="form-control" id="InterStimulusInterval" placeholder="Inter-Stimulus Interval"  disabled>
                         <option value="">--Inter-Stimulus-Interval--</option>
                         <option value="25">25 milliseconds</option>
                         <option value="50">50 milliseconds</option>
                         <option value="100">100 milliseconds</option>
                         <option value="200">200 milliseconds</option>
+                        <option value="200">300 milliseconds</option>
+                        <option value="200">400 milliseconds</option>
                         <option value="500">500 milliseconds</option>
                     </select>
-                </div>-->
-                <label class="checkbox"><input id="Familirization" type="checkbox" disabled> Familirization </label>
-                <div class="row pull-right">
-                    <button id="StartExp" type="button" class="btn btn-primary" onclick="validateExperimentParams()" disabled>Start Experiment</button>
-                    <button id="StopExp" type="button" class="btn btn-default" onclick="stopExperiment()" disabled>Stop Experiment</button>
                 </div>
+                <label class="checkbox"><input id="Familirization" type="checkbox" onchange="enableISI();" disabled> Familirization </label>
             </form>
         </div>
       </div>
+        <div class="row pull-right">
+            <button id="StartExp" type="button" class="btn btn-primary" onclick="validateExperimentParams()" disabled>Start Experiment</button>
+            <button id="StopExp" type="button" class="btn btn-default" onclick="stopExperiment()" disabled>Stop Experiment</button>
+        </div>
        <div class="row">
         <div id="MazeDiv" class="col-md-9">
             <canvas id="Maze_Canvas" width="860" height="490"></canvas>

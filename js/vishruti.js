@@ -525,7 +525,7 @@ document.onkeyup = onUserInput;
 function run_trial(TrialNo,CueLength,PathLength,Dir,Mode,Trial){
   if(Dir != Direction || Mode != CurrentMode){
     alert(InstructionFile.concat(Mode,'_',Dir,'_Direction.wav'));
-    playInstruction(InstructionFile.concat(Mode,'_',Dir,'_Direction.wav'));
+    //playInstruction(InstructionFile.concat(Mode,'_',Dir,'_Direction.wav'));
     alert(Mode + " : " + Dir + " Direction are Used");
   }
   console.log('TrialNo '+TrialNo+'CueLength '+CueLength+ 'PathLength ' + PathLength+ 'Direction ' + Dir +'Mode '+Mode+'Trial '+Trial);

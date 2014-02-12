@@ -65,7 +65,6 @@ function participantDetails(){
     MUSIC_KIND = Form_pd.MUSIC_KIND.value;
     HEARING_PROBLEM = Form_pd.HEARING_PROBLEM.value;
     KEYBOARD_FAMILIARITY = Form_pd.KEYBOARD_FAMILIARITY.value;
-    InstructionFile = InstructionFile.concat(MODEOFCOMM,'/',MODEOFCOMM,'_Ins_');
     if (!(USERID == "" || isNaN(AGE) || AGE < 1 || EDUCATION == "" || MODEOFCOMM == "" || GENDER == "" || PARTICIPANT_TYPE == "" || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || KEYBOARD_FAMILIARITY == "")) {
         ExperimentResults.push(['USER_ID', 'AGE', 'EDUCATION', 'MODE_OF_COMMUNICATION', 'GENDER', 'PARTICIPANT_TYPE', 'MUSICAL_TRAINING', 'MUSIC_KIND', 'HEARING_PROBLEM', 'KEYBOARD_FAMILIARITY', 'InterTrialInterval']);
         ExperimentResults.push([USERID, AGE, EDUCATION, MODEOFCOMM, GENDER, PARTICIPANT_TYPE, MUSICAL_TRAINING, MUSIC_KIND, HEARING_PROBLEM, KEYBOARD_FAMILIARITY, InterTrialInterval]);
@@ -78,7 +77,7 @@ function participantDetails(){
     }
     else {
         if(document.getElementById("Dummy").checked){
-            USERID = 'Test'; AGE = 25; EDUCATION = "ABC"; MODEOFCOMM = "English"; GENDER = "Male"; PARTICIPANT_TYPE = "Normal"; MUSICAL_TRAINING = "Yes"; MUSIC_KIND = "ABC";
+            USERID = 'Test'; AGE = 25; EDUCATION = "ABC"; MODEOFCOMM = "Telugu"; GENDER = "Male"; PARTICIPANT_TYPE = "Normal"; MUSICAL_TRAINING = "Yes"; MUSIC_KIND = "ABC";
             HEARING_PROBLEM = "No"; KEYBOARD_FAMILIARITY = "Yes";
             $('#contactModal').modal('hide');
             if ($(".fa-user").hasClass('detailsAdded') == false) {
@@ -90,6 +89,7 @@ function participantDetails(){
             alert("Please Enter Valid Participant Details");
         }
     }
+    InstructionFile = InstructionFile.concat(MODEOFCOMM,'/',MODEOFCOMM,'_Ins_');
 }
 // To Enable Experiment Parameters Control
 function enableExperimentParams(){
@@ -411,8 +411,7 @@ function onUserInput() {
               count=0;
               next = CurrentCuePos;
               if(CurrentCuePos==TotalSteps && PopNextFunction == 0){ // pop next function for new trials
-                  AddInstruction(InstructionFile.concat('NextMap.wav'));
-                  playSounds();
+                  //playInstruction(InstructionFile.concat('NextMap.wav'));
                   alert("Current Map is Finished.Press Enter for Next Map.");
                   AvgAccuracy = ((CurrentTrialNo - 1)*AvgAccuracy + (100*Hit/(TotalSteps)))/CurrentTrialNo;
                   console.log(AvgAccuracy);
@@ -525,8 +524,8 @@ function onUserInput() {
 document.onkeyup = onUserInput;
 function run_trial(TrialNo,CueLength,PathLength,Dir,Mode,Trial){
   if(Dir != Direction || Mode != CurrentMode){
-    AddInstruction(InstructionFile.concat(Mode,'_',Dir,'_Direction.wav'));
-    playSounds();
+    alert(InstructionFile.concat(Mode,'_',Dir,'_Direction.wav'));
+    playInstruction(InstructionFile.concat(Mode,'_',Dir,'_Direction.wav'));
     alert(Mode + " : " + Dir + " Direction are Used");
   }
   console.log('TrialNo '+TrialNo+'CueLength '+CueLength+ 'PathLength ' + PathLength+ 'Direction ' + Dir +'Mode '+Mode+'Trial '+Trial);
@@ -1057,7 +1056,8 @@ function shuffle(o){ //v1.0
   for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
   return o;
 };
-function AddInstruction(Instruction){
-    Sounds.push(Instruction);
-    //Sounds.push("silent.wav");
+function playInstruction(Instruction){
+    var ins = new Audio(Instruction);
+    ins.load();
+    ins.play();
 }

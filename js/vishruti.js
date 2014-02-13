@@ -38,7 +38,7 @@ var silencefile;
 var startexp = false;
 var cueno = 0;
 var SelectedMode;
-var InstructionFile = "./Instructions/", AlertMessage = '';
+var InstructionFile = "./Instructions/", AlertMessage = '', InsFile = '', InsFlag = false, Instructions = [], InsCounter = 0;
 // Experiment List
 var ExperimentList = {'Audio_Error_FeedBack_Training':1,
                       'Visual_Error_FeedBack_Training':2,
@@ -96,7 +96,7 @@ function DummyData(){
         Form_pd.USERID.value = 'Dummy_User';
         Form_pd.AGE.value = '25';
         Form_pd.EDUCATION.value = 'MS';
-        Form_pd.MODEOFCOMM.value = 'English';
+        Form_pd.MODEOFCOMM.value = 'Telugu';
         Form_pd.GENDER.value = 'Male';
         Form_pd.PARTICIPANT_TYPE.value = 'Normal';
         Form_pd.MUSICAL_TRAINING.value = 'No';
@@ -256,7 +256,8 @@ function stopExperiment(){
     $('#StartExp').removeClass('btn-default');
     $('#StartExp').addClass('btn-primary');
     ExperimentTime = (new Date().getTime() - ExperimentTime)/1000;
-    alert("Experiment Finished !! \nThank You For Participating "+ USERID+ "\nYou Took : " + (ExperimentTime/60).toFixed(3) + " Minutes\n Have a Nice Day.");
+    SetInstruction(8,0);
+    //alert("Experiment Finished !! \nThank You For Participating "+ USERID+ "\nYou Took : " + (ExperimentTime/60).toFixed(3) + " Minutes\n Have a Nice Day.");
     //saveExperimentResults
     saveExperimentResults();
     //Reload the page
@@ -448,8 +449,6 @@ function onUserInput() {
               count=0;
               next = CurrentCuePos;
               if(CurrentCuePos==TotalSteps && PopNextFunction == 0){ // pop next function for new Maps
-                  //playInstruction(InstructionFile.concat('NextMap.wav'));
-                  alert("Current Map is Finished.Press Enter for Next Map.");
                   AvgAccuracy = ((CurrentMapNo - 1)*AvgAccuracy + (100*Hit/(TotalSteps)))/CurrentMapNo;
                   console.log(AvgAccuracy);
                   drawMaze(Maze,MazeLength);
@@ -560,24 +559,24 @@ function onUserInput() {
 }
 document.onkeyup = onUserInput;
 function run_Map(MapNo,CueLength,PathLength,Dir,Mode,Map){
-    var Key = ExperimentList[CurrentMode];
-    SetInstruction(Key,Dir);
     if(Dir != Direction || Mode != CurrentMode){
-        var instructionEL = new Audio(InstructionFile);
-        instructionEL.addEventListener('ended', function() {
-            instructionEL.load();
-            instructionEL.play();
-            alert(AlertMessage);
-        });
-    alert(Mode + " : " + Dir + " Direction are Used");
-  }
-  console.log('MapNo '+MapNo+'CueLength '+CueLength+ 'PathLength ' + PathLength+ 'Direction ' + Dir +'Mode '+Mode+'Map '+Map);
+        InsFlag = true;
+        SetInstruction(ExperimentList[Mode],Dir);
+    }
+    else{
+        //playInstruction(InstructionFile.concat('NextMap.wav'));
+        SetInstruction(0,0);
+        //alert("Current Map is Finished.Press Enter for Next Map.");
+    }
+  console.log('MapNo '+MapNo+' CueLength '+CueLength+ ' PathLength ' + PathLength+ ' Direction ' + Dir +' Mode '+Mode+' Map '+Map);
   NMaps = Map;
   Level = CueLength;
   Direction =   Dir;
   TotalSteps = PathLength;
   CurrentMapNo = MapNo;
   CurrentMode = Mode;
+  /*var Key = ExperimentList[CurrentMode];
+  console.log(Key);
   setDisplayAndError(Key);
   console.log('RandomOrder '+RandomOrder +' CueLength '+Level);
   var MazeDiv = document.getElementById('MazeDiv');
@@ -593,12 +592,14 @@ function run_Map(MapNo,CueLength,PathLength,Dir,Mode,Map){
   InputLabels = [];
   InputTime = [];
   generateMaze();
-  NextCue();
-  playSounds();
-  CueTime =  new Date().getTime();
   drawMaze(Maze,MazeLength);
   drawMetrics();
   drawControls(-1);
+  if(!InsFlag){
+      NextCue();
+      playSounds();
+      CueTime =  new Date().getTime();
+  }*/
 }
 function generateMaze(){
   var Blocks = 4 * TotalSteps;
@@ -1098,27 +1099,88 @@ function shuffle(o){ //v1.0
   for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
   return o;
 };
-function SetInstruction(Key,Dir){
-    AlertMessage = [];
-    switch(Key){
-        case 6: InstructionFile.concat(Dir,'WM.wav');
-                AlertMessage.concat('This is ',Dir,'direction  Working Memory experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
-                AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
-                AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
-                AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
+function SetInstruction(IKey,Dir){
+    AlertMessage = '';
+    InsFile = '';
+    console.log(IKey);
+    switch(IKey){
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5: InsFile = InstructionFile.concat(Dir,'training.wav');
+                AlertMessage = AlertMessage.concat('This is Four direction Audio Training experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
+                AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
+                AlertMessage = AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
+                AlertMessage = AlertMessage.concat('You will hear a Buzzing Sound as a Hint for Wrong Response.\n');
+                AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
                 break;
-        case 7: InstructionFile.concat(Dir,'testing_1.wav');
-                AlertMessage.concat('This is Four direction Audio Testing experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
-                AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
-                AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
-                AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
+        case 6: InsFile = InstructionFile.concat(Dir,'WM.wav');
+                AlertMessage = AlertMessage.concat('This is ',Dir,'direction  Working Memory experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
+                AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
+                AlertMessage = AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
+                AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
                 break;
-        default:InstructionFile.concat(Dir,'training_1.wav');
-                AlertMessage.concat('This is Four direction Audio Training experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
-                AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
-                AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
-                AlertMessage.concat('You will hear a Buzzing Sound as a Hint for Wrong Response.');
-                AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
+        case 7: InsFile = InstructionFile.concat(Dir,'testing_1.wav');
+                AlertMessage = 'This is Four direction Audio Testing experiment.\nIn this audio for North,South, East and West Directions will be given.\n)';
+                AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
+                AlertMessage = AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
+                AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
+                break;
+
+        case 0: InsFile = InstructionFile.concat('NextMapEnter.wav');
+                AlertMessage = AlertMessage.concat('Current Map is Finished.Press Enter for Next Map.');
+                InsFlag = true;
+                break;
+        case 8: InsFile = InstructionFile.concat('ExpFinishThanks.wav');
+                AlertMessage = AlertMessage.concat('Experiment Finished !! \nThank You For Participating ',USERID,'\nYou Took : ',(ExperimentTime/60).toFixed(3),' Minutes\n Have a Nice Day.');
+                InsFlag = true;
                 break;
     }
+    Instructions.push(InsFile);
+    console.log(AlertMessage);
+    playInstruction();
+}
+function playInstruction(){
+    var instructionEL = document.getElementById('instructionEL');
+    instructionEL.load();
+    if(Instructions[InsCounter]){
+        instructionEL.src = Instructions[InsCounter];
+        instructionEL.addEventListener('ended', playMap);
+        instructionEL.play();
+        InsFile = '';
+        InsCounter++;
+    }
+}
+function playMap(){
+        alert(AlertMessage);
+        var Key = ExperimentList[CurrentMode];
+        console.log('In PlayInstuction Else Part, Experiment Key: '+ Key);
+        setDisplayAndError(Key);
+        console.log('RandomOrder '+RandomOrder +' CueLength '+Level);
+        var MazeDiv = document.getElementById('MazeDiv');
+        //console.log(DisplayGrid);
+        if(DisplayGrid==0){
+            MazeDiv.style.visibility = 'hidden'; // hide, but let the element keep its size
+
+        }
+        else{
+            MazeDiv.style.visibility = 'visible';
+        }
+        CueLabels = [];
+        InputLabels = [];
+        InputTime = [];
+        generateMaze();
+        drawMaze(Maze,MazeLength);
+        drawMetrics();
+        drawControls(-1);
+        NextCue();
+        playSounds();
+        CueTime =  new Date().getTime();
+
+        /* if(InsFlag){
+         NextCue();
+         playSounds();
+         CueTime =  new Date().getTime();
+         }*/
 }

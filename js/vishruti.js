@@ -3,15 +3,15 @@ var ExperimentMode,InterStimulusInterval,NoOfMaps,AccuracyThreshold;
 var DisplayGrid = 0,VisualError = 0,AudioError = 0;  // Flag for Visual or Error Feedback and DisplayGrid
 var ExperimentResults = []; //To Store the Experiment Results and Export it to CSV or Spreadsheet
 var ExperimentEnd = 0;
-var initialNoofSteps = 10,TestingPathLength = 50, TestingMaps = 4, WM_Maps = 5;
+var initialNoofSteps = 10,TestingPathLength = 50, TestingMaps = 4, WM_Maps = 5, WM_PathLength = 70;
 var VisualCue = 0;  //if 0 no visual cue, 1 - correct visual cue, 2 - incorrect visual cue
-var RandomOrder = 0,RandomorderCue = [2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,8,8,8],ro_index = 0;
+var RandomOrder = 0,RandomorderCue = [2,2,3,3,4,4,5,5,6,6,7,7,8,8],ro_index = 0;
 // Participant Details
 var Form_pd,USERID,AGE,EDUCATION,MODEOFCOMM,GENDER,PARTICIPANT_TYPE,MUSICAL_TRAINING,MUSIC_KIND,HEARING_PROBLEM,KEYBOARD_FAMILIARITY;
 var ExperimentTime = 0,AvgAccuracy = 0,NMaps;
 var FunctionQueue = [],FQCounter,checkFunctionQueue,PopNextFunction = 1,FileIndex = 0;
 var Familirization = false;
-var NoofFamiliarMap = 5, FamiliarizationCue = [2,2,2,2,2,3,3,3,3,3],FamiliarizationAccuracy = [];
+var FamiliarMap = 2, FamiliarCue = [2,2,2,2,2,3,3,3,3,3],Familiar_PathLength = 25,FamiliarAccuracy = [];
 // variable for each trials and maze generation
 var Maze,Path,Cue,Direction,Level,TotalSteps,MazeLength;
 var pitch = [440,523,622];   //predefined notes in hz
@@ -276,10 +276,10 @@ function stopExperiment(){
   }
 }
 // To run the selected mode
-function runMode(CueLength,PathLength,Direction,Map,Mode){
+function runMode(CueLength,PathLength,Direction,Map,Mode,ISI){
   var i = 1;
   while( i <= Map) {
-    var fun = addToFunctionQueue(run_Map, this, new Array(i,CueLength,PathLength,Direction,Mode,Map));
+    var fun = addToFunctionQueue(run_Map, this, new Array(i,CueLength,PathLength,Direction,Mode,Map,ISI));
     FunctionQueue.push(fun);
     i++;
   }
@@ -308,7 +308,7 @@ function ExperimentModeTest(){
       for(var dir = 4;dir<=8;dir=dir+4){
         //alert(ExperimentMode + " : " + dir +" Direction are Used");
         //runMode(1,initialNoofSteps,dir,1,ExperimentMode);
-        runMode(1,TestingPathLength,dir,TestingMaps,ExperimentMode);
+        runMode(1,TestingPathLength,dir,TestingMaps,ExperimentMode,InterStimulusInterval);
         //runMode(1,TestingPathLength,dir,1,ExperimentMode);
         //runMode(1,TestingPathLength,dir,1,ExperimentMode);
       }
@@ -316,8 +316,18 @@ function ExperimentModeTest(){
     else if(Key == 7){
         ExperimentEnd = 1;
         if(Familirization){
+            runMode(0,Familiar_PathLength,4,FamiliarMap,ExperimentMode,'200');
+            runMode(0,Familiar_PathLength,4,FamiliarMap,ExperimentMode,'25');
+            runMode(0,Familiar_PathLength,4,FamiliarMap,ExperimentMode,'50');
+            runMode(0,Familiar_PathLength,4,FamiliarMap,ExperimentMode,'100');
+            runMode(0,Familiar_PathLength,4,FamiliarMap,ExperimentMode,'200');
+            runMode(0,Familiar_PathLength,4,FamiliarMap,ExperimentMode,'300');
+            runMode(0,Familiar_PathLength,4,FamiliarMap,ExperimentMode,'400');
+            runMode(0,Familiar_PathLength,4,FamiliarMap,ExperimentMode,'500');
+        }
+        if(RandomOrder){
             for(var dir = 4;dir<=8;dir=dir+4){
-                runMode(0,105,dir,WM_Maps,ExperimentMode);
+                runMode(0,WM_PathLength,dir,WM_Maps,ExperimentMode,InterStimulusInterval);
                 //runMode(0,105,dir,1,ExperimentMode);
                 //runMode(0,105,dir,1,ExperimentMode);
             }
@@ -558,7 +568,7 @@ function onUserInput() {
   }
 }
 document.onkeyup = onUserInput;
-function run_Map(MapNo,CueLength,PathLength,Dir,Mode,Map){
+function run_Map(MapNo,CueLength,PathLength,Dir,Mode,Map,ISI){
     if(Dir != Direction || Mode != CurrentMode){
         InsFlag = true;
         SetInstruction(ExperimentList[Mode],Dir);

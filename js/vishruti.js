@@ -315,7 +315,7 @@ function ExperimentModeTest(){
     }
     else if(Key == 7){
         ExperimentEnd = 1;
-        if(RandomOrder){
+        if(Familirization){
             for(var dir = 4;dir<=8;dir=dir+4){
                 runMode(0,105,dir,WM_Maps,ExperimentMode);
                 //runMode(0,105,dir,1,ExperimentMode);

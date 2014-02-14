@@ -189,10 +189,12 @@ function validateExperimentParams(){
       if(Familirization)  {
           InterStimulusInterval = '25';
           FamiliarISI = '';
+          InterStimulusInterval = InterStimulusInterval.toString();
       }
       else{
           InterStimulusInterval = document.getElementById("InterStimulusInterval").value;
           FamiliarISI =  InterStimulusInterval;
+          InterStimulusInterval = InterStimulusInterval.toString();
       }
   }
   else{
@@ -202,6 +204,7 @@ function validateExperimentParams(){
       Familirization = false;
       InterStimulusInterval = '500';
       FamiliarISI =  InterStimulusInterval;
+      InterStimulusInterval = InterStimulusInterval.toString();
   }
   if(ExperimentMode=="" || isNaN(NoOfMaps) || isNaN(AccuracyThreshold) || NoOfMaps <5 || AccuracyThreshold <60 || isNaN(TestingPathLength) || TestingPathLength <10 || InterStimulusInterval==""){
     alert("Please Enter Valid Experiment Parameters, No of Maps must be greater than equal to Five.");
@@ -887,7 +890,9 @@ function drawMetrics(){
   context.fillText(text, text_width, 45);
   text_width = text_width + metrics.width + 2;
 
-  if(RandomOrder){text = "Random"} else{ text = Level.toString()};
+  if(RandomOrder){ text = "2,3,4,5,6,7 or 8"}
+  else if(Familirization){ text = "2 or 3"}
+  else{ text = Level.toString()};
   metrics = context.measureText(text);
   context.fillText(text, text_width, 45);
 
@@ -967,7 +972,7 @@ function drawMetrics(){
   context.fillText(text, text_width, 125);
 
   text_width = width;
-  text = "Inter Stimulus Interval(ms):";
+  text = "Inter Stimulus Interval:";
   metrics = context.measureText(text);
   context.fillText(text, text_width, 145);
   text_width = text_width + metrics.width + 2;
@@ -975,9 +980,14 @@ function drawMetrics(){
   text = InterStimulusInterval.toString();
   metrics = context.measureText(text);
   context.fillText(text, text_width, 145);
+  text_width = text_width + metrics.width + 2;
+
+  text = " milisec ";
+  metrics = context.measureText(text);
+  context.fillText(text, text_width, 145);
 
   text_width = width;
-  text = "Inter Trial Interval(ms):";
+  text = "Inter Trial Interval:";
   metrics = context.measureText(text);
   context.fillText(text, text_width, 165);
   text_width = text_width + metrics.width + 2;
@@ -985,6 +995,11 @@ function drawMetrics(){
   text = InterTrialInterval.toString();
   metrics = context.measureText(text);
   context.fillText(text, text_width, 165);
+  text_width = text_width + metrics.width + 2;
+
+  text = " milisec ";
+  metrics = context.measureText(text);
+  context.fillText(text, text_width, 145);
 }
 function NextCue(){
   cueno = cueno + 1;
@@ -1159,22 +1174,24 @@ function SetInstruction(IKey,Dir){
                     AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
                 }
                 else{
-                    AlertMessage = AlertMessage.concat('This is 8 direction Audio Training experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
-                    AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
+                    AlertMessage = AlertMessage.concat('This is 8 direction Audio Training experiment.\nIn this audio for North,South, East, West, North-East, North-West, South East and South-West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('Use Number pad for Controls.\n');
+                    AlertMessage = AlertMessage.concat('Press 7 Key for North-West, 8 Key for North, 9 key for North-East, 4 for West, 6 for east, 1 for south-west, 2 for south, 3 for south east.\n');
                 }
                 AlertMessage = AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
                 AlertMessage = AlertMessage.concat('You will hear a Buzzing Sound as a Hint for Wrong Response.\n');
                 AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
                 break;
         case 5:
-        case 6: InsFile = InstructionFile.concat(Dir,'training.wav');
+        case 6: InsFile = InstructionFile.concat(Dir,'testing.wav');
                 if(Dir == 4){
-                    AlertMessage = AlertMessage.concat('This is 4 direction Audio Training experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('This is 4 direction Testing experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
                     AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
                 }
                 else{
-                    AlertMessage = AlertMessage.concat('This is 8 direction Audio Training experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
-                    AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
+                    AlertMessage = AlertMessage.concat('This is 8 direction Testing experiment.\nIn this audio for North,South, East, West, North-East, North-West, South East and South-West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('Use Number pad for Controls.\n');
+                    AlertMessage = AlertMessage.concat('Press 7 Key for North-West, 8 Key for North, 9 key for North-East, 4 for West, 6 for east, 1 for south-west, 2 for south, 3 for south east.\n');
                 }
                 AlertMessage = AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
                 AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
@@ -1186,8 +1203,9 @@ function SetInstruction(IKey,Dir){
                     AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
                 }
                 else{
-                    AlertMessage = AlertMessage.concat('This is 8 direction Working Memory experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
-                    AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
+                    AlertMessage = AlertMessage.concat('This is 8 direction Working Memory experiment.\nIn this audio for North,South, East, West, North-East, North-West, South East and South-West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('Use Number pad for Controls.\n');
+                    AlertMessage = AlertMessage.concat('Press 7 Key for North-West, 8 Key for North, 9 key for North-East, 4 for West, 6 for east, 1 for south-west, 2 for south, 3 for south east.\n');
                 }
                 AlertMessage = AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
                 AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
@@ -1198,8 +1216,9 @@ function SetInstruction(IKey,Dir){
                     AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
                 }
                 else{
-                    AlertMessage = AlertMessage.concat('This is 8 direction Audio Training experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
-                    AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
+                    AlertMessage = AlertMessage.concat('This is 8 direction Working Memory experiment.\nIn this audio for North,South, East, West, North-East, North-West, South East and South-West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('Use Number pad for Controls.\n');
+                    AlertMessage = AlertMessage.concat('Press 7 Key for North-West, 8 Key for North, 9 key for North-East, 4 for West, 6 for east, 1 for south-west, 2 for south, 3 for south east.\n');
                 }
                 AlertMessage = AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
                 AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
@@ -1235,12 +1254,14 @@ function playMap(){
         if(Key == 8){
             InterStimulusInterval = ISIList[ISICounter];
             ISICounter++;
+            InterStimulusInterval = InterStimulusInterval.toString();
             console.log('Key is 8'+InterStimulusInterval);
         }
         else{
             InterStimulusInterval = FamiliarISI;
+            InterStimulusInterval = InterStimulusInterval.toString();
         }
-        console.log('In PlayInstuction Else Part, Experiment Key: '+ Key);
+        console.log('In PlayInstruction Else Part, Experiment Key: '+ Key);
         setDisplayAndError(Key);
         console.log('RandomOrder '+RandomOrder +' CueLength '+Level);
         var MazeDiv = document.getElementById('MazeDiv');

@@ -236,7 +236,7 @@ function startExperiment(){
     //startexp = true;
     ExperimentTime = new Date().getTime();
     ExperimentModeTest();
-    checkFunctionQueue = setInterval(function(){callNextFunction()},5000);
+    checkFunctionQueue = setInterval(function(){callNextFunction()},3000);  //Check function queue after every 3 seconds
     FQCounter = FunctionQueue.length;
 }
 // To Set Display and Error
@@ -982,7 +982,7 @@ function drawMetrics(){
   context.fillText(text, text_width, 145);
   text_width = text_width + metrics.width + 2;
 
-  text = " milisec ";
+  text = " milliseconds ";
   metrics = context.measureText(text);
   context.fillText(text, text_width, 145);
 
@@ -997,9 +997,9 @@ function drawMetrics(){
   context.fillText(text, text_width, 165);
   text_width = text_width + metrics.width + 2;
 
-  text = " milisec ";
+  text = " milliseconds ";
   metrics = context.measureText(text);
-  context.fillText(text, text_width, 145);
+  context.fillText(text, text_width, 165);
 }
 function NextCue(){
   cueno = cueno + 1;

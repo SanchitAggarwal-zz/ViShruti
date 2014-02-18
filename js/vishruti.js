@@ -16,7 +16,8 @@ var FamiliarRecall = 0,maxRecall = 0,FamiliarISI = '';
 var ISIList = ['200','25','50','100','200','300','400','500'],ISICounter = 0;
 // variable for each trials and maze generation
 var Maze,Path,Cue,Direction,Level,TotalSteps,MazeLength;
-var pitch = [440,523,622];   //predefined notes in hz
+//var pitch = [440,523,622];   //predefined notes in hz 18/Feb/2014
+var pitch = [440,880,1760];   //predefined notes in hz
 var rate = 44100; //sample per sec
 var volume = 50; //amplitude of sine wave
 var next = 0;  // For Next move
@@ -1207,20 +1208,22 @@ function SetInstruction(IKey,Dir){
                     AlertMessage = AlertMessage.concat('Use Number pad for Controls.\n');
                     AlertMessage = AlertMessage.concat('Press 7 Key for North-West, 8 Key for North, 9 key for North-East, 4 for West, 6 for east, 1 for south-west, 2 for south, 3 for south east.\n');
                 }
-                AlertMessage = AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
+                AlertMessage = AlertMessage.concat('You will hear 2-8 sounds, Remember the sounds and press the corresponding Keys\n');
+                AlertMessage = AlertMessage.concat('Press Spacebar for Next set of sounds.\n');
                 AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
                 break;
-        case 8: InsFile = InstructionFile.concat(Dir,'WM_1.wav');
+        case 8: InsFile = InstructionFile.concat('4Familiar.wav');
                 if(Dir == 4){
                     AlertMessage = AlertMessage.concat('This is 4 direction Familiarization experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
                     AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
                 }
                 else{
-                    AlertMessage = AlertMessage.concat('This is 8 direction Working Memory experiment.\nIn this audio for North,South, East, West, North-East, North-West, South East and South-West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('This is 8 direction Familiarization experiment.\nIn this audio for North,South, East, West, North-East, North-West, South East and South-West Directions will be given.\n');
                     AlertMessage = AlertMessage.concat('Use Number pad for Controls.\n');
                     AlertMessage = AlertMessage.concat('Press 7 Key for North-West, 8 Key for North, 9 key for North-East, 4 for West, 6 for east, 1 for south-west, 2 for south, 3 for south east.\n');
                 }
-                AlertMessage = AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
+                AlertMessage = AlertMessage.concat('You will hear 2-8 sounds, Remember the sounds and press the corresponding Keys\n');
+                AlertMessage = AlertMessage.concat('Press Spacebar for Next set of sounds.\n');
                 AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
                 break;
         case 0: InsFile = InstructionFile.concat('NextMapEnter.wav');

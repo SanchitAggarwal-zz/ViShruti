@@ -3,7 +3,7 @@ var ExperimentMode,InterStimulusInterval,NoOfMaps,AccuracyThreshold;
 var DisplayGrid = 0,VisualError = 0,AudioError = 0;  // Flag for Visual or Error Feedback and DisplayGrid
 var ExperimentResults = []; //To Store the Experiment Results and Export it to CSV or Spreadsheet
 var ExperimentEnd = 0;
-var initialNoofSteps = 10,TestingPathLength = 50, TestingMaps = 4, WM_Maps = 5, WM_PathLength = 70;
+var initialNoofSteps = 10,TestingPathLength = 50, TestingMaps = 2, WM_Maps = 5, WM_PathLength = 70;
 var VisualCue = 0;  //if 0 no visual cue, 1 - correct visual cue, 2 - incorrect visual cue
 var RandomOrder = 0,RandomorderCue = [2,2,3,3,4,4,5,5,6,6,7,7,8,8],ro_index = 0;
 // Participant Details
@@ -259,8 +259,8 @@ function setDisplayAndError(Key){
 }
 // To Stop Experiment In Between
 function stopExperiment(){
+  startexp = false;
   if(ExperimentEnd){
-    startexp = false;
     document.getElementById("StopExp").disabled = true;
     document.getElementById("StartExp").disabled = false;
     $('#StopExp').removeClass('btn-primary');
@@ -432,7 +432,7 @@ function onUserInput() {
   if(!Sounds[counter] && counter>0){
       startexp = true;
   }
-  if(startexp){
+  if(startexp && !ExperimentEnd){
       //var key_press = String.fromCharCode(event.keyCode);
       var key_code = event.keyCode;
       var key_index_a = findIndex(inputDirection_a,key_code);
@@ -494,8 +494,8 @@ function onUserInput() {
                   }
 
                   ExperimentResults.push([FileIndex,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(TotalSteps),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfMaps,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval,AvgAccuracy]);
-
-                  if(AvgAccuracy >= AccuracyThreshold && CurrentMapNo>=5){
+                  var KeyExp = ExperimentList[ExperimentMode];
+                  if(AvgAccuracy >= AccuracyThreshold && CurrentMapNo>=5 && KeyExp < 3){
                       console.log("Avg Accuracy is greater than threshold ,switching to another mode");
                       var i = CurrentMapNo;
                       while(i<NMaps){
@@ -507,11 +507,18 @@ function onUserInput() {
                       }
                   }
                   else{
-                      var EKey = ExperimentList[SelectedMode];
+                      var EKey = ExperimentList[CurrentMode];
                       if(CurrentMapNo==NMaps && EKey < 3){
                           ExperimentEnd = 1;
                           // clear the polling variable
                           alert('Average Accuracy '+ AvgAccuracy +' less than Accuracy Threshold '+ AccuracyThreshold +' After '+NMaps + ' Maps.\nTerminating Experiment');
+                          while(i<NMaps){
+                              FQCounter--;
+                              FileIndex++;
+                              FunctionQueue.shift();
+                              console.log("Spliced the function call");
+                              i++;
+                          }
                           clearInterval(checkFunctionQueue);
                           stopExperiment();
                       }

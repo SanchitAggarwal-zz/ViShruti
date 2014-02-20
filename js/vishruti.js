@@ -496,9 +496,10 @@ function onUserInput() {
                   console.log(AvgAccuracy);
                   ExperimentResults.push([FileIndex,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(TotalSteps),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfMaps,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval,AvgAccuracy]);
                   var KeyExp = ExperimentList[CurrentMode];
-                  if(CurrentMapNo>=5 && KeyExp < 3){
+                  console.log('Accuracy Flag :'+AccuracyFlag);
+                  if(CurrentMapNo>5 && KeyExp < 3){
                       if(currentAccuracy >= AccuracyThreshold){
-                          AccuracyFlag--;
+                          AccuracyFlag = AccuracyFlag -1;
                       }
                       else{
                           AccuracyFlag = 3;

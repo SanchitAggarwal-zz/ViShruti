@@ -3,7 +3,7 @@ var ExperimentMode,InterStimulusInterval,NoOfMaps,AccuracyThreshold;
 var DisplayGrid = 0,VisualError = 0,AudioError = 0;  // Flag for Visual or Error Feedback and DisplayGrid
 var ExperimentResults = []; //To Store the Experiment Results and Export it to CSV or Spreadsheet
 var ExperimentEnd = 0;
-var initialNoofSteps = 10,TestingPathLength = 50, TestingMaps = 2, WM_Maps = 5, WM_PathLength = 70;
+var initialNoofSteps = 10,TestingPathLength = 50, TestingMaps = 4, WM_Maps = 5, WM_PathLength = 70;
 var VisualCue = 0;  //if 0 no visual cue, 1 - correct visual cue, 2 - incorrect visual cue
 var RandomOrder = 0,RandomorderCue = [2,2,3,3,4,4,5,5,6,6,7,7,8,8],ro_index = 0;
 // Participant Details
@@ -110,7 +110,7 @@ function DummyData(){
         Form_pd.KEYBOARD_FAMILIARITY.value = 'Yes';
 
         document.getElementById("ExperimentMode").value = 'Visual_Error_FeedBack_Training';
-        document.getElementById("NoOfMaps").value = '8';
+        document.getElementById("NoOfMaps").value = '10';
         document.getElementById("AccuracyThreshold").value = '80';
         document.getElementById("TestingPathLength").value = '50';
         document.getElementById("InterStimulusInterval").disabled = true;
@@ -497,7 +497,7 @@ function onUserInput() {
                   ExperimentResults.push([FileIndex,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(TotalSteps),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfMaps,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval,AvgAccuracy]);
                   var KeyExp = ExperimentList[CurrentMode];
                   if(CurrentMapNo>=5 && KeyExp < 3){
-                      if(AccuracyThreshold >= currentAccuracy){
+                      if(currentAccuracy >= AccuracyThreshold){
                           AccuracyFlag--;
                       }
                       else{

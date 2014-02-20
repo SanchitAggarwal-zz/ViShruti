@@ -110,7 +110,7 @@ function DummyData(){
         Form_pd.KEYBOARD_FAMILIARITY.value = 'Yes';
 
         document.getElementById("ExperimentMode").value = 'Visual_Error_FeedBack_Training';
-        document.getElementById("NoOfMaps").value = '5';
+        document.getElementById("NoOfMaps").value = '8';
         document.getElementById("AccuracyThreshold").value = '80';
         document.getElementById("TestingPathLength").value = '50';
         document.getElementById("InterStimulusInterval").disabled = true;

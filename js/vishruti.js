@@ -41,6 +41,7 @@ var silencefile;
 var startexp = false;
 var cueno = 0;
 var SelectedMode;
+var AccuracyFlag = 3;
 var InstructionFile = "./Instructions/", AlertMessage = '', InsFile = '', InsFlag = false, Instructions = [], InsCounter = 0;
 // Experiment List
 var ExperimentList = {'Audio_Error_FeedBack_Training':1,
@@ -472,8 +473,6 @@ function onUserInput() {
                       FamiliarISI = FamiliarRecall>maxRecall?ISIList[ISICounter-1]:FamiliarISI;
                       maxRecall =  FamiliarRecall>maxRecall?FamiliarRecall:maxRecall;
                   }
-                  AvgAccuracy = ((CurrentMapNo - 1)*AvgAccuracy + (100*Hit/(TotalSteps)))/CurrentMapNo;
-                  console.log(AvgAccuracy);
                   drawMaze(Maze,MazeLength);
                   drawMetrics();
                   if(CurrentMode == 'InCorrectVisualCue'){
@@ -492,11 +491,24 @@ function onUserInput() {
                   if(Familirization){
                       Level = FamiliarCue.toString();
                   }
-
+                  var currentAccuracy = 100*Hit/(TotalSteps);
+                  AvgAccuracy = ((CurrentMapNo - 1)*AvgAccuracy + currentAccuracy)/CurrentMapNo;
+                  console.log(AvgAccuracy);
                   ExperimentResults.push([FileIndex,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(TotalSteps),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfMaps,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval,AvgAccuracy]);
-                  var KeyExp = ExperimentList[ExperimentMode];
-                  if(AvgAccuracy >= AccuracyThreshold && CurrentMapNo>=5 && KeyExp < 3){
-                      console.log("Avg Accuracy is greater than threshold ,switching to another mode");
+                  var KeyExp = ExperimentList[CurrentMode];
+                  if(CurrentMapNo>=5 && KeyExp < 3){
+                      if(AccuracyThreshold >= currentAccuracy){
+                          AccuracyFlag--;
+                      }
+                      else{
+                          AccuracyFlag = 3;
+                      }
+                  }
+                  else{
+                      AccuracyFlag = 3;
+                  }
+                  if(AccuracyFlag <= 0){
+                      console.log("Accuracy for three consecutive map is greater than threshold ,switching to another mode");
                       var i = CurrentMapNo;
                       while(i<NMaps){
                           FQCounter--;
@@ -507,11 +519,10 @@ function onUserInput() {
                       }
                   }
                   else{
-                      var EKey = ExperimentList[CurrentMode];
-                      if(CurrentMapNo==NMaps && EKey < 3){
+                      if(CurrentMapNo==NMaps && KeyExp < 3){
                           ExperimentEnd = 1;
                           // clear the polling variable
-                          alert('Average Accuracy '+ AvgAccuracy +' less than Accuracy Threshold '+ AccuracyThreshold +' After '+NMaps + ' Maps.\nTerminating Experiment');
+                          alert('Avg Accuracy of three consecutive Maps less than Accuracy Threshold '+ AccuracyThreshold +' After '+NMaps + ' Maps.\nTerminating Experiment');
                           while(i<NMaps){
                               FQCounter--;
                               FileIndex++;
@@ -594,6 +605,7 @@ document.onkeyup = onUserInput;
 function run_Map(MapNo,CueLength,PathLength,Dir,Mode,Map){
     if(Dir != Direction || Mode != CurrentMode){
         InsFlag = true;
+        AccuracyFlag = 3;
         SetInstruction(ExperimentList[Mode],Dir);
     }
     else{

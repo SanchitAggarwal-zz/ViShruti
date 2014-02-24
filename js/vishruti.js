@@ -249,14 +249,14 @@ function startExperiment(){
 // To Set Display and Error
 function setDisplayAndError(Key){
   switch(Key){
-    case 1 :DisplayGrid = 0; VisualError = 1; AudioError = 1; VisualCue = 0; RandomOrder = 0; break;
-    case 2 :DisplayGrid = 1; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
-    case 3 :DisplayGrid = 1; VisualError = 1; AudioError = 1; VisualCue = 1; RandomOrder = 0; break;
-    case 4 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
-    case 5 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
-    case 6 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
-    case 7 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 1; break;
-    case 8 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
+    case 1 :DisplayGrid = 0; VisualError = 1; AudioError = 1; VisualCue = 0; RandomOrder = 0; Familirization = false; break;
+    case 2 :DisplayGrid = 1; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; Familirization = false; break;
+    case 3 :DisplayGrid = 1; VisualError = 1; AudioError = 1; VisualCue = 1; RandomOrder = 0; Familirization = false; break;
+    case 4 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; Familirization = false; break;
+    case 5 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; Familirization = false; break;
+    case 6 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; Familirization = false; break;
+    case 7 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 1; Familirization = false; break;
+    case 8 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; Familirization = true; break;
     /*case 8 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
     case 9 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; WM_StepsInEachCue.reverse(); break;
     case 10:DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 1; break;
@@ -475,8 +475,8 @@ function onUserInput() {
               if(CurrentCuePos==TotalSteps && PopNextFunction == 0){ // pop next function for new Maps
                   if(Familirization){
                       FamiliarRecall = Recall;
-                      FamiliarISI = FamiliarRecall>maxRecall?ISIList[ISICounter-1]:FamiliarISI;
-                      maxRecall =  FamiliarRecall>maxRecall?FamiliarRecall:maxRecall;
+                      FamiliarISI = FamiliarRecall>=maxRecall?ISIList[ISICounter-1]:FamiliarISI;
+                      maxRecall =  FamiliarRecall>=maxRecall?FamiliarRecall:maxRecall;
                   }
                   drawMaze(Maze,MazeLength);
                   drawMetrics();

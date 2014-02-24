@@ -105,7 +105,7 @@ function DummyData(){
         Form_pd.USERID.value = 'Dummy_User';
         Form_pd.AGE.value = '25';
         Form_pd.EDUCATION.value = 'MS';
-        Form_pd.MODEOFCOMM.value = 'Telugu';
+        Form_pd.MODEOFCOMM.value = 'English';
         Form_pd.GENDER.value = 'Male';
         Form_pd.PARTICIPANT_TYPE.value = 'Normal';
         Form_pd.MUSICAL_TRAINING.value = 'No';
@@ -554,7 +554,7 @@ function onUserInput() {
                   // inter-trial time between two sound patterns in working memory experiment
                   startexp = false;
                   var str1 = "./Silence/silence";
-                  silencefile = str1.concat(InterTrialInterval,'.mp3');
+                  silencefile = str1.concat(InterTrialInterval,'.wav');
                   AddSilence();
                   // play next audio sequence
                   NextCue();
@@ -1030,7 +1030,7 @@ function drawMetrics(){
 function NextCue(){
   cueno = cueno + 1;
   var str1 = "./Silence/silence";
-  silencefile = str1.concat(InterStimulusInterval,'.mp3');
+  silencefile = str1.concat(InterStimulusInterval,'.wav');
   if(RandomOrder){
     Level = RandomorderCue[ro_index++];
   }

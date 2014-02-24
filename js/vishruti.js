@@ -249,14 +249,14 @@ function startExperiment(){
 // To Set Display and Error
 function setDisplayAndError(Key){
   switch(Key){
-    case 1 :DisplayGrid = 0; VisualError = 1; AudioError = 1; VisualCue = 0; RandomOrder = 0; Familirization = false; break;
-    case 2 :DisplayGrid = 1; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; Familirization = false; break;
-    case 3 :DisplayGrid = 1; VisualError = 1; AudioError = 1; VisualCue = 1; RandomOrder = 0; Familirization = false; break;
-    case 4 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; Familirization = false; break;
-    case 5 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; Familirization = false; break;
-    case 6 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; Familirization = false; break;
-    case 7 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 1; Familirization = false; break;
-    case 8 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; Familirization = true; break;
+    case 1 :DisplayGrid = 0; VisualError = 1; AudioError = 1; VisualCue = 0; RandomOrder = 0;  break;
+    case 2 :DisplayGrid = 1; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0;  break;
+    case 3 :DisplayGrid = 1; VisualError = 1; AudioError = 1; VisualCue = 1; RandomOrder = 0;  break;
+    case 4 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0;  break;
+    case 5 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0;  break;
+    case 6 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0;  break;
+    case 7 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 1;  break;
+    case 8 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0;  break;
     /*case 8 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; break;
     case 9 :DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 0; WM_StepsInEachCue.reverse(); break;
     case 10:DisplayGrid = 0; VisualError = 1; AudioError = 0; VisualCue = 0; RandomOrder = 1; break;
@@ -1288,10 +1288,11 @@ function playMap(){
         else{
             InterStimulusInterval = FamiliarISI;
             InterStimulusInterval = InterStimulusInterval.toString();
+            Familirization = false;
         }
         console.log('In PlayInstruction Else Part, Experiment Key: '+ Key);
         setDisplayAndError(Key);
-        console.log('RandomOrder '+RandomOrder +' CueLength '+Level);
+        console.log('RandomOrder '+RandomOrder +' CueLength '+Level+'Familirization '+Familirization);
         var MazeDiv = document.getElementById('MazeDiv');
         //console.log(DisplayGrid);
         if(DisplayGrid==0){

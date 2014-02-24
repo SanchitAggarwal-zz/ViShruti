@@ -42,6 +42,7 @@ var startexp = false;
 var cueno = 0;
 var SelectedMode;
 var AccuracyFlag = 3;
+var DayNo;
 var InstructionFile = "./Instructions/", AlertMessage = '', InsFile = '', InsFlag = false, Instructions = [], InsCounter = 0;
 // Experiment List
 var ExperimentList = {'Audio_Error_FeedBack_Training':1,
@@ -69,7 +70,10 @@ function participantDetails(){
     MUSIC_KIND = Form_pd.MUSIC_KIND.value;
     HEARING_PROBLEM = Form_pd.HEARING_PROBLEM.value;
     KEYBOARD_FAMILIARITY = Form_pd.KEYBOARD_FAMILIARITY.value;
-    if (!(USERID == "" || isNaN(AGE) || AGE < 1 || EDUCATION == "" || MODEOFCOMM == "" || GENDER == "" || PARTICIPANT_TYPE == "" || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || KEYBOARD_FAMILIARITY == "")) {
+    DayNo = Form_pd.DayNo.value;
+
+    if (!(DayNo == "" || USERID == "" || isNaN(AGE) || AGE < 1 || EDUCATION == "" || MODEOFCOMM == "" || GENDER == "" || PARTICIPANT_TYPE == "" || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || KEYBOARD_FAMILIARITY == "")) {
+        USERID = USERID.concat('_',DayNo);
         ExperimentResults.push(['USER_ID', 'AGE', 'EDUCATION', 'MODE_OF_COMMUNICATION', 'GENDER', 'PARTICIPANT_TYPE', 'MUSICAL_TRAINING', 'MUSIC_KIND', 'HEARING_PROBLEM', 'KEYBOARD_FAMILIARITY', 'InterTrialInterval']);
         ExperimentResults.push([USERID, AGE, EDUCATION, MODEOFCOMM, GENDER, PARTICIPANT_TYPE, MUSICAL_TRAINING, MUSIC_KIND, HEARING_PROBLEM, KEYBOARD_FAMILIARITY, InterTrialInterval]);
         ExperimentResults.push(['Index#', 'Direction', '# of Stimuli per Trial', 'Experiment Mode', 'Accuracy Threshold', 'Total Steps in Map', '#Hit', '#Wrong Response', 'Accuracy', 'Recall', 'ResponseTime(in Sec)', 'Average Response Time (in Sec)', 'MaximumTrainingMaps', 'Input Time per response', 'Stimuli Direction Labels', 'Response Direction Labels','InterStimulusInterval','Average Accuracy']);
@@ -82,7 +86,7 @@ function participantDetails(){
     else {
         if(document.getElementById("Dummy").checked){
             USERID = 'Test'; AGE = 25; EDUCATION = "ABC"; MODEOFCOMM = "Telugu"; GENDER = "Male"; PARTICIPANT_TYPE = "Normal"; MUSICAL_TRAINING = "Yes"; MUSIC_KIND = "ABC";
-            HEARING_PROBLEM = "No"; KEYBOARD_FAMILIARITY = "Yes";
+            HEARING_PROBLEM = "No"; KEYBOARD_FAMILIARITY = "Yes"; DayNo = "Day_1";
             $('#contactModal').modal('hide');
             if ($(".fa-user").hasClass('detailsAdded') == false) {
                 $(".fa-user").addClass('detailsAdded');
@@ -108,6 +112,7 @@ function DummyData(){
         MUSIC_KIND = Form_pd.MUSIC_KIND.value = 'None';
         Form_pd.HEARING_PROBLEM.value = 'No';
         Form_pd.KEYBOARD_FAMILIARITY.value = 'Yes';
+        Form_pd.DayNo.value = 'Day_1';
 
         document.getElementById("ExperimentMode").value = 'Visual_Error_FeedBack_Training';
         document.getElementById("NoOfMaps").value = '10';
@@ -129,7 +134,7 @@ function DummyData(){
         MUSIC_KIND = Form_pd.MUSIC_KIND.value = '';
         Form_pd.HEARING_PROBLEM.value = '';
         Form_pd.KEYBOARD_FAMILIARITY.value = '';
-
+        Form_pd.DayNo.value = '';
         document.getElementById("ExperimentMode").value = '';
         document.getElementById("NoOfMaps").value = '';
         document.getElementById("AccuracyThreshold").value = '';

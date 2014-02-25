@@ -3,7 +3,7 @@ var ExperimentMode,InterStimulusInterval,NoOfMaps,AccuracyThreshold;
 var DisplayGrid = 0,VisualError = 0,AudioError = 0;  // Flag for Visual or Error Feedback and DisplayGrid
 var ExperimentResults = []; //To Store the Experiment Results and Export it to CSV or Spreadsheet
 var ExperimentEnd = 0;
-var initialNoofSteps = 10,TestingPathLength = 50, TestingMaps = 4, WM_Maps = 5, WM_PathLength = 70;
+var initialNoofSteps = 10,TestingPathLength = 50, TestingMaps = 3, WM_Maps = 2, WM_PathLength = 70;
 var VisualCue = 0;  //if 0 no visual cue, 1 - correct visual cue, 2 - incorrect visual cue
 var RandomOrder = 0,RandomorderCue = [2,2,3,3,4,4,5,5,6,6,7,7,8,8],ro_index = 0;
 // Participant Details

@@ -3,7 +3,7 @@ var ExperimentMode,InterStimulusInterval,NoOfMaps,AccuracyThreshold;
 var DisplayGrid = 0,VisualError = 0,AudioError = 0;  // Flag for Visual or Error Feedback and DisplayGrid
 var ExperimentResults = []; //To Store the Experiment Results and Export it to CSV or Spreadsheet
 var ExperimentEnd = 0;
-var initialNoofSteps = 10,TestingPathLength = 50, TestingMaps = 3, WM_Maps = 2, WM_PathLength = 70;
+var initialNoofSteps = 10,TestingPathLength = 50, TestingMaps = 3, WM_Maps = 3, WM_PathLength = 70;
 var VisualCue = 0;  //if 0 no visual cue, 1 - correct visual cue, 2 - incorrect visual cue
 var RandomOrder = 0,RandomorderCue = [2,2,3,3,4,4,5,5,6,6,7,7,8,8],ro_index = 0;
 // Participant Details
@@ -11,7 +11,7 @@ var Form_pd,USERID,AGE,EDUCATION,MODEOFCOMM,GENDER,PARTICIPANT_TYPE,MUSICAL_TRAI
 var ExperimentTime = 0,AvgAccuracy = 0,NMaps, Accuracy = [];
 var FunctionQueue = [],FQCounter,checkFunctionQueue,PopNextFunction = 1,FileIndex = 0;
 var Familirization = false;
-var FamiliarMap = 8, FamiliarCue = [2,2,2,2,2,3,3,3,3,3,2,2,2,2,2,3,3,3,3,3],Familiar_PathLength = 50;
+var FamiliarMap = 8, FamiliarCue = [2,2,2,2,2,3,3,3,3,3],Familiar_PathLength = 25;
 var FamiliarRecall = 0,maxRecall = 0,FamiliarISI = '';
 var ISIList = ['200','25','50','100','200','300','400','500'],ISICounter = 0;
 // variable for each trials and maze generation

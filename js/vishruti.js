@@ -502,7 +502,7 @@ function onUserInput() {
                   ExperimentResults.push([FileIndex,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(TotalSteps),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfMaps,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval,AvgAccuracy]);
                   var KeyExp = ExperimentList[CurrentMode];
                   console.log('Accuracy Flag :'+AccuracyFlag);
-                  if(CurrentMapNo>5 && KeyExp < 3){
+                  if(CurrentMapNo>5 && KeyExp < 5){
                       if(currentAccuracy >= AccuracyThreshold){
                           AccuracyFlag = AccuracyFlag -1;
                       }
@@ -525,7 +525,7 @@ function onUserInput() {
                       }
                   }
                   else{
-                      if(CurrentMapNo==NMaps && KeyExp < 3){
+                      if(CurrentMapNo==NMaps && KeyExp < 5){
                           ExperimentEnd = 1;
                           // clear the polling variable
                           alert('Avg Accuracy of three consecutive Maps less than Accuracy Threshold '+ AccuracyThreshold +' After '+NMaps + ' Maps.\nTerminating Experiment');
@@ -1191,16 +1191,13 @@ function SetInstruction(IKey,Dir){
     InsFile = '';
     console.log(IKey);
     switch(IKey){
-        case 1:
-        case 2:
-        case 3:
-        case 4: InsFile = InstructionFile.concat(Dir,'training.wav');
+        case 1: InsFile = InstructionFile.concat(Dir,'training.wav');
                 if(Dir == 4){
-                    AlertMessage = AlertMessage.concat('This is 4 direction Audio Training experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('This is 4 direction Audio Error Feedback Training experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
                     AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
                 }
                 else{
-                    AlertMessage = AlertMessage.concat('This is 8 direction Audio Training experiment.\nIn this audio for North,South, East, West, North-East, North-West, South East and South-West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('This is 8 direction Audio Error Feedback Training experiment.\nIn this audio for North,South, East, West, North-East, North-West, South East and South-West Directions will be given.\n');
                     AlertMessage = AlertMessage.concat('Use Number pad for Controls.\n');
                     AlertMessage = AlertMessage.concat('Press 7 Key for North-West, 8 Key for North, 9 key for North-East, 4 for West, 6 for east, 1 for south-west, 2 for south, 3 for south east.\n');
                 }
@@ -1208,7 +1205,59 @@ function SetInstruction(IKey,Dir){
                 AlertMessage = AlertMessage.concat('You will hear a Buzzing Sound as a Hint for Wrong Response.\n');
                 AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
                 break;
-        case 5:
+        case 2: InsFile = InstructionFile.concat(Dir,'training.wav');
+                if(Dir == 4){
+                    AlertMessage = AlertMessage.concat('This is 4 direction Video Error Feedback experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
+                }
+                else{
+                    AlertMessage = AlertMessage.concat('This is 8 direction Video Training experiment.\nIn this audio for North,South, East, West, North-East, North-West, South East and South-West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('Use Number pad for Controls.\n');
+                    AlertMessage = AlertMessage.concat('Press 7 Key for North-West, 8 Key for North, 9 key for North-East, 4 for West, 6 for east, 1 for south-west, 2 for south, 3 for south east.\n');
+                }
+                AlertMessage = AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
+                AlertMessage = AlertMessage.concat('You will see a Red or Green Color as a Hint for Wrong/Right Response.\n');
+                AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
+                break;
+        case 3: InsFile = InstructionFile.concat(Dir,'training.wav');
+                if(Dir == 4){
+                    AlertMessage = AlertMessage.concat('This is 4 direction User Directed Audio Training experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
+                }
+                else{
+                    AlertMessage = AlertMessage.concat('This is 8 direction User Directed Audio Training experiment.\nIn this audio for North,South, East, West, North-East, North-West, South East and South-West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('Use Number pad for Controls.\n');
+                    AlertMessage = AlertMessage.concat('Press 7 Key for North-West, 8 Key for North, 9 key for North-East, 4 for West, 6 for east, 1 for south-west, 2 for south, 3 for south east.\n');
+                }
+                AlertMessage = AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
+                AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
+                break;
+        case 4: InsFile = InstructionFile.concat(Dir,'training.wav');
+                if(Dir == 4){
+                    AlertMessage = AlertMessage.concat('This is 4 direction Unsupervised Audio Training experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
+                }
+                else{
+                    AlertMessage = AlertMessage.concat('This is 8 direction Unsupervised Audio Training experiment.\nIn this audio for North,South, East, West, North-East, North-West, South East and South-West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('Use Number pad for Controls.\n');
+                    AlertMessage = AlertMessage.concat('Press 7 Key for North-West, 8 Key for North, 9 key for North-East, 4 for West, 6 for east, 1 for south-west, 2 for south, 3 for south east.\n');
+                }
+                AlertMessage = AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
+                AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
+                break;
+        case 5: InsFile = InstructionFile.concat(Dir,'training.wav');
+                if(Dir == 4){
+                    AlertMessage = AlertMessage.concat('This is 4 direction Audio Testing experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
+                }
+                else{
+                    AlertMessage = AlertMessage.concat('This is 8 direction Audio Testing experiment.\nIn this audio for North,South, East, West, North-East, North-West, South East and South-West Directions will be given.\n');
+                    AlertMessage = AlertMessage.concat('Use Number pad for Controls.\n');
+                    AlertMessage = AlertMessage.concat('Press 7 Key for North-West, 8 Key for North, 9 key for North-East, 4 for West, 6 for east, 1 for south-west, 2 for south, 3 for south east.\n');
+                }
+                AlertMessage = AlertMessage.concat('Listen to Audio and Press corresponding Arrow Key. Press Spacebar for Next Audio.\n');
+                AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
+                break;
         case 6: InsFile = InstructionFile.concat(Dir,'testing.wav');
                 if(Dir == 4){
                     AlertMessage = AlertMessage.concat('This is 4 direction Testing experiment.\nIn this audio for North,South, East and West Directions will be given.\n');

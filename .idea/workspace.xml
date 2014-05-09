@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="8341231e-1b75-464b-81ce-6170d666ab3a" name="Default" comment="" />
+    <ignored path="ViShruti.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="ViShruti" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="vishruti.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="57" column="46" selection-start="2855" selection-end="2855" vertical-scroll-proportion="0.6302521" vertical-offset="480" max-vertical-offset="20625">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="false" />
+    </FindUsagesManager>
+  </component>
+  <component name="Git.Settings">
+    <option name="UPDATE_TYPE" value="MERGE" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/ViShruti.html" />
+        <option value="$PROJECT_DIR$/js/vishruti.js" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="y" value="22" />
+    <option name="width" value="1280" />
+    <option name="height" value="705" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ViShruti" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ViShruti" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ViShruti" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ViShruti" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ViShruti" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SoundScape" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ViShruti" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ViShruti" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="FullScreen" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Dropbox/BioJS/samplecode/PyhlogeneticTreeDemo" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="DartUnitRunConfigurationType" factoryName="DartUnit">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="scope" value="ALL" />
+      <option name="testName" />
+      <method />
+    </configuration>
+    <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
+      <option name="VMOptions" />
+      <option name="arguments" />
+      <option name="filePath" />
+      <option name="name" value="Dart" />
+      <option name="saveOutputToFile" value="false" />
+      <option name="showConsoleOnStdErr" value="false" />
+      <option name="showConsoleOnStdOut" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JSTestDriver:ConfigurationType" factoryName="JsTestDriver">
+      <setting name="configLocationType" value="CONFIG_FILE" />
+      <setting name="settingsFile" value="" />
+      <setting name="serverType" value="INTERNAL" />
+      <setting name="preferredDebugBrowser" value="CHROME" />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerKarma" factoryName="Karma" singleton="true" config-file="">
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+      <method />
+    </configuration>
+    <configuration default="true" type="NodeJSConfigurationType" factoryName="Node.js" working-dir="">
+      <browser start="false" url="" with-js-debugger="false" />
+      <method />
+    </configuration>
+    <list size="0" />
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration" maxAnnotateRevisions="500" myUseAcceleration="nothing" myAutoUpdateAfterCommit="false" cleanupOnStartRun="false" SSL_PROTOCOLS="sslv3">
+    <option name="USER" value="" />
+    <option name="PASSWORD" value="" />
+    <option name="mySSHConnectionTimeout" value="30000" />
+    <option name="mySSHReadTimeout" value="30000" />
+    <option name="LAST_MERGED_REVISION" />
+    <option name="MERGE_DRY_RUN" value="false" />
+    <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
+    <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
+    <option name="IGNORE_SPACES_IN_MERGE" value="false" />
+    <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
+    <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
+    <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
+    <option name="FORCE_UPDATE" value="false" />
+    <option name="IGNORE_EXTERNALS" value="false" />
+    <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8341231e-1b75-464b-81ce-6170d666ab3a" name="Default" comment="" />
+      <created>1392220096521</created>
+      <updated>1392220096521</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Fixing Instructions">
+      <created>1392280843143</created>
+      <updated>1392280843143</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Fixing Instructions&#10;">
+      <created>1392313036371</created>
+      <updated>1392313036371</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Fixing Instructions&#10;">
+      <created>1392315929557</created>
+      <updated>1392315929557</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Fixing Instructions&#10;">
+      <created>1392315950687</created>
+      <updated>1392315950687</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Fixing Instructions&#10;">
+      <created>1392336912092</created>
+      <updated>1392336912092</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Fixing Instructions&#10;">
+      <created>1392435213807</created>
+      <updated>1392435213807</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Fixing Instructions&#10;">
+      <created>1392701169763</created>
+      <updated>1392701169763</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Fixing Instructions&#10;">
+      <created>1392805726661</created>
+      <updated>1392805726661</updated>
+    </task>
+    <task id="LOCAL-00009" summary="fixed accuracy, three consecutive maps and added hindi, english instruction with dummy silence file">
+      <created>1392891884778</created>
+      <updated>1392891884778</updated>
+    </task>
+    <task id="LOCAL-00010" summary="fixed accuracy, three consecutive maps and added hindi, english instruction with dummy silence file&#10;">
+      <created>1392892071562</created>
+      <updated>1392892071562</updated>
+    </task>
+    <task id="LOCAL-00011" summary="fixed accuracy, three consecutive maps and added hindi, english instruction with dummy silence file&#10;">
+      <created>1392892429745</created>
+      <updated>1392892429745</updated>
+    </task>
+    <task id="LOCAL-00012" summary="fixed accuracy, three consecutive maps and added hindi, english instruction with dummy silence file&#10;">
+      <created>1392893734176</created>
+      <updated>1392893734176</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Corrected sound silence">
+      <created>1393273379427</created>
+      <updated>1393273379427</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Corrected Set Display and Error , added Familirization Key&#10;">
+      <created>1393278278016</created>
+      <updated>1393278278016</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Corrected Set Display and Error , added Familirization in play map&#10;">
+      <created>1393280449242</created>
+      <updated>1393280449242</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Corrected Set Display and Error , added Familirization in play map&#10;">
+      <created>1393308732669</created>
+      <updated>1393308732669</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Corrected Set Display and Error , added Familirization in play map&#10;">
+      <created>1393310843755</created>
+      <updated>1393310843755</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Corrected Set Display and Error , added Familirization in play map&#10;">
+      <created>1393311004201</created>
+      <updated>1393311004201</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Corrected Set Display and Error , added Familirization in play map&#10;">
+      <created>1399586369491</created>
+      <updated>1399586369491</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="22" width="1280" height="705" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32861635" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32861635" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USERS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="myTodoPanelSettings">
+      <TodoPanelSettings />
+    </option>
+    <option name="SHORT_DIFF_EXTRA_LINES" value="-1" />
+    <MESSAGE value="Fixing Instructions" />
+    <MESSAGE value="Fixing Instructions&#10;" />
+    <MESSAGE value="fixed accuracy" />
+    <MESSAGE value="fixed accuracy, three consecutive maps and added hindi, english instruction with dummy silence file" />
+    <MESSAGE value="fixed accuracy, three consecutive maps and added hindi, english instruction with dummy silence file&#10;" />
+    <MESSAGE value="Corrected sound silence" />
+    <MESSAGE value="Corrected Set Display and Error , added Familirization Key&#10;" />
+    <MESSAGE value="Corrected Set Display and Error , added Familirization in play map&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="Corrected Set Display and Error , added Familirization in play map&#10;" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="2" />
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="25" selection-start="1314" selection-end="1326" vertical-scroll-proportion="0.0" vertical-offset="285" max-vertical-offset="20625">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="8" selection-start="0" selection-end="18391" vertical-scroll-proportion="0.0" vertical-offset="210" max-vertical-offset="4485">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="25" selection-start="1314" selection-end="1326" vertical-scroll-proportion="0.0" vertical-offset="285" max-vertical-offset="20625">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="8" selection-start="0" selection-end="18391" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4485">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="25" selection-start="1314" selection-end="1326" vertical-scroll-proportion="0.0" vertical-offset="285" max-vertical-offset="4380">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="174" column="41" selection-start="10381" selection-end="10386" vertical-scroll-proportion="0.0" vertical-offset="2610" max-vertical-offset="4485">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="25" selection-start="1314" selection-end="1326" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4380">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="174" column="41" selection-start="10381" selection-end="10386" vertical-scroll-proportion="0.0" vertical-offset="2040" max-vertical-offset="4485">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="464" column="10" selection-start="21572" selection-end="21572" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4380">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="174" column="41" selection-start="10381" selection-end="10386" vertical-scroll-proportion="0.0" vertical-offset="2040" max-vertical-offset="4485">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1351" column="10" selection-start="59133" selection-end="59133" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="8850">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="174" column="41" selection-start="10381" selection-end="10386" vertical-scroll-proportion="0.0" vertical-offset="2040" max-vertical-offset="4485">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1257" column="138" selection-start="52889" selection-end="52889" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="8850">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="174" column="41" selection-start="10381" selection-end="10386" vertical-scroll-proportion="0.0" vertical-offset="2040" max-vertical-offset="4485">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="67" selection-start="1300" selection-end="1300" vertical-scroll-proportion="0.0" vertical-offset="270" max-vertical-offset="6135">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="174" column="41" selection-start="10381" selection-end="10386" vertical-scroll-proportion="0.0" vertical-offset="2040" max-vertical-offset="4485">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="67" selection-start="1300" selection-end="1300" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6135">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="174" column="41" selection-start="10381" selection-end="10386" vertical-scroll-proportion="0.0" vertical-offset="2040" max-vertical-offset="4485">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1294" column="84" selection-start="53504" selection-end="53504" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6135">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="174" column="41" selection-start="10381" selection-end="10386" vertical-scroll-proportion="0.0" vertical-offset="2040" max-vertical-offset="4485">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="499" column="34" selection-start="23785" selection-end="23785" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="19800">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="162" column="56" selection-start="9627" selection-end="9632" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="497" column="86" selection-start="23700" selection-end="23700" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="6045">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="79" column="77" selection-start="4857" selection-end="4857" vertical-scroll-proportion="0.0" vertical-offset="1185" max-vertical-offset="4320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="1197" column="6" selection-start="47742" selection-end="47742" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3285">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="79" column="77" selection-start="4857" selection-end="4857" vertical-scroll-proportion="0.0" vertical-offset="1185" max-vertical-offset="4320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="47" selection-start="1209" selection-end="1209" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2010">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="79" column="77" selection-start="4857" selection-end="4857" vertical-scroll-proportion="0.0" vertical-offset="1185" max-vertical-offset="4320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="238" column="120" selection-start="12214" selection-end="12214" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2010">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="79" column="77" selection-start="4857" selection-end="4857" vertical-scroll-proportion="0.0" vertical-offset="1185" max-vertical-offset="4320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="238" column="120" selection-start="12214" selection-end="12214" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2010">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="79" column="77" selection-start="4857" selection-end="4857" vertical-scroll-proportion="0.0" vertical-offset="1185" max-vertical-offset="4320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="329" column="88" selection-start="16100" selection-end="16100" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3135">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="79" column="77" selection-start="4857" selection-end="4857" vertical-scroll-proportion="0.0" vertical-offset="1170" max-vertical-offset="4320">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="567" column="33" selection-start="26108" selection-end="26108" vertical-scroll-proportion="0.0" vertical-offset="3105" max-vertical-offset="3105">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="78" column="118" selection-start="4773" selection-end="4773" vertical-scroll-proportion="0.0" vertical-offset="1170" max-vertical-offset="4305">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="870" column="21" selection-start="34880" selection-end="34880" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="16020">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="8" selection-start="616" selection-end="616" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3840">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SoundScape/index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="33" selection-start="423" selection-end="423" vertical-scroll-proportion="0.3338816" vertical-offset="67" max-vertical-offset="1890" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/SoundScape/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="12" selection-start="1241" selection-end="1241" vertical-scroll-proportion="0.39473686" vertical-offset="0" max-vertical-offset="608" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ViShruti.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="287" column="38" selection-start="18247" selection-end="18247" vertical-scroll-proportion="0.7110333" vertical-offset="3899" max-vertical-offset="4485">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/vishruti.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="46" selection-start="2855" selection-end="2855" vertical-scroll-proportion="0.6302521" vertical-offset="480" max-vertical-offset="20625">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
+

@@ -44,6 +44,7 @@ var SelectedMode;
 var AccuracyFlag = 3;
 var DayNo;
 var InstructionFile = "./Instructions/", AlertMessage = '', InsFile = '', InsFlag = false, Instructions = [], InsCounter = 0;
+var gamepadSupportAvailable = !!navigator.webkitGetGamepads || !!navigator.webkitGamepads;
 // Experiment List
 var ExperimentList = {'Audio_Error_FeedBack_Training':1,
                       'Visual_Error_FeedBack_Training':2,

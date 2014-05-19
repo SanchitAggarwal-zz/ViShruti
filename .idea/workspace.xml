@@ -6,7 +6,7 @@
     </list>
     <ignored path="ViShruti.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="58f8d20a-6c86-48d2-bb70-ef7cb2d7f219" time="1400526232141" ignored="false" />
+    <file path="/Dummy.txt" changelist="58f8d20a-6c86-48d2-bb70-ef7cb2d7f219" time="1400526238718" ignored="false" />
     <file path="/vishruti.js" changelist="58f8d20a-6c86-48d2-bb70-ef7cb2d7f219" time="1393249933577" ignored="false" />
     <file path="/ViShruti.html" changelist="58f8d20a-6c86-48d2-bb70-ef7cb2d7f219" time="1400509720919" ignored="false" />
     <file path="/Version" changelist="58f8d20a-6c86-48d2-bb70-ef7cb2d7f219" time="1400105852965" ignored="false" />
@@ -344,7 +344,11 @@
       <created>1400526235845</created>
       <updated>1400526235845</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="started changed for ABAB in vishruti_abab.js">
+      <created>1400526240716</created>
+      <updated>1400526240716</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers>
       <GitHub shared="false">
         <commitMessageFormat>{id} {summary}</commitMessageFormat>

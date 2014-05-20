@@ -1,0 +1,24 @@
+{
+    "name": "ViShruti App",
+    "version": "5",
+    "description": "Hear the Scenes",
+    "icons": { "128": "ViShruti.png" },
+    "app": {
+        "urls": [
+            "http://localhost:7000/ViShruti.html"
+        ],
+    "launch": {
+     "web_url": "http://localhost:7000/ViShruti.html"
+     }
+    },
+    "permissions": ["fileSystem",
+        "audio",
+        "fileBrowserHandler",
+        "fileSystemProvider",
+        "serial",
+        "storage",
+        "unlimitedStorage"
+    ],
+    "manifest_version": 2,
+    "author": "Sanchit Aggarwal, Koustav Ghosal, Pulkit Singhal"
+}

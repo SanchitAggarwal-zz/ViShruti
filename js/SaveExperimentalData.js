@@ -54,3 +54,9 @@ function onInitFs(fs) {
     }, errorHandler);
 
 }
+
+
+
+
+//Request 100 MB of filesystem
+window.requestFileSystem(window.PERSISTENT, 100*1024*1024, onInitFs, errorHandler);

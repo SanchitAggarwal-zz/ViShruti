@@ -1,13 +1,15 @@
-var FORM_PD,PHASENO,USERID,PARTICIPANT_TYPE;
+var FORM_PD,PHASENO,USERID,PARTICIPANT_TYPE,FIRSTNAME,LASTNAME;
 var AGE,EDUCATION,MODEOFCOMM,GENDER,MUSICAL_TRAINING,MUSIC_KIND,HEARING_PROBLEM,KEYBOARD_FAMILIARITY;
-var ParticipantDetails = [];
+var ParticipantDetails = [], TimeStamp;
 
 
 // For inserting dummy data in participant details form
 function DummyData(){
 	FORM_PD = document.ParticipantDetail;
   if(document.getElementById("Dummy").checked){
-    FORM_PD.USERID.value = 'Dummy_User';
+    FORM_PD.USERID.value = 'Dummy_User_1234';
+	  FORM_PD.FIRSTNAME.value = 'Dummy';
+	  FORM_PD.LASTNAME.value = 'User';
     FORM_PD.AGE.value = '25';
     FORM_PD.EDUCATION.value = 'MS';
     FORM_PD.MODEOFCOMM.value = 'English';
@@ -31,6 +33,8 @@ function DummyData(){
 	}
 	else{
     FORM_PD.USERID.value = '';
+	  FORM_PD.FIRSTNAME.value = '';
+	  FORM_PD.LASTNAME.value = '';
     FORM_PD.AGE.value = '';
     FORM_PD.EDUCATION.value = '';
     FORM_PD.MODEOFCOMM.value = '';
@@ -58,6 +62,8 @@ function disablePD(){
 	FORM_PD = document.ParticipantDetail;
 	if(FORM_PD.PHASENO.value != 'Phase_1'){
 	  document.getElementById("inputAge").disabled = true;
+		document.getElementById("firstname").disabled = true;
+		document.getElementById("lastname").disabled = true;
 	  document.getElementById("Education").disabled = true;
 	  document.getElementById("Modeofcommunication").disabled = true;
 	  document.getElementById("inputGender").disabled = true;
@@ -68,7 +74,9 @@ function disablePD(){
 	  document.getElementById("KeyboardFamiliarity").disabled = true;
 	}
 	else{
-    document.getElementById("inputAge").disabled = false;
+    document.getElementById("inputAge").disabled = false
+		document.getElementById("firstname").disabled = false;
+		document.getElementById("lastname").disabled = false;
     document.getElementById("Education").disabled = false;
     document.getElementById("Modeofcommunication").disabled = false;
     document.getElementById("inputGender").disabled = false;
@@ -85,6 +93,8 @@ function participantDetails(){
   FORM_PD = document.ParticipantDetail;
   USERID = FORM_PD.USERID.value;
   AGE = FORM_PD.AGE.value;
+	FIRSTNAME = FORM_PD.FIRSTNAME.value;
+	LASTNAME = FORM_PD.LASTNAME.value;
   EDUCATION = FORM_PD.EDUCATION.value;
   MODEOFCOMM = FORM_PD.MODEOFCOMM.value;
   GENDER = FORM_PD.GENDER.value;
@@ -101,12 +111,16 @@ function participantDetails(){
 	      if (!(isNaN(AGE) || AGE < 1 || EDUCATION == "" || MODEOFCOMM == "" || GENDER == "" || PARTICIPANT_TYPE == ""
 		              || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || KEYBOARD_FAMILIARITY == "")) {
 
-	        ParticipantDetails.push(['USER_ID', 'AGE', 'EDUCATION', 'MODE_OF_COMMUNICATION', 'GENDER', 'PARTICIPANT_TYPE', 'MUSICAL_TRAINING', 'MUSIC_KIND', 'HEARING_PROBLEM', 'KEYBOARD_FAMILIARITY', 'Consent Given']);
-	        ParticipantDetails.push([USERID, AGE, EDUCATION, MODEOFCOMM, GENDER, PARTICIPANT_TYPE, MUSICAL_TRAINING, MUSIC_KIND, HEARING_PROBLEM, KEYBOARD_FAMILIARITY, "Yes"]);
+		      TimeStamp = new Date().toString();
+	        ParticipantDetails.push(['USER_ID','FIRST_NAME','LAST_NAME', 'AGE', 'EDUCATION', 'MODE_OF_COMMUNICATION', 'GENDER', 'PARTICIPANT_TYPE',
+		                        'MUSICAL_TRAINING', 'MUSIC_KIND', 'HEARING_PROBLEM', 'KEYBOARD_FAMILIARITY', 'Consent Given','TimeStamp']);
+	        ParticipantDetails.push([USERID,FIRSTNAME,LASTNAME, AGE, EDUCATION, MODEOFCOMM, GENDER, PARTICIPANT_TYPE, MUSICAL_TRAINING,
+		                                                            MUSIC_KIND, HEARING_PROBLEM, KEYBOARD_FAMILIARITY, "Yes",TimeStamp]);
 		      $('#contactModal').modal('hide');
 		      if ($(".fa-user").hasClass('detailsAdded') == false) {
 			      $(".fa-user").addClass('detailsAdded');
 		      }
+		      savePD();
 		      //enableExperimentParameters();
 	      }
 		    else{//if details are not correct
@@ -131,4 +145,20 @@ function participantDetails(){
 	else{// if consent is not checked
 		alert("Please read the consent form and give your consent");
 	}
+}
+
+function savePD (){
+	var csvRows = [];
+	for(var i=0, l=ParticipantDetails.length; i<l; ++i){
+		csvRows.push(ParticipantDetails[i].join(','));
+	}
+	var csvString = csvRows.join("%0A");
+	var savecsv         = document.createElement('a');
+	savecsv.href        = 'data:attachment/csv,' + csvString;
+	savecsv.target      = '_blank';
+	//savecsv.download    = 'PD_'+FIRSTNAME+'_'+LASTNAME+'_'+USERID +'.csv';
+	savecsv.download    = './ParticipantDetails.csv';
+	document.body.appendChild(savecsv);
+	savecsv.click();
+	alert("Your results are saved successfully");
 }

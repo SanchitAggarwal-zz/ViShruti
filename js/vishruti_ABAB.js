@@ -61,6 +61,7 @@ function DummyData(){
 function disablePD(){
 	FORM_PD = document.ParticipantDetail;
 	if(FORM_PD.PHASENO.value != 'Phase_1'){
+		readPD();
 	  document.getElementById("inputAge").disabled = true;
 		document.getElementById("firstname").disabled = true;
 		document.getElementById("lastname").disabled = true;
@@ -90,6 +91,7 @@ function disablePD(){
 
 // To validate and store participant details
 function participantDetails(){
+	readPD();
   FORM_PD = document.ParticipantDetail;
   USERID = FORM_PD.USERID.value;
   AGE = FORM_PD.AGE.value;
@@ -112,8 +114,10 @@ function participantDetails(){
 		              || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || KEYBOARD_FAMILIARITY == "")) {
 
 		      TimeStamp = new Date().toString();
-	        ParticipantDetails.push(['USER_ID','FIRST_NAME','LAST_NAME', 'AGE', 'EDUCATION', 'MODE_OF_COMMUNICATION', 'GENDER', 'PARTICIPANT_TYPE',
-		                        'MUSICAL_TRAINING', 'MUSIC_KIND', 'HEARING_PROBLEM', 'KEYBOARD_FAMILIARITY', 'Consent Given','TimeStamp']);
+		      if(ParticipantDetails.length==0){
+			      ParticipantDetails.push(['USER_ID','FIRST_NAME','LAST_NAME', 'AGE', 'EDUCATION', 'MODE_OF_COMMUNICATION', 'GENDER', 'PARTICIPANT_TYPE',
+				      'MUSICAL_TRAINING', 'MUSIC_KIND', 'HEARING_PROBLEM', 'KEYBOARD_FAMILIARITY', 'Consent Given','TimeStamp']);
+		      }
 	        ParticipantDetails.push([USERID,FIRSTNAME,LASTNAME, AGE, EDUCATION, MODEOFCOMM, GENDER, PARTICIPANT_TYPE, MUSICAL_TRAINING,
 		                                                            MUSIC_KIND, HEARING_PROBLEM, KEYBOARD_FAMILIARITY, "Yes",TimeStamp]);
 		      $('#contactModal').modal('hide');
@@ -146,7 +150,7 @@ function participantDetails(){
 		alert("Please read the consent form and give your consent");
 	}
 }
-
+// function to save Participant Details
 function savePD (){
 	var csvRows = [];
 	for(var i=0, l=ParticipantDetails.length; i<l; ++i){
@@ -157,8 +161,19 @@ function savePD (){
 	savecsv.href        = 'data:attachment/csv,' + csvString;
 	savecsv.target      = '_blank';
 	//savecsv.download    = 'PD_'+FIRSTNAME+'_'+LASTNAME+'_'+USERID +'.csv';
-	savecsv.download    = './ParticipantDetails.csv';
+	savecsv.download    = 'ParticipantDetails.csv';
 	document.body.appendChild(savecsv);
 	savecsv.click();
 	alert("Your results are saved successfully");
+}
+
+// function to read Participant Details
+function readPD (){
+			$.get('ParticipantData/ParticipantDetails.csv', function(PD_Result) {
+				PD_Result = PD_Result.split('\n');
+				for(var i= 0; i<PD_Result.length;++i){
+					ParticipantDetails.push([PD_Result[i].split(',')]);
+				}
+				alert(ParticipantDetails.length,' ',ParticipantDetails[0].length);
+			});
 }

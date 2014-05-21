@@ -5,5 +5,5 @@ import SocketServer
 PORT = 7000
 Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
 httpd = SocketServer.TCPServer(("", PORT), Handler)
-print "serving at port", PORT
+print "Starting ViShruti Server at port", PORT
 httpd.serve_forever()

@@ -174,6 +174,6 @@ function readPD (){
 				for(var i= 0; i<PD_Result.length;++i){
 					ParticipantDetails.push([PD_Result[i].split(',')]);
 				}
-				alert(ParticipantDetails.length,' ',ParticipantDetails[0].length);
+				//alert(ParticipantDetails.length,' ',ParticipantDetails[0].length);
 			});
 }

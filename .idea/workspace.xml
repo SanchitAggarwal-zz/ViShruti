@@ -2,12 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="58f8d20a-6c86-48d2-bb70-ef7cb2d7f219" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ParticipantData/ParticipantDetails.csv" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ViShruti.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="58f8d20a-6c86-48d2-bb70-ef7cb2d7f219" time="1400685247944" ignored="false" />
+    <file path="/Dummy.txt" changelist="58f8d20a-6c86-48d2-bb70-ef7cb2d7f219" time="1400706848531" ignored="false" />
     <file path="/vishruti_ABAB.js" changelist="58f8d20a-6c86-48d2-bb70-ef7cb2d7f219" time="1400685165363" ignored="false" />
     <file path="/server.py" changelist="58f8d20a-6c86-48d2-bb70-ef7cb2d7f219" time="1400679585879" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -347,7 +346,11 @@
       <created>1400685253652</created>
       <updated>1400685253652</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="added participant details folder">
+      <created>1400706852684</created>
+      <updated>1400706852684</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers>
       <GitHub shared="false">
         <commitMessageFormat>{id} {summary}</commitMessageFormat>
@@ -434,7 +437,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="save module in participant details&#10;&#10;# Please enter the commit message for your changes. Lines starting&#10;# with '#' will be ignored, and an empty message aborts the commit.&#10;# On branch master&#10;# Your branch is ahead of 'origin/master' by 1 commit.&#10;#   (use &quot;git push&quot; to publish your local commits)&#10;#&#10;# Changes to be committed:&#10;#&#9;new file:   .idea/workspace.xml&#10;#&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="added participant details folder" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -468,6 +471,7 @@
     <MESSAGE value="started changed for ABAB in vishruti_abab.js" />
     <MESSAGE value="adding name fields in participant details&#10;&#10;# Please enter the commit message for your changes. Lines starting&#10;# with '#' will be ignored, and an empty message aborts the commit.&#10;# On branch master&#10;# Your branch is ahead of 'origin/master' by 1 commit.&#10;#   (use &quot;git push&quot; to publish your local commits)&#10;#&#10;# Changes to be committed:&#10;#&#9;new file:   .idea/workspace.xml&#10;#&#10;" />
     <MESSAGE value="save module in participant details&#10;&#10;# Please enter the commit message for your changes. Lines starting&#10;# with '#' will be ignored, and an empty message aborts the commit.&#10;# On branch master&#10;# Your branch is ahead of 'origin/master' by 1 commit.&#10;#   (use &quot;git push&quot; to publish your local commits)&#10;#&#10;# Changes to be committed:&#10;#&#9;new file:   .idea/workspace.xml&#10;#&#10;" />
+    <MESSAGE value="added participant details folder" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -9,6 +9,7 @@ app.get('/', function(req, res){
 	res.send('hello world');
 });
 
+
 app.listen(3000);
 //these are the only file types we will support for now
 	extensions = {

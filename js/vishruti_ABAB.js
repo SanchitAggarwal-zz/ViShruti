@@ -61,7 +61,6 @@ function DummyData(){
 function disablePD(){
 	FORM_PD = document.ParticipantDetail;
 	if(FORM_PD.PHASENO.value != 'Phase_1'){
-		readPD();
 	  document.getElementById("inputAge").disabled = true;
 		document.getElementById("firstname").disabled = true;
 		document.getElementById("lastname").disabled = true;
@@ -91,7 +90,6 @@ function disablePD(){
 
 // To validate and store participant details
 function participantDetails(){
-	readPD();
   FORM_PD = document.ParticipantDetail;
   USERID = FORM_PD.USERID.value;
   AGE = FORM_PD.AGE.value;
@@ -171,9 +169,10 @@ function savePD (){
 function readPD (){
 			$.get('ParticipantData/ParticipantDetails.csv', function(PD_Result) {
 				PD_Result = PD_Result.split('\n');
+				ParticipantDetails = [];
 				for(var i= 0; i<PD_Result.length;++i){
 					ParticipantDetails.push([PD_Result[i].split(',')]);
 				}
-				//alert(ParticipantDetails.length,' ',ParticipantDetails[0].length);
+				alert(ParticipantDetails);
 			});
 }

@@ -2,13 +2,13 @@
     "name": "ViShruti App",
     "version": "5",
     "description": "Hear the Scenes",
-    "icons": { "128": "ViShruti.png" },
+    "icons": { "128": "/public/images/ViShruti.png" },
     "app": {
         "urls": [
-            "http://localhost:7000/ViShruti.html"
+            "http://localhost:7000/public/ViShruti.html"
         ],
     "launch": {
-     "web_url": "http://localhost:7000/ViShruti.html"
+     "web_url": "http://localhost:7000/public/ViShruti.html"
      }
     },
     "permissions": ["fileSystem",

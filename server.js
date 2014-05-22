@@ -2,15 +2,24 @@ var
 	http = require('http'),
 	path = require('path'),
 	fs = require('fs'),
+	express = require('express');
+var app = express();
 
+app.get('/', function(req, res){
+	res.send('hello world');
+});
+
+app.listen(3000);
 //these are the only file types we will support for now
 	extensions = {
 		".html" : "text/html",
-		".css" : "text/css",
-		".js" : "application/javascript",
-		".png" : "image/png",
-		".gif" : "image/gif",
-		".jpg" : "image/jpeg"
+		".css"  : "text/css",
+		".js"   : "application/javascript",
+		".png"  : "image/png",
+		".gif"  : "image/gif",
+		".jpg"  : "image/jpeg",
+		".woff" : "application/font-woff",
+		".pdf"  : "application/pdf"
 	};
 
 //helper function handles file verification
@@ -66,6 +75,7 @@ function requestHandler(req, res) {
 	else if(ext == '.css'){localFolder = localFolder+'css/'}
 	else if(ext == '.png'){localFolder = localFolder+'images/'}
 	else if(ext == '.html'){localFolder = localFolder+'/'}
+	else if(ext == '.woff'){localFolder = localFolder+'/fonts/'}
 	else{
 			//for now just send a 404 and a short message
 			res.writeHead(404, {'Content-Type': 'text/html'});

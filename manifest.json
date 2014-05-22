@@ -5,10 +5,10 @@
     "icons": { "128": "/public/images/ViShruti.png" },
     "app": {
         "urls": [
-            "http://localhost:7000/public/ViShruti.html"
+            "http://localhost:3000/public/ViShruti.html"
         ],
     "launch": {
-     "web_url": "http://localhost:7000/public/ViShruti.html"
+     "web_url": "http://localhost:3000/public/ViShruti.html"
      }
     },
     "permissions": ["fileSystem",

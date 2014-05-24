@@ -16,7 +16,7 @@ app.post("/user/add", function(req, res) {
 
 /* serves all the static files */
 app.get(/^(.+)$/, function(req, res){
-	console.log('static file request : ' + req.params);
+	console.log('static file request : ' + req.params[0]);
 	res.sendfile( __dirname + '/public/'+req.params[0]);
 });
 

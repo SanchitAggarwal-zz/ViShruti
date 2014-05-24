@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/SanchitAggarwal/ViShruti/issues"
   },
-  "homepage": "https://github.com/SanchitAggarwal/ViShruti"
+  "homepage": "https://github.com/SanchitAggarwal/ViShruti",
+	"dependencies": {
+		"express": ">= 1.2.0"
+	}
 }

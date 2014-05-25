@@ -163,16 +163,37 @@ function savePD (){
 	document.body.appendChild(savecsv);
 	savecsv.click();
 	alert("Your results are saved successfully");
+
+	$.ajax({
+		type: 'POST',
+		data: csvString,
+		url: 'http://localhost:3000/writeParticipantData',
+		success: function(data) {
+			console.log('success');
+			alert('Saved Your :' + data);
+		}
+	});
 }
 
-// function to read Participant Details
+//// function to read Participant Details from file
+//function readPD (){
+//			$.get('ParticipantData/ParticipantDetails.csv', function(PD_Result) {
+//				PD_Result = PD_Result.split('\n');
+//				ParticipantDetails = [];
+//				for(var i= 0; i<PD_Result.length;++i){
+//					ParticipantDetails.push([PD_Result[i].split(',')]);
+//				}
+//				alert(ParticipantDetails);
+//			});
+//}
+
 function readPD (){
-			$.get('ParticipantData/ParticipantDetails.csv', function(PD_Result) {
-				PD_Result = PD_Result.split('\n');
-				ParticipantDetails = [];
-				for(var i= 0; i<PD_Result.length;++i){
-					ParticipantDetails.push([PD_Result[i].split(',')]);
-				}
-				alert(ParticipantDetails);
-			});
+	$.get('http://localhost:3000/readParticipantData', function(PD_Result) {
+		PD_Result = PD_Result.split('\n');
+		ParticipantDetails = [];
+		for(var i= 0; i<PD_Result.length;++i){
+			ParticipantDetails.push([PD_Result[i].split(',')]);
+		}
+		alert('read:' +ParticipantDetails.length);
+	});
 }

@@ -153,29 +153,46 @@
                                 </label>
                             </div>
                         </div>
-                      <!--<div id="dvImportSegments" class="fileupload ">-->
-                        <!--<fieldset>-->
-                          <!--<legend>Upload your CSV File</legend>-->
-                          <!--<input type="file" name="File Upload" id="txtFileUpload" accept=".csv" />-->
-                        <!--</fieldset>-->
-                      <!--</div>-->
+
                       <div class="form-group">
-                            <label for="PhaseNo" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
-                            <div class="col-sm-10">
-                                <select name="PHASENO" class="form-control" id="PhaseNo" placeholder="Phase Number" onChange="disablePD();" required>
-                                    <option value="">--Phase Number--</option>
-                                    <option value="Phase_1">Phase_1</option>
-                                    <option value="Phase_2">Phase_2</option>
-                                    <option value="Phase_3">Phase_3</option>
-                                </select>
-                            </div>
+                          <label for="userid" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
+                          <div class="col-sm-10">
+                              <select name="USERID" class="form-control" id="userid" placeholder="User ID"
+                                      onChange="populatePD();" required>
+                                <option value="">--User ID--</option>
+                                <option value="NewParticipant">New Participant</option>
+                              </select>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="PhaseNo" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
+                        <div class="col-sm-10">
+                          <select name="PHASENO" class="form-control" id="PhaseNo"
+                                  placeholder="Phase Number" required>
+                            <option value="">--Phase Number--</option>
+                            <option value="Phase_1">Phase_1</option>
+                            <option value="Phase_2">Phase_2</option>
+                            <option value="Phase_3">Phase_3</option>
+                          </select>
                         </div>
-                        <div class="form-group">
-                            <label for="userid" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
-                            <div class="col-sm-10">
-                                <input type="text" name="USERID" class="form-control" id="userid" placeholder="User ID" required>
-                            </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="GroupID" class="col-sm-2 control-label"><i class=
+                                                                             "glyphicon glyphicon-pencil"></i></label>
+                        <div class="col-sm-10">
+                          <select name="GROUPID" class="form-control" id="GroupId" placeholder="Group ID"
+                                  onChange="disablePD();" required>
+                            <option value="">--Group ID--</option>
+                            <option value="SVEF">Sighted Visual Error Feedback</option>
+                            <option value="SAEF">Sighted Audio Error Feedback</option>
+                            <option value="SUS">Sighted Unsupervised</option>
+                            <option value="SNT">Sighted No Training</option>
+                            <option value="NSAEF">Non Sighted Audio Error Feedback</option>
+                            <option value="NSUS">Non Sighted Unsupervised</option>
+                            <option value="NSNT">Non Sighted No Training</option>
+                          </select>
                         </div>
+                      </div>
                         <div class="form-group">
                           <label for="firstname" class="col-sm-2 control-label"><i class
                                                                                ="glyphicon glyphicon-pencil"></i></label>
@@ -326,7 +343,7 @@
   <script src="js/canvas2image.js"></script>
   <script src="js/base64.js"></script>
   <!--<script src="js/vishruti_AB.js"></script>-->
-  <script src="js/vishruti_ABAB.js"></script>
+  <script src="js/participant_details.js"></script>
   <!--<script src="js/SaveExperimentalData.js"></script>-->
   <!--<script src="js/runTrial.js"></script>
   <script src="js/try.js"></script>-->

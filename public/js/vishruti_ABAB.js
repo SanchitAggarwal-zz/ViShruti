@@ -313,5 +313,6 @@ function playMap(){
 	drawControls(-1);
 	NextCue();
 	playSounds();
+
 	CueTime =  new Date().getTime();
 }

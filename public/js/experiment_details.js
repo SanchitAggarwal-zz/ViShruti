@@ -3,7 +3,9 @@ var NoOfWMMaps = 3,NoOfDemoMaps = 2,NoOfTrainingMaps = 40, NoOfTestingMaps = 3;
 var WM_PathLength = 36, Training_PathLength = 10, Testing_PathLength = 50;
 var AccuracyThreshold = 90, ConsecutiveMap = 2;
 var Staircase, Staircase_PathLength = 210,NoOfStaircaseMaps = 1, StaircaseCueLength = 3;
-var	ExperimentDetails = [], ED = [];
+var	ExperimentDetails = [];
+var ISIDetails = [], ISID = [];
+var ExperimentData = [];
 var BreakTime = 2; //2 minutes break between each switch
 
 // To disable/enable experiment details

@@ -1,7 +1,7 @@
 var FunctionQueue = [],checkFunctionQueue,FQCounter,PopNextFunction = 1,FileIndex = 0;
-var DisplayGrid = 0,VisualError = 0,AudioError = 0;  // Flag for Visual or Error Feedback and DisplayGrid
+var DisplayGrid = 0,VisualError = 0,AudioError = 0,VisualCue = 0;  // Flag for Visual or Error Feedback and DisplayGrid
 var ExperimentEnd = 0,StartExp = false;
-var RandomOrder = 0,WM_CueLength = [1,2,3,4,5,6,7,8],Cue_index = 0;
+var WM = false,WM_CueLength = [1,2,3,4,5,6,7,8],Cue_index = 0;
 var NoOfMaps,TrialLength,Direction,TotalStimuli,CurrentMapNo,CurrentMode;
 var Maze,Path,Cue,MazeLength;
 var ExperimentList = {'Visual_Error_FeedBack_Training':1,
@@ -15,7 +15,7 @@ var ExperimentList = {'Visual_Error_FeedBack_Training':1,
 										 };
 var InstructionFlag = false; AccuracyFlag = ConsecutiveMap;
 var InstructionFolder = "/Audio/instructions/", AlertMessage = '';
-var InstructionFile = '', Instructions = [], InsCounter = 0;
+var InstructionFile = '', Instructions = [], InsCounter = 0, SilenceFile;
 var ISIList = ['25','50','100','200','300','400','500','25','50','100','200','300','400','500',
 							'25','50','100','200','300','400','500','25','50','100','200','300','400','500',
 							'25','50','100','200','300','400','500','25','50','100','200','300','400','500',
@@ -27,20 +27,12 @@ var start_x,start_y,inc_sx,inc_sy;
 var pitch = [440,880,1760];   //predefined notes in hz
 var rate = 44100; //sample per sec
 var volume = 50; //amplitude of sine wave
-var next = 0;  // For Next move
 var ResponseTime = 0, CueTime = 0,IntervalTime = 0;
 var Hit = 0,Miss = 0,Recall = 0,count=0;
 var Sounds = [];
-var CurrentCuePos = 0;
+var CurrentCuePos = 0,CueNo = 0,next = 0;// For Next move
 var counter = 0;
-var CurrentMode;
-var InterTrialInterval = '500';  //in milliseconds
-var silencefile;
-var startexp = false;
-var cueno = 0;
-var SelectedMode;
-var AccuracyFlag = 3;
-var DayNo;
+
 function startExperiment(){
 	document.getElementById("StopExp").disabled = false;
 	document.getElementById("StartExp").disabled = true;
@@ -174,6 +166,7 @@ function callNextFunction() {
 
 function run_Map(MapNo,CueLength,PathLength,Dir,Mode,Map){
 	if(Dir != Direction || Mode != CurrentMode){
+		WM = false;
 		InstructionFlag = true;
 		AccuracyFlag = ConsecutiveMap;
 		SetInstruction(ExperimentList[Mode],Dir);
@@ -189,6 +182,7 @@ function run_Map(MapNo,CueLength,PathLength,Dir,Mode,Map){
 	TotalStimuli = PathLength;
 	CurrentMapNo = MapNo;
 	CurrentMode = Mode;
+	if(TrialLength == 0){WM = true;}
 }
 
 function shuffle(o){ //v1.0
@@ -319,11 +313,11 @@ function SetInstruction(IKey,Dir){
 			break;
 		case 0: InstructionFile = InstructionFolder.concat('NextMapEnter.wav');
 			AlertMessage = AlertMessage.concat('Current Map is Finished.Press Enter for Next Map.');
-			InsFlag = true;
+			InstructionFlag = true;
 			break;
 		case -1: InstructionFile = InstructionFolder.concat('ExpFinishThanks.wav');
 			AlertMessage = AlertMessage.concat('Experiment Finished !! \nThank You For Participating ',USERID,'\nYou Took : ',(ExperimentTime/60).toFixed(3),' Minutes\n Have a Nice Day.');
-			InsFlag = true;
+			InstructionFlag = true;
 			break;
 	}
 	Instructions.push(InstructionFile);
@@ -347,6 +341,11 @@ function playMap(){
 	alert(AlertMessage);
 	StartExp = true;
 	var EM = ExperimentList[CurrentMode];
+	if(EM != 7){
+		InterStimulusInterval = BestISI;
+		InterStimulusInterval = InterStimulusInterval.toString();
+		Staircase = false;
+	}
 	setDisplayAndError(EM);
 	console.log('TrialLength '+TrialLength+'Staircase '+Staircase);
 	var MazeDiv = document.getElementById('MazeDiv');
@@ -365,55 +364,34 @@ function playMap(){
 }
 
 function NextCue(){
-	cueno = cueno + 1;
-	var str1 = "./Silence/silence";
-	silencefile = str1.concat(InterStimulusInterval,'.wav');
-	if(RandomOrder){
-		Level = RandomorderCue[ro_index++];
+	CueNo = CueNo + 1;
+	if(Staircase){
+		InterStimulusInterval = ISIList[ISICounter];
+		ISICounter++;
+		InterStimulusInterval = InterStimulusInterval.toString();
+		console.log('InterStimulusInterval is ' + InterStimulusInterval);
 	}
-	if(Familirization){
-		Level = FamiliarCue[ro_index++];
+	if(WM){
+		TrialLength = WM_CueLength[Cue_index++];
 	}
-	console.log('RandomOrder '+RandomOrder +' Level '+Level);
-	for(var i=0;i<Level;i++){
-		if(VisualCue==2){
-			var inc = 1;
-			do{
-				var Neighbour = getNeighbours(Direction);
-				var NoOfNbr = Neighbour.length;
-				var IncorrectNbr =  Math.floor(Math.random()*NoOfNbr);
-				//alert('Next Neighbour ' + NextNbr);
-				var incorrect_x = inc_sx + Neighbour[IncorrectNbr][0];
-				var incorrect_y = inc_sy + Neighbour[IncorrectNbr][1];
-				if(incorrect_x >= 0 && incorrect_x < MazeLength){
-					if(incorrect_y >= 0 && incorrect_y < MazeLength){
-						Maze[incorrect_x][incorrect_y] = 2;
-						inc_sx = Path[next+i][0];
-						inc_sy = Path[next+i][1];
-						inc = 0;
-					}
-				}
-			}while(inc);
-		}
-		else{
-			var x =  Path[next+i][0];
-			var y = Path[next+i][1];
-			if(VisualCue==1){ Maze[x][y] = 2;}
-		}
+	var str1 = "audio/silence_wav/silence";
+	SilenceFile = str1.concat(InterStimulusInterval,'.wav');
+	console.log('TrialLength '+TrialLength);
+	for(var i=0;i<TrialLength;i++){
 		var cue_x = Cue[next+i][0];
 		var cue_y = Cue[next+i][1]*-1;
 		//alert('x' + cue_x +'y'+ cue_y);
-		if(i<Level){
+		if(i<TrialLength){
 			AddSilence();
 		}
 		AddCueWave(cue_x,cue_y,1);
 		drawMaze(Maze,MazeLength);
 	}
-	CurrentCuePos = CurrentCuePos + Level;
+	CurrentCuePos = CurrentCuePos + TrialLength;
 }
 
 function playSounds(){
-	startexp = false;
+	StartExp = false;
 	var audioEl = document.getElementById('audio');
 	audioEl.load();
 	//audioEl.removeEventListener('ended', playSounds);
@@ -455,15 +433,17 @@ function getNeighbours(Direction){
 }
 
 function playError(){
-	var audio = new Audio("1.wav");
+	var audio = new Audio("audio/1.wav");
 	//var audio = new Audio("error500ms.mp3");
 	audio.load();
 	audio.play();
 }
+
 function AddSilence(){
-	Sounds.push(silencefile);
+	Sounds.push(SilenceFile);
 	//Sounds.push("silent.wav");
 }
+
 function AddCueWave(x,y,z){
 	var data = new Array();
 	var seconds = 0.5; //x==0?1:0.5;
@@ -498,7 +478,6 @@ function AddCueWave(x,y,z){
 	wave.Make(data);
 	Sounds.push(wave.dataURI);
 }
-
 
 //Generate Map Maze
 function generateMaze(){
@@ -673,7 +652,7 @@ function drawMetrics(){
 
 	if(RandomOrder){ text = "2,3,4,5,6,7 or 8"}
 	else if(Familirization){ text = "2 or 3"}
-	else{ text = Level.toString()};
+	else{ text = TrialLength.toString()};
 	metrics = context.measureText(text);
 	context.fillText(text, text_width, 45);
 
@@ -851,21 +830,6 @@ function drawControls(key){
 	context.font = "bold 14px Arial";
 	var text = DirectionLabels[9];
 	context.fillText(text, x+spacebarwidth/3, y+BlockHeight/3);
-}
-
-function playSounds(){
-	startexp = false;
-	var audioEl = document.getElementById('audio');
-	audioEl.load();
-	//audioEl.removeEventListener('ended', playSounds);
-	//console.log("sound"+Sounds[counter]);
-	if(Sounds[counter]){
-		audioEl.src = Sounds[counter];
-		audioEl.addEventListener('ended', playSounds);
-		audioEl.play();
-		//console.log("played"+Sounds[counter]);
-		counter++;
-	}
 }
 
 function drawCorrectMaze(MazeLength,Path){

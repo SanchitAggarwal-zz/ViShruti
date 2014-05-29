@@ -19,9 +19,9 @@ function findIndex(search_array,key){
 function onUserInput() {
 	var waitTime = new Date().getTime();
 	if(!Sounds[counter] && counter>0){
-		startexp = true;
+		StartExp = true;
 	}
-	if(startexp && !ExperimentEnd){
+	if(StartExp && !ExperimentEnd){
 		//var key_press = String.fromCharCode(event.keyCode);
 		var key_code = event.keyCode;
 		var key_index_a = findIndex(inputDirection_a,key_code);
@@ -31,7 +31,7 @@ function onUserInput() {
 		}
 		else{
 			if(key_index_a == 9 ||key_index_b==9){
-				console.log('Spacebar: next '+next+' CurrentCuePos '+CurrentCuePos+" TotalSteps:"+TotalSteps);
+				console.log('Spacebar: next '+next+' CurrentCuePos '+CurrentCuePos+" TotalStimuli:"+TotalStimuli);
 				while(next<CurrentCuePos){
 					var x =  Path[next][0];
 					var y = Path[next][1];
@@ -49,13 +49,13 @@ function onUserInput() {
 				// Add marker in input and cue labels
 				CueLabels.push(DirectionLabels[key_index_a]);
 				InputLabels.push(DirectionLabels[key_index_a]);
-				if(count==Level){Recall++;}
+				if(count==TrialLength){Recall++;}
 				InputTime.push(IntervalTime);
 				ResponseTime = ResponseTime + IntervalTime;
 				IntervalTime = 0;
 				count=0;
 				next = CurrentCuePos;
-				if(CurrentCuePos==TotalSteps && PopNextFunction == 0){ // pop next function for new Maps
+				if(CurrentCuePos==TotalStimuli && PopNextFunction == 0){ // pop next function for new Maps
 					if(Familirization){
 						FamiliarRecall = Recall;
 						FamiliarISI = FamiliarRecall>=maxRecall?ISIList[ISICounter-1]:FamiliarISI;
@@ -69,20 +69,20 @@ function onUserInput() {
 					var canvas = document.getElementById('Maze_Canvas');
 					var savecanvas = document.createElement('a');
 					savecanvas.href = canvas.toDataURL('image/png').replace('image/png');
-					savecanvas.download= USERID + "_" + CurrentMode + "_Dir_" + Direction + "_Map_" + CurrentMapNo +"_PL_" + TotalSteps + "_FI_" + FileIndex + ".png";
+					savecanvas.download= USERID + "_" + CurrentMode + "_Dir_" + Direction + "_Map_" + CurrentMapNo +"_PL_" + TotalStimuli + "_FI_" + FileIndex + ".png";
 					document.body.appendChild(savecanvas);
 					savecanvas.click();
 
 					if(RandomOrder){
-						Level = RandomorderCue.toString();
+						TrialLength = RandomorderCue.toString();
 					}
 					if(Familirization){
-						Level = FamiliarCue.toString();
+						TrialLength = FamiliarCue.toString();
 					}
-					var currentAccuracy = 100*Hit/(TotalSteps);
+					var currentAccuracy = 100*Hit/(TotalStimuli);
 					AvgAccuracy = ((CurrentMapNo - 1)*AvgAccuracy + currentAccuracy)/CurrentMapNo;
 					console.log(AvgAccuracy);
-					ExperimentResults.push([FileIndex,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(TotalSteps),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfMaps,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval,AvgAccuracy]);
+					ExperimentResults.push([FileIndex,Direction,TrialLength,CurrentMode,AccuracyThreshold,TotalStimuli,Hit,Miss,100*Hit/(TotalStimuli),Recall,ResponseTime,ResponseTime/TotalStimuli,NoOfMaps,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval,AvgAccuracy]);
 					var KeyExp = ExperimentList[CurrentMode];
 					console.log('Accuracy Flag :'+AccuracyFlag);
 					if(CurrentMapNo>5 && KeyExp < 5){
@@ -189,58 +189,4 @@ function onUserInput() {
 			}
 		}
 	}
-}
-
-function saveExperimentResults(){
-	for(var i=3;i<ExperimentResults.length;i++){
-		$.ajax({
-			type: "POST",
-			//url: "https://docs.google.com/forms/d/1HYqxuBrAA3idjzjqBLwCEGcnnL_WbOL6oCrBBvMF7sI/formResponse",
-			url: "https://docs.google.com/forms/d/1XCgK4jjuhv2BBwQ8Muzmz2zMhmX3C6sf7pyf1Y6UhWE/formResponse",
-			data: {
-				'entry.452712856' :USERID,
-				'entry.1217543975':AGE,
-				'entry.1047119998':EDUCATION,
-				'entry.1297203076':MODEOFCOMM,
-				'entry.1383316539':GENDER,
-				'entry.453829439' :PARTICIPANT_TYPE,
-				'entry.481881047' :MUSICAL_TRAINING,
-				'entry.1963578379':MUSIC_KIND,
-				'entry.437891093' :HEARING_PROBLEM,
-				'entry.518374845' :KEYBOARD_FAMILIARITY,
-				'entry.281696488' :ExperimentResults[i][0], //Index#
-				'entry.501651834' :ExperimentResults[i][1], //Direction
-				'entry.486615617' :ExperimentResults[i][2], //Cue Length
-				'entry.56018046'  :ExperimentResults[i][3], //Experiment Mode
-				'entry.1372960057':ExperimentResults[i][4], //Accuracy Threshold
-				'entry.561470756' :ExperimentResults[i][5], //Total Steps
-				'entry.1450128684':ExperimentResults[i][6], //#Hit
-				'entry.631366225' :ExperimentResults[i][7], //#Wrong Response
-				'entry.740927359' :ExperimentResults[i][8], //Accuracy
-				'entry.481811278' :ExperimentResults[i][9], //Recall
-				'entry.1724321037':ExperimentResults[i][10],//ResponseTime(in Sec)
-				'entry.1184871699':ExperimentResults[i][11],//Average Response Time (in Sec)
-				'entry.1943108855':ExperimentResults[i][12],//No of Training Maps
-				'entry.239911530' :ExperimentResults[i][13],//Input Time per response
-				'entry.786668683' :ExperimentResults[i][14],//Cue Direction Labels
-				'entry.2065638177':ExperimentResults[i][15],//Input Direction Labels
-				'entry.1313234140':ExperimentResults[i][16],//InterStimulusInterval
-				'entry.263350514':ExperimentResults[i][17],// Average Accuracy after Nth Map
-				'entry.1348081382':InterTrialInterval // Inter Trial Interval
-			}
-		});
-	}
-
-	var csvRows = [];
-	for(var i=0, l=ExperimentResults.length; i<l; ++i){
-		csvRows.push(ExperimentResults[i].join(';'));
-	}
-	var csvString = csvRows.join("%0A");
-	var savecsv         = document.createElement('a');
-	savecsv.href        = 'data:attachment/csv,' + csvString;
-	savecsv.target      = '_blank';
-	savecsv.download    = USERID +'.csv';
-	document.body.appendChild(savecsv);
-	savecsv.click();
-	alert("Your results are saved successfully");
 }

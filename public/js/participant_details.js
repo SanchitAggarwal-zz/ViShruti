@@ -21,14 +21,13 @@ function DummyData(){
     FORM_PD.PHASENO.value = 'Phase_1';
 	  FORM_PD.GROUPID.value = 'SVEF';
 	  document.getElementById("Consent").checked = true;
-    document.getElementById("ExperimentMode").value = 'Visual_Error_FeedBack_Training';
-    document.getElementById("NoOfMaps").value = '10';
+    document.getElementById("ExperimentMode").value = 'Working_Memory';
+    document.getElementById("NoOfWMMaps").value = '3';
+	  document.getElementById("NoOfDemoMaps").value = '2';
+	  document.getElementById("NoOfTrainingMaps").value = '40';
     document.getElementById("AccuracyThreshold").value = '90';
-    document.getElementById("TestingPathLength").value = '50';
-		document.getElementById("InterStimulusInterval").disabled = true;
-    document.getElementById("Familirization").disabled = true;
-    document.getElementById("InterStimulusInterval").value = '';
-    document.getElementById("Familirization").checked = false;
+    document.getElementById("Staircase").disabled = true;
+    document.getElementById("Staircase").checked = true;
 	}
 	else{
     FORM_PD.USERID.value = '';
@@ -46,14 +45,13 @@ function DummyData(){
     FORM_PD.PHASENO.value = '';
 	  FORM_PD.GROUPID.value = '';
 	  document.getElementById("Consent").checked = false;
-    document.getElementById("ExperimentMode").value = '';
-    document.getElementById("NoOfMaps").value = '';
-    document.getElementById("AccuracyThreshold").value = '';
-    document.getElementById("TestingPathLength").value = '';
-    document.getElementById("InterStimulusInterval").disabled = false;
-    document.getElementById("Familirization").disabled = false;
-    document.getElementById("InterStimulusInterval").value = '';
-    document.getElementById("Familirization").checked = false;
+	  document.getElementById("ExperimentMode").value = '';
+	  document.getElementById("NoOfWMMaps").value = '';
+	  document.getElementById("NoOfDemoMaps").value = '';
+	  document.getElementById("NoOfTrainingMaps").value = '';
+	  document.getElementById("AccuracyThreshold").value = '';
+	  document.getElementById("Staircase").disabled = false;
+	  document.getElementById("Staircase").checked = false;
 	}
 }
 
@@ -131,7 +129,8 @@ function participantDetails(){
 					  $(".fa-user").addClass('detailsAdded');
 				  }
 				  savePD();
-				  //enableExperimentParameters();
+				  disableED(false);
+				  EMOptions(GROUPID);
 			  }
 		  else{//if details are not correct
 			  alert("Please Enter All and Valid Participant Details");
@@ -163,7 +162,7 @@ function savePD (){
 	$.ajax({
 		type: 'POST',
 		data: csvString,
-		url: 'http://localhost:3000/writeParticipantData',
+		url: 'http://localhost:3000/writeParticipantDetails',
 		success: function(data) {
 			console.log('success');
 			alert(data);
@@ -171,23 +170,12 @@ function savePD (){
 	});
 }
 
-//// function to read Participant Details from file
-//function readPD (){
-//			$.get('ParticipantData/ParticipantDetails.csv', function(PD_Result) {
-//				PD_Result = PD_Result.split('\n');
-//				ParticipantDetails = [];
-//				for(var i= 0; i<PD_Result.length;++i){
-//					ParticipantDetails.push([PD_Result[i].split(',')]);
-//				}
-//				alert(ParticipantDetails);
-//			});
-//}
-
+// function to read Participant Details from file
 function readPD (){
 	PD = [];
 	var select = document.getElementById("userid");
 	var options = [];
-	$.get('http://localhost:3000/readParticipantData', function(PD_Result) {
+	$.get('http://localhost:3000/readParticipantDetails', function(PD_Result) {
 		if(PD_Result.length != 0)
 		{
 			PD_Result = PD_Result.split('\n');
@@ -206,6 +194,7 @@ function readPD (){
 	});
 }
 
+// function to populate USER Id dropdown
 function populatePD(){
 	FORM_PD = document.ParticipantDetail;
 	if(FORM_PD.USERID.value != 'NewParticipant'){
@@ -232,3 +221,15 @@ function populatePD(){
 		disablePD(false);
 	}
 }
+
+//// function to read Participant Details from file
+//function readPD (){
+//			$.get('ParticipantData/ParticipantDetails.csv', function(PD_Result) {
+//				PD_Result = PD_Result.split('\n');
+//				ParticipantDetails = [];
+//				for(var i= 0; i<PD_Result.length;++i){
+//					ParticipantDetails.push([PD_Result[i].split(',')]);
+//				}
+//				alert(ParticipantDetails);
+//			});
+//}

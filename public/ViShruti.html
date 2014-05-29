@@ -1,352 +1,361 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="description" content="Assistive Naviagtion System Using Sound for Blind">
-      <meta name="author" content="Sanchit Aggarwal & Koustav Ghoshal">
-      <title>ViShruti</title>
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <!-- Custom CSS for the '3 Col Portfolio' Template -->
-    <link href="css/vishruti.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
-  </head>
-  <body>
-    <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#"><i class="glyphicon glyphicon-headphones"></i> ViShruti</a>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Assistive Naviagtion System Using Sound for Blind">
+  <meta name="author" content="Sanchit Aggarwal & Koustav Ghoshal">
+  <title>ViShruti</title>
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <!-- Custom CSS for the '3 Col Portfolio' Template -->
+  <link href="css/vishruti.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+</head>
+<body>
+<nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#"><i class="glyphicon glyphicon-headphones"></i> ViShruti</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+      <ul class="nav navbar-nav pull-right">
+        <li><a href="#contactModal" role="button" data-toggle="modal"
+               onclick="readPD();"><i class="fa fa-user"></i>
+          Participant</a></li>
+        <li><a href="ConsentForm.html" target="_self" role="button"><i class="glyphicon glyphicon-list-alt"></i> ConsentForm</a></li>
+        <li><a href="#instructionsModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-info-sign"></i> Instructions</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container -->
+</nav>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <form class="form-inline page-header" role="form">
+        <div class="form-group">
+          <label class="sr-only" for="ExperimentMode">ExperimentMode</label>
+          <select class="form-control" id="ExperimentMode" placeholder="Experiment Mode"
+                  onChange="EM_change();" required disabled>
+            <option value="">--Experiment Mode--</option>
+            <option value="Working_Memory">Working Memory</option>
+            <option value="Testing">Testing</option>
+            <!--<option value="Audio_Error_FeedBack_Training">Audio Error FeedBack</option>-->
+            <!--<option value="Visual_Error_FeedBack_Training">Visual Error FeedBack</option>-->
+            <!--&lt;!&ndash; <option value="User_Directed">User Directed</option>&ndash;&gt;-->
+            <!--<option value="UnSupervised_Training">UnSupervised</option>-->
+            <!--<option value="No_Training">No Training</option>-->
+            <!--<option value="InCorrectVisualCue">InCorrect Visual Cue</option>-->
+          </select>
         </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse navbar-ex1-collapse">
-          <ul class="nav navbar-nav pull-right">
-              <li><a href="#contactModal" role="button" data-toggle="modal"
-                     onclick="readPD();"><i class="fa fa-user"></i>
-                Participant</a></li>
-              <li><a href="ConsentForm.html" target="_self" role="button"><i class="glyphicon glyphicon-list-alt"></i> ConsentForm</a></li>
-              <li><a href="#instructionsModal" role="button" data-toggle="modal"><i class="glyphicon glyphicon-info-sign"></i> Instructions</a></li>
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container -->
-    </nav>
-   <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-            <form class="form-inline page-header" role="form">
-                <div class="form-group">
-                    <label class="sr-only" for="ExperimentMode">ExperimentMode</label>
-                    <select class="form-control" id="ExperimentMode" placeholder="Experiment Mode" onChange="disable();" required disabled>
-                        <option value="">--Experiment Mode--</option>
-                        <option value="Audio_Error_FeedBack_Training">Audio Error FeedBack</option>
-                        <option value="Visual_Error_FeedBack_Training">Visual Error FeedBack</option>
-                       <!-- <option value="User_Directed">User Directed</option>-->
-                        <option value="UnSupervised_Training">UnSupervised</option>
-                        <option value="No_Training">No Training</option>
-                        <option value="Testing">Testing</option>
-                        <option value="Working_Memory">Working Memory</option>
-                        <!--<option value="InCorrectVisualCue">InCorrect Visual Cue</option>-->
-                    </select>
-                </div>
-                <!--<div class="form-group">
-                    <label class="sr-only" for="WorkingMemory">Working Memory</label>
-                    <select class="form-control" id="WorkingMemory" placeholder="Working Memory" required disabled>
-                        <option value="">--Working Memory--</option>
-                        <option value="WM_Order_Ascending">WM Order Ascending</option>
-                        <option value="WM_Order_Descending">WM Order Descending</option>
-                        <option value="WM_Order_Random">WM Order Random</option>
-                    </select>
-                </div>-->
-                <div class="form-group">
-                    <label class="sr-only" for="NoOfMaps">No Of Maps for Training</label>
-                    <input type="number" class="form-control" id="NoOfMaps" placeholder="#Maps for Training"  min="5" required disabled>
-                </div>
-                <div class="form-group">
-                    <label class="sr-only" for="TestingPathLength">Testing Path Length</label>
-                    <input type="number" class="form-control" id="TestingPathLength" placeholder="Testing Path Length"  min="10" required disabled>
-                </div>
-                <div class="form-group">
-                    <label class="sr-only" for="AccuracyThreshold">Accuracy Threshold</label>
-                    <input type="number" class="form-control" id="AccuracyThreshold" placeholder="Accuracy Threshold"  min="50" required disabled>
-                </div>
-                <div class="form-group">
-                    <label class="sr-only" for="InterStimulusInterval">ExperimentMode</label>
-                    <select class="form-control" id="InterStimulusInterval" placeholder="Inter-Stimulus Interval"  disabled>
-                        <option value="">--Inter-Stimulus-Interval--</option>
-                        <option value="25">25 milliseconds</option>
-                        <option value="50">50 milliseconds</option>
-                        <option value="100">100 milliseconds</option>
-                        <option value="200">200 milliseconds</option>
-                        <option value="300">300 milliseconds</option>
-                        <option value="400">400 milliseconds</option>
-                        <option value="500">500 milliseconds</option>
-                    </select>
-                </div>
-                <label class="checkbox"><input id="Familirization" type="checkbox" onchange="enableISI();" disabled> Familirization </label>
-            </form>
+        <!--<div class="form-group">
+            <label class="sr-only" for="WorkingMemory">Working Memory</label>
+            <select class="form-control" id="WorkingMemory" placeholder="Working Memory" required disabled>
+                <option value="">--Working Memory--</option>
+                <option value="WM_Order_Ascending">WM Order Ascending</option>
+                <option value="WM_Order_Descending">WM Order Descending</option>
+                <option value="WM_Order_Random">WM Order Random</option>
+            </select>
+        </div>-->
+        <div class="form-group">
+          <label class="sr-only" for="NoOfWMMaps">No of WM Maps</label>
+          <input type="number" class="form-control" id="NoOfWMMaps" placeholder="# of WM Maps"
+                 min="3" required disabled>
         </div>
-      </div>
-        <div class="row pull-right">
-            <button id="StartExp" type="button" class="btn btn-primary" onclick="validateExperimentParams()" disabled>Start Experiment</button>
-            <button id="StopExp" type="button" class="btn btn-default" onclick="stopExperiment()" disabled>Stop Experiment</button>
+        <div class="form-group">
+          <label class="sr-only" for="NoOfDemoMaps">No of Trials</label>
+          <input type="number" class="form-control" id="NoOfDemoMaps" placeholder="# of Demo Maps"
+                 min="0" required disabled>
         </div>
-       <div class="row">
-        <div id="MazeDiv" class="col-md-9">
-            <canvas id="Maze_Canvas" width="860" height="490"></canvas>
+        <div class="form-group">
+          <label class="sr-only" for="NoOfTrainingMaps">No of Training Maps</label>
+          <input type="number" class="form-control" id="NoOfTrainingMaps" placeholder="# of Training Maps"
+                 min="50" required disabled>
         </div>
-        <div class="col-md-3">
-          <h3>Controls</h3>
-          <canvas id="Controls_Canvas" width="300" height="300"></canvas><br>
-          <audio id="audio" controls preload hidden="true"></audio>
-          <audio id="instructionEL" controls preload hidden="true"></audio>
+        <div class="form-group">
+          <label class="sr-only" for="AccuracyThreshold">Accuracy Threshold</label>
+          <input type="number" class="form-control" id="AccuracyThreshold" placeholder="Accuracy Threshold"  min="50" required disabled>
         </div>
-      </div>
-    </div><!-- /.container -->
+        <!--<div class="form-group">-->
+          <!--<label class="sr-only" for="InterStimulusInterval">InterStimulusInterval</label>-->
+          <!--<select class="form-control" id="InterStimulusInterval" placeholder="Inter-Stimulus Interval"  disabled>-->
+            <!--<option value="">--Inter-Stimulus-Interval--</option>-->
+            <!--<option value="25">25 milliseconds</option>-->
+            <!--<option value="50">50 milliseconds</option>-->
+            <!--<option value="100">100 milliseconds</option>-->
+            <!--<option value="200">200 milliseconds</option>-->
+            <!--<option value="300">300 milliseconds</option>-->
+            <!--<option value="400">400 milliseconds</option>-->
+            <!--<option value="500">500 milliseconds</option>-->
+          <!--</select>-->
+        <!--</div>-->
+        <label class="checkbox"><input id="Staircase" type="checkbox" disabled> ISI StairCase </label>
+      </form>
+    </div>
+  </div>
+  <div class="row pull-right">
+    <button id="StartExp" type="button" class="btn btn-primary" onclick="validateExperimentDetails()" disabled>Start Experiment</button>
+    <button id="StopExp" type="button" class="btn btn-default" onclick="stopExperiment()" disabled>Stop Experiment</button>
+  </div>
+  <div class="row">
+    <div id="MazeDiv" class="col-md-9">
+      <canvas id="Maze_Canvas" width="860" height="490"></canvas>
+    </div>
+    <div class="col-md-3">
+      <h3>Controls</h3>
+      <canvas id="Controls_Canvas" width="300" height="300"></canvas><br>
+      <audio id="audio" controls preload hidden="true"></audio>
+      <audio id="instructionEL" controls preload hidden="true"></audio>
+    </div>
+  </div>
+</div><!-- /.container -->
 
-    <div class="container">
-      <hr>
-      <footer>
+<div class="container">
+  <hr>
+  <footer>
+    <div class="row">
+      <div class="col-md-2">
+        <p>Copyright &copy; ViShruti 2013</p>
+      </div>
+      <div class="col-md-4">
+        <p class="pull-right">Best Viewed and Performed In Google Chrome</p>
+      </div>
+      <div class="col-md-6">
+        <p class="pull-right">Developers : Sanchit Aggarwal, Koustav Ghosal, Pulkit Singhal</p>
+      </div>
+    </div>
+  </footer>
+</div><!-- /.container -->
+
+<div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+
         <div class="row">
-          <div class="col-md-2">
-            <p>Copyright &copy; ViShruti 2013</p>
-          </div>
-            <div class="col-md-4">
-                <p class="pull-right">Best Viewed and Performed In Google Chrome</p>
-            </div>
           <div class="col-md-6">
-            <p class="pull-right">Developers : Sanchit Aggarwal, Koustav Ghosal, Pulkit Singhal</p>
+            <h4 class="modal-title">Participant Details </h4>
+          </div>
+          <div class="col-md-4">
+            <label class="checkbox pull-right modal-title"><input id="Dummy" type="checkbox" onchange="DummyData();"> Demo</label>
+          </div>
+          <div class="col-md-2">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
           </div>
         </div>
-      </footer>
-    </div><!-- /.container -->
+      </div>
+      <div class="modal-body">
+        <form name="ParticipantDetail"  class="form-horizontal" role="form">
+          <div class="form-group">
+            <div class="col-sm-12">
+              <label class="checkbox pull-right"><input id="Consent" type="checkbox"> I have read
+                the information given in Consent Form. I consent my child/ student(s) to
+                participate in this study.
+              </label>
+            </div>
+          </div>
 
-     <div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactModal" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
+          <div class="form-group">
+            <label for="userid" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
+            <div class="col-sm-10">
+              <select name="USERID" class="form-control" id="userid" placeholder="User ID"
+                      onChange="populatePD();" required>
+                <option value="">--User ID--</option>
+                <option value="NewParticipant">New Participant</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="PhaseNo" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
+            <div class="col-sm-10">
+              <select name="PHASENO" class="form-control" id="PhaseNo"
+                      placeholder="Phase Number" required>
+                <option value="">--Phase Number--</option>
+                <option value="Phase_1">Phase_1</option>
+                <option value="Phase_2">Phase_2</option>
+                <option value="Phase_3">Phase_3</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="GroupID" class="col-sm-2 control-label"><i class=
+                                                                       "glyphicon glyphicon-pencil"></i></label>
+            <div class="col-sm-10">
+              <select name="GROUPID" class="form-control" id="GroupId" placeholder="Group ID" required>
+                <option value="">--Group ID--</option>
+                <option value="SVEF">Sighted Visual Error Feedback</option>
+                <option value="SAEF">Sighted Audio Error Feedback</option>
+                <option value="SUS">Sighted Unsupervised</option>
+                <option value="SNT">Sighted No Training</option>
+                <option value="NSAEF">Non Sighted Audio Error Feedback</option>
+                <option value="NSUS">Non Sighted Unsupervised</option>
+                <option value="NSNT">Non Sighted No Training</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="firstname" class="col-sm-2 control-label"><i class
+                                                                         ="glyphicon glyphicon-pencil"></i></label>
+            <div class="col-sm-10">
+              <input type="text" name="FIRSTNAME" class="form-control" id="firstname" placeholder="FIRST NAME">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="lastname" class="col-sm-2 control-label"><i class
+                                                                        ="glyphicon glyphicon-pencil"></i></label>
+            <div class="col-sm-10">
+              <input type="text" name="LASTNAME" class="form-control" id="lastname"
+                     placeholder="LAST NAME">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputAge" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
+            <div class="col-sm-10">
+              <input type="number" name="AGE" class="form-control" id="inputAge" placeholder="Age" min="1" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="Education" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
+            <div class="col-sm-10">
+              <input type="text" name="EDUCATION" class="form-control" id="Education" placeholder="Education" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="Modeofcommunication" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
+            <div class="col-sm-10">
+              <select name="MODEOFCOMM" class="form-control" id="Modeofcommunication" placeholder="Mode of communication" required>
+                <option value="">--Mode of Communication--</option>
+                <option value="Telugu">Telugu</option>
+                <option value="English">English</option>
+                <option value="Hindi">Hindi</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputGender" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
+            <div class="col-sm-10">
+              <select name="GENDER" class="form-control" id="inputGender" placeholder="Gender" required>
+                <option value="">--Gender--</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputType" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
+            <div class="col-sm-10">
+              <select name="PARTICIPANT_TYPE" class="form-control" id="inputType" placeholder="Type" required>
+                <option value="">Participant Type</option>
+                <option value="Normal">Normal</option>
+                <option value="congenital Blind">Congenital Blind</option>
+                <option value="Accidental Blind">Accidental Blind</option>
+                <option value="Night Blind">Night Blind</option>
+                <option value="Color Blind">Color Blind</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputMusic" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
+            <div class="col-sm-10">
+              <select  name="MUSICAL_TRAINING" class="form-control" id="inputMusic" placeholder="Type" required>
+                <option value="">--Musical Training--</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputMusicKind" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
+            <div class="col-sm-10">
+              <input type="text"   name="MUSIC_KIND" class="form-control" id="inputMusicKind" placeholder="Kind of Music Accustom To" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="HearingProblem" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
+            <div class="col-sm-10">
+              <select  name="HEARING_PROBLEM" class="form-control" id="HearingProblem" placeholder="Hearing Problem" required>
+                <option value="">--Hearing Problem--</option>
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="KeyboardFamiliarity" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
+            <div class="col-sm-10">
+              <select  name="KEYBOARD_FAMILIARITY" class="form-control" id="KeyboardFamiliarity" placeholder="Familiarity with computer game or Key Board Settings" required>
+                <option value="">--Familiarity with computer game or Key Board Settings--</option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button id="SavePD" type="button" class="btn btn-primary" onclick="participantDetails()">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4 class="modal-title">Participant Details </h4>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="checkbox pull-right modal-title"><input id="Dummy" type="checkbox" onchange="DummyData();"> Demo</label>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <form name="ParticipantDetail"  class="form-horizontal" role="form">
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <label class="checkbox pull-right"><input id="Consent" type="checkbox"> I have read
-                                    the information given in Consent Form. I consent my child/ student(s) to
-                                    participate in this study.
-                                </label>
-                            </div>
-                        </div>
+<div class="modal fade" id="instructionsModal" tabindex="-1" role="dialog" aria-labelledby="instructionsModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+        <h4 class="modal-title">Experiment Information</h4>
+      </div>
+      <div class="modal-body">
+        <ul>
+          <li>This Experiment is Done in order to test navigation based on sound using combination of <b>PITCH(<i>y-Direction</i>) and PAN(<i>x-Direction</i>)</b> for representing 8-Directions.</li>
+          <li>Listen to the sound cues and press the direction button (0-9),by guessing the source direction.Press space bar after your response</li>
+          <li>Fill The <b>Participant Details</b> in order to fill the experiment parameters.</li>
+          <li><b>Start the Experiment</b> after filling the following experiment parameters:</li>
+          <li><b>Experiment Mode:</b> Select out of the six modes.<br>
+            <ul>
+              <li><b> Audio_Error_FeedBack</b>, will be provided in case of error during training.</li>
+              <li><b> Visual_Error_FeedBack</b>, will be provided in case of error during training.</li>
+              <li><b> UnSupervised</b>, No feed back will be provided during training.</li>
+              <li><b> No_Training</b>, Direct Testing will be performed.</li>
+              <li><b> Testing</b>, Testing will be performed.</li>
+            </ul>
+          </li>
+          <li><b>Working Memory:</b> To Test Working Memory of Participant.<br>
+            Here Multiple Cues will be played Simultaneously and Participant has to Identify and recall Them.<br>
+            For Example if three cues (L,D,R) are played then key corresponding to them have to be pressed in order.
+          </li>
+          <li><b>No of Training Maps - (Good if >=10) :</b> Maps in the experiment.</li>
+          <li><b>Accuracy Threshold (>=60) :</b> To Move Participant to Testing Mode when the Training threshold is achieved.</li>
+          <li><b>Testing Path Length(>=50)</b>Path Length for testing</li>
+        </ul>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
-                      <div class="form-group">
-                          <label for="userid" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
-                          <div class="col-sm-10">
-                              <select name="USERID" class="form-control" id="userid" placeholder="User ID"
-                                      onChange="populatePD();" required>
-                                <option value="">--User ID--</option>
-                                <option value="NewParticipant">New Participant</option>
-                              </select>
-                          </div>
-                      </div>
-                      <div class="form-group">
-                        <label for="PhaseNo" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
-                        <div class="col-sm-10">
-                          <select name="PHASENO" class="form-control" id="PhaseNo"
-                                  placeholder="Phase Number" required>
-                            <option value="">--Phase Number--</option>
-                            <option value="Phase_1">Phase_1</option>
-                            <option value="Phase_2">Phase_2</option>
-                            <option value="Phase_3">Phase_3</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label for="GroupID" class="col-sm-2 control-label"><i class=
-                                                                             "glyphicon glyphicon-pencil"></i></label>
-                        <div class="col-sm-10">
-                          <select name="GROUPID" class="form-control" id="GroupId" placeholder="Group ID"
-                                  onChange="disablePD();" required>
-                            <option value="">--Group ID--</option>
-                            <option value="SVEF">Sighted Visual Error Feedback</option>
-                            <option value="SAEF">Sighted Audio Error Feedback</option>
-                            <option value="SUS">Sighted Unsupervised</option>
-                            <option value="SNT">Sighted No Training</option>
-                            <option value="NSAEF">Non Sighted Audio Error Feedback</option>
-                            <option value="NSUS">Non Sighted Unsupervised</option>
-                            <option value="NSNT">Non Sighted No Training</option>
-                          </select>
-                        </div>
-                      </div>
-                        <div class="form-group">
-                          <label for="firstname" class="col-sm-2 control-label"><i class
-                                                                               ="glyphicon glyphicon-pencil"></i></label>
-                          <div class="col-sm-10">
-                            <input type="text" name="FIRSTNAME" class="form-control" id="firstname" placeholder="FIRST NAME">
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label for="lastname" class="col-sm-2 control-label"><i class
-                                                                               ="glyphicon glyphicon-pencil"></i></label>
-                          <div class="col-sm-10">
-                            <input type="text" name="LASTNAME" class="form-control" id="lastname"
-                                   placeholder="LAST NAME">
-                          </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputAge" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
-                            <div class="col-sm-10">
-                                <input type="number" name="AGE" class="form-control" id="inputAge" placeholder="Age" min="1" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="Education" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
-                            <div class="col-sm-10">
-                                <input type="text" name="EDUCATION" class="form-control" id="Education" placeholder="Education" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="Modeofcommunication" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
-                            <div class="col-sm-10">
-                                <select name="MODEOFCOMM" class="form-control" id="Modeofcommunication" placeholder="Mode of communication" required>
-                                    <option value="">--Mode of Communication--</option>
-                                    <option value="Telugu">Telugu</option>
-                                    <option value="English">English</option>
-                                    <option value="Hindi">Hindi</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputGender" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
-                            <div class="col-sm-10">
-                                <select name="GENDER" class="form-control" id="inputGender" placeholder="Gender" required>
-                                    <option value="">--Gender--</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputType" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
-                            <div class="col-sm-10">
-                                <select name="PARTICIPANT_TYPE" class="form-control" id="inputType" placeholder="Type" required>
-                                    <option value="">Participant Type</option>
-                                    <option value="Normal">Normal</option>
-                                    <option value="congenital Blind">Congenital Blind</option>
-                                    <option value="Accidental Blind">Accidental Blind</option>
-                                    <option value="Night Blind">Night Blind</option>
-                                    <option value="Color Blind">Color Blind</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputMusic" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
-                            <div class="col-sm-10">
-                                <select  name="MUSICAL_TRAINING" class="form-control" id="inputMusic" placeholder="Type" required>
-                                    <option value="">--Musical Training--</option>
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputMusicKind" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
-                            <div class="col-sm-10">
-                                <input type="text"   name="MUSIC_KIND" class="form-control" id="inputMusicKind" placeholder="Kind of Music Accustom To" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="HearingProblem" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
-                            <div class="col-sm-10">
-                                <select  name="HEARING_PROBLEM" class="form-control" id="HearingProblem" placeholder="Hearing Problem" required>
-                                    <option value="">--Hearing Problem--</option>
-                                    <option value="No">No</option>
-                                    <option value="Yes">Yes</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="KeyboardFamiliarity" class="col-sm-2 control-label"><i class="glyphicon glyphicon-pencil"></i></label>
-                            <div class="col-sm-10">
-                                <select  name="KEYBOARD_FAMILIARITY" class="form-control" id="KeyboardFamiliarity" placeholder="Familiarity with computer game or Key Board Settings" required>
-                                    <option value="">--Familiarity with computer game or Key Board Settings--</option>
-                                    <option value="Yes">Yes</option>
-                                    <option value="No">No</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button id="SavePD" type="button" class="btn btn-primary" onclick="participantDetails()">Submit</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-    <div class="modal fade" id="instructionsModal" tabindex="-1" role="dialog" aria-labelledby="instructionsModal" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
-                    <h4 class="modal-title">Experiment Information</h4>
-                </div>
-                <div class="modal-body">
-                    <ul>
-                      <li>This Experiment is Done in order to test navigation based on sound using combination of <b>PITCH(<i>y-Direction</i>) and PAN(<i>x-Direction</i>)</b> for representing 8-Directions.</li>
-                      <li>Listen to the sound cues and press the direction button (0-9),by guessing the source direction.Press space bar after your response</li>
-                      <li>Fill The <b>Participant Details</b> in order to fill the experiment parameters.</li>
-                      <li><b>Start the Experiment</b> after filling the following experiment parameters:</li>
-                      <li><b>Experiment Mode:</b> Select out of the six modes.<br>
-                            <ul>
-                              <li><b> Audio_Error_FeedBack</b>, will be provided in case of error during training.</li>
-                              <li><b> Visual_Error_FeedBack</b>, will be provided in case of error during training.</li>
-                              <li><b> UnSupervised</b>, No feed back will be provided during training.</li>
-                              <li><b> No_Training</b>, Direct Testing will be performed.</li>
-                              <li><b> Testing</b>, Testing will be performed.</li>
-                            </ul>
-                      </li>
-                      <li><b>Working Memory:</b> To Test Working Memory of Participant.<br>
-                          Here Multiple Cues will be played Simultaneously and Participant has to Identify and recall Them.<br>
-                          For Example if three cues (L,D,R) are played then key corresponding to them have to be pressed in order.
-                      </li>
-                      <li><b>No of Training Maps - (Good if >=10) :</b> Maps in the experiment.</li>
-                      <li><b>Accuracy Threshold (>=60) :</b> To Move Participant to Testing Mode when the Training threshold is achieved.</li>
-                      <li><b>Testing Path Length(>=50)</b>Path Length for testing</li>
-                    </ul>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
-    <!-- javascript -->
-  <script src="js/jquery.js"></script>
-  <script src="js/bootstrap.js"></script>
-  <script src="js/riffwave.js"></script>
-  <script src="js/canvas2image.js"></script>
-  <script src="js/base64.js"></script>
-  <!--<script src="js/vishruti_AB.js"></script>-->
-  <script src="js/participant_details.js"></script>
-  <!--<script src="js/SaveExperimentalData.js"></script>-->
-  <!--<script src="js/runTrial.js"></script>
-  <script src="js/try.js"></script>-->
-  </body>
+<!-- javascript -->
+<script src="js/jquery.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/riffwave.js"></script>
+<script src="js/canvas2image.js"></script>
+<script src="js/base64.js"></script>
+<!--<script src="js/vishruti_AB.js"></script>-->
+<script src="js/participant_details.js"></script>
+<script src="js/vishruti_ABAB.js"></script>
+<script src="js/experiment_details.js"></script>
+<!--<script src="js/SaveExperimentalData.js"></script>-->
+<!--<script src="js/runTrial.js"></script>
+<script src="js/try.js"></script>-->
+</body>
 
 </html>

@@ -13,7 +13,7 @@ app.get('/', function (req, res) {
 });
 
 /* Read Participant data */
-app.get('/readParticipantData',function(req,res){
+app.get('/readParticipantDetails',function(req,res){
 	console.log('In readPD');
 	console.log('read file :'+ __dirname+'/ParticipantData/ParticipantDetails.csv');
 	fs.readFile(__dirname+'/ParticipantData/ParticipantDetails.csv', 'utf8', function (err, data) {
@@ -28,8 +28,8 @@ app.get('/readParticipantData',function(req,res){
 	});
 });
 
-/* Writ Participant Data */
-app.post('/writeParticipantData',function(req,res){
+/* Write Participant Data */
+app.post('/writeParticipantDetails',function(req,res){
 	var data = '';
 	req.on('data', function(chunk) {
 		console.log("Received body data:");
@@ -40,6 +40,42 @@ app.post('/writeParticipantData',function(req,res){
 	req.on('end', function() {
 		console.log(__dirname+'/ParticipantData/ParticipantDetails.csv');
 		fs.appendFile(__dirname+'/ParticipantData/ParticipantDetails.csv', data+'\n', function (err) {
+			if (err) throw err;
+			console.log('The data is saved into file');
+		});
+		res.end('The data is saved into file');
+	});
+});
+
+/* Read Experiment Details */
+app.get('/readExperimentDetails',function(req,res){
+	console.log('In readPD');
+	console.log('read file :'+ __dirname+'/ParticipantData/ExperimentDetails.csv');
+	fs.readFile(__dirname+'/ParticipantData/ExperimentDetails.csv', 'utf8', function (err, data) {
+		var msg = [];
+		if (err){
+			console.log('Error Occurred '+err);
+			res.end(msg);
+		}else{
+			console.log('Data Read:\n'+ data);
+			res.end(data);
+		}
+	});
+});
+
+
+/* Write Experiment Details */
+app.post('/writeExperimentDetails',function(req,res){
+	var data = '';
+	req.on('data', function(chunk) {
+		console.log("Received body data:");
+		data += chunk.toString();
+		console.log(chunk.toString());
+	});
+
+	req.on('end', function() {
+		console.log(__dirname+'/ParticipantData/ExperimentDetails.csv');
+		fs.appendFile(__dirname+'/ParticipantData/ExperimentDetails.csv', data+'\n', function (err) {
 			if (err) throw err;
 			console.log('The data is saved into file');
 		});

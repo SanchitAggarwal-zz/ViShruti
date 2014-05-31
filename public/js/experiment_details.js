@@ -1,12 +1,18 @@
-var ExperimentMode,SelectedMode,InterStimulusInterval,InterTrialInterval = '500',StartTime,StopTime,TotalTime,BestISI = '';
+var ExperimentMode,SelectedMode,InterStimulusInterval='',InterTrialInterval = '500',StartTime,StopTime,TotalTime,BestISI = '';
 var NoOfWMMaps = 3,NoOfDemoMaps = 2,NoOfTrainingMaps = 40, NoOfTestingMaps = 3;
-var WM_PathLength = 36, Training_PathLength = 10, Testing_PathLength = 50;
+var WM_PathLength = 35, Training_PathLength = 10, Testing_PathLength = 50;
 var AccuracyThreshold = 90, ConsecutiveMap = 2;
-var Staircase, Staircase_PathLength = 210,NoOfStaircaseMaps = 1, StaircaseCueLength = 3;
-var	ExperimentDetails = [];
-var ISIDetails = [], ISID = [];
-var ExperimentData = [];
+var Staircase, Staircase_PathLength = 210,NoOfStaircaseMaps = 1, StaircaseCueLength = 3,StaircaseAccuracy = 80;
+var StaircaseDistance = 100,Collision_PathLength = 30, CollisionMap = 1, Collision = false;
+var	ExperimentDetails = [],ISID = [],ExperimentData = [], Folder_Name = '', File_Name = '';
 var BreakTime = 2; //2 minutes break between each switch
+var ISID_Head = "USERID,InterStimulusInterval,TimeStamp",
+	  ExperimentDetails_Head = "USERID,GROUPID,PHASENO,EXPERIMENT_MODE,#_of_Maps,Trial_per_Map,Total_Trials,ISI,ITI," +
+															"StartTime,StopTime,TotalTime,BreakTime",
+		ExperimentData_Head = "USERID,GROUPID,PHASENO,EXPERIMENT_MODE,TRIAL_NO,MAP_NO,TRIAL_LENGTH,S1,S2,S3,S4,S5," +
+													"S6,S7,S8,R1,R2,R3,R4,R5,R6,R7,R8,T1,T2,T3,T4,T5,T6,T7,T8,TotalResponseTime,HIT,MISS,RECALL",
+		Folder_Name = GROUPID + '/' + USERID + '/';
+		File_Name = GROUPID + '_' + PHASENO + '.csv';
 
 // To disable/enable experiment details
 function disableED(flag){
@@ -18,6 +24,11 @@ function disableED(flag){
 	document.getElementById("Staircase").disabled = flag;
 	document.getElementById("StartExp").disabled = flag;
 	document.getElementById("SavePD").disabled = !flag;
+	document.getElementById("Staircase").checked = false;
+	document.getElementById("NoOfWMMaps").value = 3;
+	document.getElementById("NoOfDemoMaps").value = 2;
+	document.getElementById("NoOfTrainingMaps").value = 40;
+	document.getElementById("AccuracyThreshold").value = 90;
 }
 
 // To Change Experiment Mode Options
@@ -75,15 +86,15 @@ function EM_change(){
 
 // For Staircase of Inter Stimulus Interval
 function getISI(){
-	ED = [];
-	$.get('http://localhost:3000/readExperimentDetails', function(ED_Result) {
-		if(ED_Result.length != 0)
+	ISID = [];
+	$.get('http://localhost:3000/readISIDetails', function(ISI_Result) {
+		if(ISI_Result.length != 0)
 		{
-			ED_Result = ED_Result.split('\n');
-			for(var i=0; i<ED_Result.length;++i){
-				ED.push(ED_Result[i].split(','));
-				if(i>0 && ED[i][0]==USERID && ED[i][5] != '' ){// Select Inter Stimulus Interval
-					BestISI = ED[i][5];
+			ISI_Result = ISI_Result.split('\n');
+			for(var i=0; i<ISI_Result.length;++i){
+				ISID.push(ISI_Result[i].split(','));
+				if(i>0 && ISID[i][0]==USERID && ISID[i][1] != '' ){// Select Inter Stimulus Interval
+					BestISI = ISID[i][1];
 					break;
 				}
 			}
@@ -111,33 +122,10 @@ function validateExperimentDetails(){
 	}
 	else {
 		StartTime = new Date().getTime();
+		if(BestISI == ''){BestISI = InterTrialInterval;console.log("BEST ISI value: "+BestISI);}
+		initialize();
 		startExperiment();
 	}
-}
-
-// function to save Experiment Details
-function saveED (){
-	var csvRows = [];
-	for(var i=0, l=ExperimentDetails.length; i<l; ++i){
-		csvRows.push(ExperimentDetails[i].join(','));
-	}
-	var csvString = csvRows.join("\n");
-//	var savecsv         = document.createElement('a');
-//	savecsv.href        = 'data:attachment/csv,' + csvString;
-//	savecsv.target      = '_blank';
-//	savecsv.download    = USERID +'.csv';
-//	document.body.appendChild(savecsv);
-//	savecsv.click();
-
-	$.ajax({
-		type: 'POST',
-		data: csvString,
-		url: 'http://localhost:3000/writeExperimentDetails',
-		success: function(data) {
-			console.log('success');
-			alert(data);
-		}
-	});
 }
 
 function saveExperimentResults(){
@@ -192,4 +180,29 @@ function saveExperimentResults(){
 	document.body.appendChild(savecsv);
 	savecsv.click();
 	alert("Your results are saved successfully");
+}
+
+function initialize(){
+	var ISID_Head,ExperimentDetails_Head,ExperimentData_Head;
+	ISID_Head = "USERID,InterStimulusInterval,TimeStamp";
+	ExperimentDetails_Head = "USERID,GROUPID,PHASENO,EXPERIMENT_MODE,#_of_Maps,Trial_per_Map,Total_Trials,ISI,ITI," +
+		"StartTime,StopTime,TotalTime,BreakTime";
+	ExperimentData_Head = "USERID,GROUPID,PHASENO,EXPERIMENT_MODE,TRIAL_NO,MAP_NO,TRIAL_LENGTH,S1,S2,S3,S4,S5," +
+		"S6,S7,S8,R1,R2,R3,R4,R5,R6,R7,R8,T1,T2,T3,T4,T5,T6,T7,T8,TotalResponseTime,HIT,MISS,RECALL";
+	Folder_Name = GROUPID + '/' + USERID + '/';
+	File_Name = GROUPID + '_' + PHASENO + '.csv';
+
+	$.ajax({
+		type: 'POST',
+		data: {'ISID': ISID_Head,
+					 'ExperimentDetails': ExperimentDetails_Head,
+					 'ExperimentData': ExperimentData_Head,
+					 'Folder_Name': Folder_Name,
+					 'File_Name' : File_Name},
+		url: 'http://localhost:3000/initialize',
+		success: function(data) {
+			console.log('success');
+			alert(data);
+		}
+	});
 }

@@ -1,7 +1,7 @@
 var FunctionQueue = [],checkFunctionQueue,FQCounter,PopNextFunction = 1,FileIndex = 0;
 var DisplayGrid = 0,VisualError = 0,AudioError = 0,VisualCue = 0;  // Flag for Visual or Error Feedback and DisplayGrid
 var ExperimentEnd = 0,StartExp = false;
-var WM = false,WM_CueLength = [1,2,3,4,5,6,7,8],Cue_index = 0;
+var WM = false,WM_CueLength = [2,3,4,5,6,7,8],Cue_index = 0;
 var NoOfMaps,TrialLength,Direction,TotalStimuli,CurrentMapNo,CurrentMode;
 var Maze,Path,Cue,MazeLength;
 var ExperimentList = {'Visual_Error_FeedBack_Training':1,
@@ -14,7 +14,7 @@ var ExperimentList = {'Visual_Error_FeedBack_Training':1,
 											'Demo':8
 										 };
 var InstructionFlag = false; AccuracyFlag = ConsecutiveMap;
-var InstructionFolder = "/Audio/instructions/", AlertMessage = '';
+var InstructionFolder = "/audio/instructions/", AlertMessage = '';
 var InstructionFile = '', Instructions = [], InsCounter = 0, SilenceFile;
 var ISIList = ['25','50','100','200','300','400','500','25','50','100','200','300','400','500',
 							'25','50','100','200','300','400','500','25','50','100','200','300','400','500',
@@ -31,7 +31,7 @@ var ResponseTime = 0, CueTime = 0,IntervalTime = 0;
 var Hit = 0,Miss = 0,Recall = 0,count=0;
 var Sounds = [];
 var CurrentCuePos = 0,CueNo = 0,next = 0;// For Next move
-var counter = 0;
+var counter = 0,AvgAccuracy = 0,FileIndex = 0;
 
 function startExperiment(){
 	document.getElementById("StopExp").disabled = false;
@@ -100,6 +100,7 @@ function addExperimentMode(){
 	else if(EM == 6){
 		if(Staircase){
 			runMode(StaircaseCueLength,Staircase_PathLength,4,NoOfStaircaseMaps,"Staircase");
+			runMode(StaircaseCueLength,Collision_PathLength,4,CollisionMap,"Staircase");
 		}
 		runMode(0,WM_PathLength,4,NoOfDemoMaps,"Demo");
 		runMode(0,WM_PathLength,4,NoOfWMMaps,ExperimentMode);
@@ -650,8 +651,8 @@ function drawMetrics(){
 	context.fillText(text, text_width, 45);
 	text_width = text_width + metrics.width + 2;
 
-	if(RandomOrder){ text = "2,3,4,5,6,7 or 8"}
-	else if(Familirization){ text = "2 or 3"}
+	if(WM){ text = "2,3,4,5,6,7 or 8"}
+	else if(Staircase){ text = "3"}
 	else{ text = TrialLength.toString()};
 	metrics = context.measureText(text);
 	context.fillText(text, text_width, 45);

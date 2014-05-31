@@ -41,7 +41,7 @@ function onUserInput() {
 					var cue_index = findIndex(expectedDirection,cue_code);
 					CueLabels.push(DirectionLabels[cue_index]);
 					InputLabels.push('NoInput');
-					if(VisualError){Maze[x][y] = 4 * (cueno % 2) + 4;}
+					if(VisualError){Maze[x][y] = 4 * (CueNo % 2) + 4;}
 					Miss++;
 					count--;
 					next++;
@@ -56,7 +56,7 @@ function onUserInput() {
 				count=0;
 				next = CurrentCuePos;
 				if(CurrentCuePos==TotalStimuli && PopNextFunction == 0){ // pop next function for new Maps
-					if(Familirization){
+					if(Staircase){
 						FamiliarRecall = Recall;
 						FamiliarISI = FamiliarRecall>=maxRecall?ISIList[ISICounter-1]:FamiliarISI;
 						maxRecall =  FamiliarRecall>=maxRecall?FamiliarRecall:maxRecall;
@@ -73,11 +73,11 @@ function onUserInput() {
 					document.body.appendChild(savecanvas);
 					savecanvas.click();
 
-					if(RandomOrder){
-						TrialLength = RandomorderCue.toString();
+					if(WM){
+						TrialLength = WM_CueLength.toString();
 					}
-					if(Familirization){
-						TrialLength = FamiliarCue.toString();
+					if(Staircase){
+						TrialLength = StaircaseCueLength.toString();
 					}
 					var currentAccuracy = 100*Hit/(TotalStimuli);
 					AvgAccuracy = ((CurrentMapNo - 1)*AvgAccuracy + currentAccuracy)/CurrentMapNo;
@@ -108,7 +108,7 @@ function onUserInput() {
 						}
 					}
 					else{
-						if(CurrentMapNo==NMaps && KeyExp < 5){
+						if(CurrentMapNo==NoOfMaps && KeyExp < 5){
 							ExperimentEnd = 1;
 							// clear the polling variable
 							alert('Avg Accuracy of three consecutive Maps less than Accuracy Threshold '+ AccuracyThreshold +' After '+NMaps + ' Maps.\nTerminating Experiment');
@@ -130,7 +130,7 @@ function onUserInput() {
 					ResponseTime = 0;
 					CurrentCuePos = 0;
 					count=0;Recall=0;
-					cueno = 0;
+					CueNo = 0;
 					PopNextFunction = 1;
 				}
 				else{ //play next cues
@@ -172,7 +172,7 @@ function onUserInput() {
 					CueTime = new Date().getTime();
 					count++;
 					Hit++;
-					if(VisualError && noextra){Maze[x][y] = 4 * (cueno % 2) + 3;}
+					if(VisualError && noextra){Maze[x][y] = 4 * (CueNo % 2) + 3;}
 				}
 				else{
 					IntervalTime = IntervalTime + (waitTime - CueTime)/1000;
@@ -180,7 +180,7 @@ function onUserInput() {
 					if(AudioError){playError();}
 					Miss++;
 					count--;
-					if(VisualError && noextra){Maze[x][y] = 4 * (cueno % 2) + 4;}
+					if(VisualError && noextra){Maze[x][y] = 4 * (CueNo % 2) + 4;}
 				}
 				drawMaze(Maze,MazeLength);
 				drawMetrics();

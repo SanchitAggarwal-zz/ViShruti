@@ -1,6 +1,7 @@
 var FORM_PD,PHASENO,USERID,PARTICIPANT_TYPE,FIRSTNAME,LASTNAME,GROUPID;
 var AGE,EDUCATION,MODEOFCOMM,GENDER,MUSICAL_TRAINING,MUSIC_KIND,HEARING_PROBLEM,KEYBOARD_FAMILIARITY;
-var ParticipantDetails = [], PD = [], TimeStamp;
+var ParticipantDetails = [], PD = [], TimeStamp, PD_FileName = 'ParticipantDetails.csv';
+var url = 'http://localhost:3000', read = '/read', write = '/write', createuser = '/createUser', createfile = '/createFile';
 
 // For inserting dummy data in participant details form
 function DummyData(){
@@ -110,10 +111,7 @@ function participantDetails(){
 			  if (!(isNaN(AGE) || AGE < 1 || EDUCATION == "" || MODEOFCOMM == "" || GENDER == "" || PARTICIPANT_TYPE == ""
 				  || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || KEYBOARD_FAMILIARITY == "" || GROUPID == "" || PHASENO == "") ) {
 				  TimeStamp = new Date().toString();
-				  if(PD.length==0){
-					  ParticipantDetails.push(['USER_ID','GROUP_ID','FIRST_NAME','LAST_NAME', 'AGE', 'EDUCATION', 'MODE_OF_COMMUNICATION', 'GENDER', 'PARTICIPANT_TYPE',
-						  'MUSICAL_TRAINING', 'MUSIC_KIND', 'HEARING_PROBLEM', 'KEYBOARD_FAMILIARITY','PHASE NUMBER', 'Given Consent','TimeStamp']);
-				  }
+
 				  if(USERID == "NewParticipant") {
 				    USERID = GROUPID + '_' + GENDER[0] + '_' + FIRSTNAME + '_' + (PD.length + 1).toString(16);
 					  alert('Please Note Your USER_ID for future reference: ' + USERID);
@@ -128,7 +126,6 @@ function participantDetails(){
 				  if ($(".fa-user").hasClass('detailsAdded') == false) {
 					  $(".fa-user").addClass('detailsAdded');
 				  }
-				  savePD();
 				  disableED(false);
 				  EMOptions(GROUPID);
 			  }
@@ -145,24 +142,19 @@ function participantDetails(){
 	}
 }
 
-// function to save Participant Details
-function savePD (){
+// function to save data into file
+function save (filename,data){
 	var csvRows = [];
-	for(var i=0, l=ParticipantDetails.length; i<l; ++i){
-		csvRows.push(ParticipantDetails[i].join(','));
+	for(var i=0, l=data.length; i<l; ++i){
+		csvRows.push(data[i].join(','));
 	}
 	var csvString = csvRows.join("\n");
-//	var savecsv         = document.createElement('a');
-//	savecsv.href        = 'data:attachment/csv,' + csvString;
-//	savecsv.target      = '_blank';
-//	savecsv.download    = USERID +'.csv';
-//	document.body.appendChild(savecsv);
-//	savecsv.click();
 
 	$.ajax({
 		type: 'POST',
-		data: csvString,
-		url: 'http://localhost:3000/writeParticipantDetails',
+		data: {'data': csvString,
+					 'Name' : filename},
+		url: url+write,
 		success: function(data) {
 			console.log('success');
 			alert(data);
@@ -175,7 +167,7 @@ function readPD (){
 	PD = [];
 	var select = document.getElementById("userid");
 	var options = [];
-	$.get('http://localhost:3000/readParticipantDetails', function(PD_Result) {
+	$.get(url+read,{ Name: PD_FileName }, function(PD_Result) {
 		if(PD_Result.length != 0)
 		{
 			PD_Result = PD_Result.split('\n');
@@ -222,7 +214,7 @@ function populatePD(){
 	}
 }
 
-//// function to read Participant Details from file
+//// function to read Participant Details from file without server
 //function readPD (){
 //			$.get('ParticipantData/ParticipantDetails.csv', function(PD_Result) {
 //				PD_Result = PD_Result.split('\n');

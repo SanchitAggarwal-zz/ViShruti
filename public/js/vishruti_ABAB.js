@@ -32,7 +32,7 @@ var Hit = 0,Miss = 0,Recall = 0,count=0;
 var Sounds = [];
 var CurrentCuePos = 0,CueNo = 0,next = 0;// For Next move
 var counter = 0,AvgAccuracy = 0,FileIndex = 0;
-
+var checkJoyStickEvent;
 function startExperiment(){
 	document.getElementById("StopExp").disabled = false;
 	document.getElementById("StartExp").disabled = true;
@@ -49,6 +49,9 @@ function startExperiment(){
 	addExperimentMode();
 	checkFunctionQueue = setInterval(function(){callNextFunction()},3000);  //Check function queue after every 3 seconds
 	FQCounter = FunctionQueue.length;
+	initJoyStick();
+	checkJoyStickEvent = setInterval(function(){onUserInput()},15);  // check for onuserinput after every 30 ms fro joystick control
+	//globalID = requestAnimationFrame(joyStickResponse);
 }
 
 // To Stop Experiment In Between
@@ -68,6 +71,7 @@ function stopExperiment(){
 		saveExperimentResults();
 		//Reload the page
 		//location.reload();
+		clearInterval(checkJoyStickEvent);
 		document.getElementById("StopExp").disabled = true;
 		document.getElementById("StartExp").disabled = false;
 	}

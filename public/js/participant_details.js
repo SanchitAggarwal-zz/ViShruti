@@ -1,5 +1,5 @@
 var FORM_PD,PHASENO,USERID,PARTICIPANT_TYPE,FIRSTNAME,LASTNAME,GROUPID;
-var AGE,EDUCATION,MODEOFCOMM,GENDER,MUSICAL_TRAINING,MUSIC_KIND,HEARING_PROBLEM,KEYBOARD_FAMILIARITY;
+var AGE,EDUCATION,MODEOFCOMM,GENDER,MUSICAL_TRAINING,MUSIC_KIND,HEARING_PROBLEM,USERCONTROL;
 var ParticipantDetails = [], PD = [], TimeStamp, PD_FileName = 'ParticipantDetails.csv';
 var url = 'http://localhost:3000', read = '/read', write = '/write', createuser = '/createUser', createfile = '/createFile';
 
@@ -18,7 +18,7 @@ function DummyData(){
     FORM_PD.MUSICAL_TRAINING.value = 'No';
     MUSIC_KIND = FORM_PD.MUSIC_KIND.value = 'None';
     FORM_PD.HEARING_PROBLEM.value = 'No';
-    FORM_PD.KEYBOARD_FAMILIARITY.value = 'Yes';
+    FORM_PD.USERCONTROL.value = 'JoyStick';
     FORM_PD.PHASENO.value = 'Phase_1';
 	  FORM_PD.GROUPID.value = 'SVEF';
 	  document.getElementById("Consent").checked = true;
@@ -42,7 +42,7 @@ function DummyData(){
     FORM_PD.MUSICAL_TRAINING.value = '';
     MUSIC_KIND = FORM_PD.MUSIC_KIND.value = '';
     FORM_PD.HEARING_PROBLEM.value = '';
-    FORM_PD.KEYBOARD_FAMILIARITY.value = '';
+    FORM_PD.USERCONTROL.value = '';
     FORM_PD.PHASENO.value = '';
 	  FORM_PD.GROUPID.value = '';
 	  document.getElementById("Consent").checked = false;
@@ -69,7 +69,7 @@ function disablePD(flag){
 	  document.getElementById("inputMusic").disabled = true;
 	  document.getElementById("inputMusicKind").disabled = true;
 	  document.getElementById("HearingProblem").disabled = true;
-	  document.getElementById("KeyboardFamiliarity").disabled = true;
+	  document.getElementById("UserControl").disabled = true;
 		document.getElementById("GroupId").disabled = true;
 	}
 	else{
@@ -83,7 +83,7 @@ function disablePD(flag){
     document.getElementById("inputMusic").disabled = false;
     document.getElementById("inputMusicKind").disabled = false;
     document.getElementById("HearingProblem").disabled = false;
-    document.getElementById("KeyboardFamiliarity").disabled = false;
+    document.getElementById("UserControl").disabled = false;
 		document.getElementById("GroupId").disabled = false;
 	}
 }
@@ -102,14 +102,14 @@ function participantDetails(){
   MUSICAL_TRAINING = FORM_PD.MUSICAL_TRAINING.value;
   MUSIC_KIND = FORM_PD.MUSIC_KIND.value;
   HEARING_PROBLEM = FORM_PD.HEARING_PROBLEM.value;
-  KEYBOARD_FAMILIARITY = FORM_PD.KEYBOARD_FAMILIARITY.value;
+  USERCONTROL = FORM_PD.USERCONTROL.value;
   PHASENO = FORM_PD.PHASENO.value;
 	GROUPID = FORM_PD.GROUPID.value;
 	var select = document.getElementById("userid");
 	if(document.getElementById("Consent").checked){
 	  if(USERID != ""){
 			  if (!(isNaN(AGE) || AGE < 1 || EDUCATION == "" || MODEOFCOMM == "" || GENDER == "" || PARTICIPANT_TYPE == ""
-				  || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || KEYBOARD_FAMILIARITY == "" || GROUPID == "" || PHASENO == "") ) {
+				  || MUSICAL_TRAINING == "" || MUSIC_KIND == "" || HEARING_PROBLEM == "" || USERCONTROL == "" || GROUPID == "" || PHASENO == "") ) {
 				  TimeStamp = new Date().toString();
 
 				  if(USERID == "NewParticipant") {
@@ -121,7 +121,7 @@ function participantDetails(){
 					  //alert('Please Note Your USER_ID for future reference: ' + USERID);
 				  }
 			    ParticipantDetails.push([USERID,GROUPID,FIRSTNAME,LASTNAME, AGE, EDUCATION, MODEOFCOMM, GENDER, PARTICIPANT_TYPE, MUSICAL_TRAINING,
-					  MUSIC_KIND, HEARING_PROBLEM, KEYBOARD_FAMILIARITY,PHASENO, "YES",TimeStamp]);
+					  MUSIC_KIND, HEARING_PROBLEM, USERCONTROL,PHASENO, "YES",TimeStamp]);
 				  $('#contactModal').modal('hide');
 				  if ($(".fa-user").hasClass('detailsAdded') == false) {
 					  $(".fa-user").addClass('detailsAdded');
@@ -202,7 +202,7 @@ function populatePD(){
 		FORM_PD.MUSICAL_TRAINING.value = PD[i][9];
 		MUSIC_KIND = FORM_PD.MUSIC_KIND.value = PD[i][10];
 		FORM_PD.HEARING_PROBLEM.value = PD[i][11];
-		FORM_PD.KEYBOARD_FAMILIARITY.value = PD[i][12];
+		FORM_PD.USERCONTROL.value = PD[i][12];
 		FORM_PD.PHASENO.value = '';
 		document.getElementById("PhaseNo").disabled = false;
 		disablePD(true);

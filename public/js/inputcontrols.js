@@ -1,9 +1,89 @@
-var inputDirection_a = [36,38,33,37,12,39,35,40,34,32];   //added 32 for spacebar
-var inputDirection_b = [103,104,105,100,101,102,97,98,99,32]; //added 32 for spacebar
-var expectedDirection = [13,23,33,12,22,32,11,21,31];
+// Adding joystick Controls
+var PI = 180.0;
+var verticleAngle=20,horizontalAngle=30,diagonalAngle=40;
+
+var Quadrants = {
+	East_Max : horizontalAngle,
+	East_Min : 2*PI-horizontalAngle,
+	NorthEast_Min : horizontalAngle,
+	NorthEast_Max : horizontalAngle + diagonalAngle,
+	North_Min : PI/2 - verticleAngle,
+	North_Max : PI/2 + verticleAngle,
+	NorthWest_Min : PI/2 + verticleAngle,
+	NorthWest_Max : PI - horizontalAngle,
+	West_Min : PI - horizontalAngle,
+	West_Max : PI + horizontalAngle,
+	SouthWest_Min : PI + horizontalAngle,
+	SouthWest_Max : PI + horizontalAngle + diagonalAngle,
+	South_Min : PI/2 + PI - verticleAngle,
+	South_Max : PI/2 + PI + verticleAngle,
+	SouthEast_Min : PI/2 + PI + verticleAngle,
+	SouthEast_Max : 2*PI - horizontalAngle
+}
+var DirectionIndex = {
+	NorthWest : 0,
+	North : 1,
+	NorthEast : 2,
+	West : 3,
+	Center :4,
+	East : 5,
+	SouthWest : 6,
+	South: 7,
+	SouthEast : 8,
+	NextTrial: 9
+}
 var DirectionLabels = ['NW',' N','NE',' W',' C',' E','SW',' S','SE','Space'];
+var joyStickLabels = [11,21,31,12,22,32,13,23,33,50];  // (10 * (x+2)) + (y+2)
+var joyStick, joyStickDetected = false,oldJoyStick,jsResponseValue = [];
+var Buttons = {
+												FACE_1: 0,
+												FACE_2: 1,
+												FACE_3: 2,
+												FACE_4: 3,
+												LEFT_SHOULDER: 4,
+												RIGHT_SHOULDER: 5,
+												LEFT_SHOULDER_BOTTOM: 6,
+												RIGHT_SHOULDER_BOTTOM: 7,
+												SELECT: 8,
+												START: 9,
+												LEFT_ANALOGUE_STICK: 10,
+												RIGHT_ANALOGUE_STICK: 11,
+												PAD_UP: 12,
+												PAD_DOWN: 13,
+												PAD_LEFT: 14,
+												PAD_RIGHT: 15,
+												CENTER_BUTTON: 16
+											};
+var Axes = {
+											LEFT_X: 0,
+											LEFT_Y: 1,
+											RIGHT_X: 2,
+											RIGHT_Y: 3
+										};
+var ANALOGUE_BUTTON_THRESHOLD = .5;
+var AXIS_DEADZONE = 0.8;
+var Axes_X,Axes_Y,oldAxes_X,oldAxes_Y,Theta,oldTheta,quad,oldquad;
+
 
 document.onkeyup = onUserInput;
+
+buttonPressed = function(stick, buttonId) {
+	//console.log(stick.buttons[buttonId]);
+	return stick.buttons[buttonId].pressed && (stick.buttons[buttonId].value > ANALOGUE_BUTTON_THRESHOLD);
+};
+
+stickDistanceMoved = function(x,y) {
+	var distance = Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
+	return  distance > AXIS_DEADZONE ? distance : 0;
+};
+
+function initJoyStick(){
+	joyStick = navigator.getGamepads && navigator.getGamepads()[0];
+	if(joyStick){
+		console.log('in init joystick');
+		joyStickDetected = true;
+	}
+}
 
 function findIndex(search_array,key){
 	var index = -1;
@@ -16,7 +96,88 @@ function findIndex(search_array,key){
 	return index;
 }
 
+function getAngle(x,y){
+	var angle;
+	angle = 180*Math.atan2(y,x)/Math.PI;
+	angle = angle < 0? Math.abs(angle):360 - angle
+	return angle;
+}
+
+function getQuadrant(angle){
+	if(angle > Quadrants.NorthEast_Min &&  angle <= Quadrants.NorthEast_Max){
+		return DirectionIndex.NorthEast;
+	}else if(angle > Quadrants.North_Min  &&  angle <= Quadrants.North_Max){
+		return DirectionIndex.North;
+	}else if(angle > Quadrants.NorthWest_Min  &&  angle <= Quadrants.NorthWest_Max){
+		return DirectionIndex.NorthWest;
+	}else if(angle > Quadrants.West_Min &&  angle <= Quadrants.West_Max){
+		return DirectionIndex.West;
+	}else if(angle > Quadrants.SouthWest_Min  &&  angle <= Quadrants.SouthWest_Max){
+		return DirectionIndex.SouthWest;
+	}else if(angle > Quadrants.South_Min  &&  angle <= Quadrants.South_Max){
+		return DirectionIndex.South;
+	}else if(angle > Quadrants.SouthEast_Min  &&  angle <= Quadrants.SouthEast_Max){
+		return DirectionIndex.SouthEast;
+	}else{
+		return DirectionIndex.East;
+	}
+}
+
+
 function onUserInput() {
+	if(USERCONTROL == 'JoyStick'){
+		joyStickResponse();
+	}
+	else{
+		KeyBoardResponse();
+	}
+}
+
+function joyStickResponse(){
+	if (!joyStickDetected) {
+		initJoyStick();
+	} else {
+		oldJoyStick = JSON.parse(JSON.stringify(joyStick));
+		joyStick = navigator.getGamepads && navigator.getGamepads()[0];
+		Axes_X = joyStick.axes[Axes.LEFT_X];
+		Axes_Y = joyStick.axes[Axes.LEFT_Y];
+		oldAxes_X = oldJoyStick.axes[Axes.LEFT_X];
+		oldAxes_Y = oldJoyStick.axes[Axes.LEFT_Y];
+		Theta = getAngle(Axes_X,Axes_Y);
+		oldTheta = getAngle(oldAxes_X,oldAxes_Y);
+		quad = getQuadrant(Theta);
+
+		if(buttonPressed(oldJoyStick,Buttons.FACE_1)!=buttonPressed(joyStick,Buttons.FACE_1) && !buttonPressed(joyStick,Buttons.FACE_1)){
+			console.log("Key Pressed, Play Next Trial");
+			playNextTrial();
+			jsResponseValue =[];
+			oldquad = DirectionIndex.Center;
+		}
+		if(stickDistanceMoved(Axes_X,Axes_Y) && quad != oldquad){
+			oldquad = quad;
+			console.log(Theta);
+			console.log("Response Recorded: ")
+			jsResponseValue.push(DirectionLabels[quad]);
+			jsResponseValue.push(Theta);
+
+		}
+		if(!stickDistanceMoved(Axes_X,Axes_Y)){
+			oldquad = DirectionIndex.Center;
+		}
+	}
+}
+
+function playNextTrial(){
+	console.log(jsResponseValue);
+//	NextCue();
+//	playSounds();
+//	CueTime =  new Date().getTime();
+}
+
+
+//globalID = requestAnimationFrame(joyStickResponse);
+
+function KeyBoardResponse(){
 	var waitTime = new Date().getTime();
 	if(!Sounds[counter] && counter>0){
 		StartExp = true;
@@ -190,3 +351,63 @@ function onUserInput() {
 		}
 	}
 }
+
+
+
+//$("#StartExp").on("click", function() {
+//});
+//
+//$("#StopExp").on("click", function() {
+//	if(USERCONTROL == 'JoyStick')
+//		cancelAnimationFrame(globalID);
+//});
+
+
+//function joyStickResponse(){
+//	if (!joyStickDetected) {
+//		initJoyStick();
+//	} else {
+//		oldJoyStick = JSON.parse(JSON.stringify(joyStick));
+//		joyStick = navigator.getGamepads && navigator.getGamepads()[0];
+//		if(buttonPressed(oldJoyStick,Buttons.FACE_1)!=buttonPressed(joyStick,Buttons.FACE_1) && !buttonPressed(joyStick,Buttons.FACE_1)){
+//			//prevJsResponseValue = (10 * (stickMoved(oldJoyStick,Axes.LEFT_X)+2))+stickMoved(oldJoyStick,Axes.LEFT_Y)+2;
+////			jsResponseValue = joyStickLabels[9];
+//			console.log("Key Pressed, Play Next Trial");
+//			playNextTrial();
+//			jsResponseValue =[];
+//		}
+////		else if((stickMoved(joyStick,Axes.LEFT_X) != stickMoved(oldJoyStick,Axes.LEFT_X) || stickMoved(joyStick,Axes.LEFT_Y) != stickMoved(oldJoyStick,Axes.LEFT_Y))
+////			&& (stickMoved(joyStick,Axes.LEFT_X) || stickMoved(joyStick,Axes.LEFT_Y))){
+////			Axes_X = stickMoved(joyStick,Axes.LEFT_X);
+////			Axes_Y = stickMoved(joyStick,Axes.LEFT_Y);
+////			//prevJsResponseValue = (10 * (stickMoved(oldJoyStick,Axes.LEFT_X)+2))+stickMoved(oldJoyStick,Axes.LEFT_Y)+2;
+////			jsResponseValue.push(DirectionLabels[findIndex(joyStickLabels,(10 * (Axes_X+2))+Axes_Y+2)]);
+////			console.log("Stick Moved: " + Axes_X + "__" + Axes_Y);
+//////			if(prevJsResponseValue == 0){
+//////				playNextTrial(jsResponseValue);
+//////			}
+////		}
+////		else{
+////			console.log('Waiting for response');
+////		}
+//		else{
+//
+//			Axes_X = stickMoved(joyStick,Axes.LEFT_X);
+//			Axes_Y = stickMoved(joyStick,Axes.LEFT_Y);
+//			oldAxes_X = stickMoved(oldJoyStick,Axes.LEFT_X);
+//			oldAxes_Y = stickMoved(oldJoyStick,Axes.LEFT_Y);
+//			Theta = getAngle(Axes_X,Axes_Y);
+//			oldTheta = getAngle(oldAxes_X,oldAxes_Y);
+//			if(getDirection(Theta) != getDirection(oldTheta) && getDirection(Theta)!=DirectionSet.Center){
+//				console.log(Theta);
+//				jsResponseValue.push(DirectionLabels[getDirection(Theta)]);
+//			}
+//		}
+//
+//	}
+//}
+
+
+var inputDirection_a = [36,38,33,37,12,39,35,40,34,32];   //added 32 for spacebar
+var inputDirection_b = [103,104,105,100,101,102,97,98,99,32]; //added 32 for spacebar
+var expectedDirection = [13,23,33,12,22,32,11,21,31];

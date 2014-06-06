@@ -63,8 +63,6 @@ var Axes = {
 var ANALOGUE_BUTTON_THRESHOLD = .5;
 var AXIS_DEADZONE = 0.8;
 var Axes_X,Axes_Y,oldAxes_X,oldAxes_Y,Theta,oldTheta,quad,oldquad;
-
-
 document.onkeyup = onUserInput;
 
 buttonPressed = function(stick, buttonId) {
@@ -123,7 +121,6 @@ function getQuadrant(angle){
 	}
 }
 
-
 function onUserInput() {
 	if(USERCONTROL == 'JoyStick'){
 		joyStickResponse();
@@ -173,7 +170,6 @@ function playNextTrial(){
 //	playSounds();
 //	CueTime =  new Date().getTime();
 }
-
 
 //globalID = requestAnimationFrame(joyStickResponse);
 

@@ -182,7 +182,7 @@ function readPD (){
 				}
 			}
 		}
-		alert('No of Rows in PD:' +PD.length);
+		console.log('No of Rows in PD:' +PD.length);
 	});
 }
 

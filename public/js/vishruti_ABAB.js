@@ -21,14 +21,23 @@ var ISIList = ['25','50','100','200','300','400','500','25','50','100','200','30
 							'25','50','100','200','300','400','500','25','50','100','200','300','400','500',
 							'25','50','100','200','300','400','500','25','50','100','200','300','400','500',
 							'25','50','100','200','300','400','500','25','50','100','200','300','400','500'];
-var ISICounter = 0;
+var ISICounter = 0,ISI_Recall = [0,0,0,0,0,0],ISI_Trial = 10;
+var ISI_Index = {
+								"25":0,
+								"50":1,
+								"100":2,
+								"200":3,
+								"300":4,
+								"400":5,
+								"500":6
+}
 var CueLabels = [],InputLabels = [],InputTime = [];
 var start_x,start_y,inc_sx,inc_sy;
 var pitch = [440,880,1760];   //predefined notes in hz
 var rate = 44100; //sample per sec
 var volume = 50; //amplitude of sine wave
 var ResponseTime = 0, CueTime = 0,IntervalTime = 0;
-var Hit = 0,Miss = 0,Recall = 0,count=0;
+var Hit = 0,Miss = 0,Recall = 0,count= 0,TotalRecall = 0;
 var Sounds = [];
 var CurrentCuePos = 0,CueNo = 0,next = 0;// For Next move
 var counter = 0,AvgAccuracy = 0,FileIndex = 0;
@@ -363,9 +372,9 @@ function playMap(){
 	drawMaze(Maze,MazeLength);
 	drawMetrics();
 	drawControls(-1);
-	NextCue();
-	playSounds();
-	CueTime =  new Date().getTime();
+//	NextCue();
+//	playSounds();
+//	CueTime =  new Date().getTime();
 }
 
 function NextCue(){

@@ -32,9 +32,12 @@ var DirectionIndex = {
 	SouthEast : 8,
 	NextTrial: 9
 }
+var inputDirection_a = [36,38,33,37,12,39,35,40,34,32];   //added 32 for spacebar
+var inputDirection_b = [103,104,105,100,101,102,97,98,99,32]; //added 32 for spacebar
+var expectedDirection = [13,23,33,12,22,32,11,21,31];
 var DirectionLabels = ['NW',' N','NE',' W',' C',' E','SW',' S','SE','Space'];
-var joyStickLabels = [11,21,31,12,22,32,13,23,33,50];  // (10 * (x+2)) + (y+2)
-var joyStick, joyStickDetected = false,oldJoyStick,jsResponseValue = [];
+var joyStick, joyStickDetected = false,oldJoyStick,ExtraResponse = [];
+var TotalResponseTime;
 var Buttons = {
 												FACE_1: 0,
 												FACE_2: 1,
@@ -61,7 +64,7 @@ var Axes = {
 											RIGHT_Y: 3
 										};
 var ANALOGUE_BUTTON_THRESHOLD = .5;
-var AXIS_DEADZONE = 0.8;
+var AXIS_DEADZONE = 0.9;
 var Axes_X,Axes_Y,oldAxes_X,oldAxes_Y,Theta,oldTheta,quad,oldquad;
 document.onkeyup = onUserInput;
 
@@ -76,9 +79,10 @@ stickDistanceMoved = function(x,y) {
 };
 
 function initJoyStick(){
+	console.log('Initializing joyStick');
 	joyStick = navigator.getGamepads && navigator.getGamepads()[0];
 	if(joyStick){
-		console.log('in init joystick');
+		console.log('joystick Detected');
 		joyStickDetected = true;
 	}
 }
@@ -122,18 +126,25 @@ function getQuadrant(angle){
 }
 
 function onUserInput() {
-	if(USERCONTROL == 'JoyStick'){
-		joyStickResponse();
-	}
-	else{
-		KeyBoardResponse();
+	if(!Sounds[counter] && counter>0){
+		startexp = true;
+		if(USERCONTROL == 'JoyStick' && joyStickDetected ){
+			joyStickResponse();
+		}
+		else if(USERCONTROL == 'JoyStick' && !joyStickDetected){
+			initJoyStick();
+		}
+		else{
+			KeyBoardResponse();
+		}
 	}
 }
 
+// with continuous axis and FACE_1 for Next Trial
 function joyStickResponse(){
-	if (!joyStickDetected) {
-		initJoyStick();
-	} else {
+	if(startexp && !ExperimentEnd){
+		console.log('Checking Joystick Response');
+		//console.log(joyStick);
 		oldJoyStick = JSON.parse(JSON.stringify(joyStick));
 		joyStick = navigator.getGamepads && navigator.getGamepads()[0];
 		Axes_X = joyStick.axes[Axes.LEFT_X];
@@ -147,15 +158,16 @@ function joyStickResponse(){
 		if(buttonPressed(oldJoyStick,Buttons.FACE_1)!=buttonPressed(joyStick,Buttons.FACE_1) && !buttonPressed(joyStick,Buttons.FACE_1)){
 			console.log("Key Pressed, Play Next Trial");
 			playNextTrial();
-			jsResponseValue =[];
+			//jsResponseValue =[];
 			oldquad = DirectionIndex.Center;
 		}
 		if(stickDistanceMoved(Axes_X,Axes_Y) && quad != oldquad){
 			oldquad = quad;
 			console.log(Theta);
-			console.log("Response Recorded: ")
-			jsResponseValue.push(DirectionLabels[quad]);
-			jsResponseValue.push(Theta);
+			console.log("Response Recorded: ");
+			checkResponse(quad);
+			//jsResponseValue.push(DirectionLabels[quad]);
+			//jsResponseValue.push(Theta);
 
 		}
 		if(!stickDistanceMoved(Axes_X,Axes_Y)){
@@ -165,14 +177,191 @@ function joyStickResponse(){
 }
 
 function playNextTrial(){
-	console.log(jsResponseValue);
-//	NextCue();
-//	playSounds();
-//	CueTime =  new Date().getTime();
+	isCompleteResponse();
+	if(count==TrialLength){
+		Recall = 1;
+		TotalRecall++;
+		if(Staircase){
+			ISI_Recall[ISI_Index[InterStimulusInterval]]++;
+		}
+	}
+	ExperimentData = [];
+	ExperimentData.push(USERID,GROUPID,PHASENO,EXPERIMENT_MODE,TRIAL_NO,MAP_NO,TRIAL_LENGTH,InterStimulusInterval);
+	ExperimentData.push(CueLabels.join(','),InputLabels.join(','),InputTime.join(','),TotalResponseTime,Hit,Miss,Recall,TRIAL_LENGTH*Recall,ExtraResponse.join(' '));
+	save(ExperimentData_Filename,ExperimentData);
+	count=0;
+	next = CurrentCuePos;
+	if(!isCompleteMap()){
+		 //play next cues
+		// inter-trial time between two sound patterns in working memory experiment
+		StartExp = false;
+		var str1 = "audio/silence_wav/silence";
+		SilenceFile = str1.concat(InterTrialInterval,'.wav');
+		AddSilence();
+		// play next audio sequence
+		NextCue();
+		playSounds();
+		CueTime =  new Date().getTime();
+	}
+	drawMaze(Maze,MazeLength);
+	drawMetrics();
+	drawControls(DirectionIndex.NextTrial);
+}
+
+function checkResponse(input_key){
+	var x, y,cue_x,cue_y,cue_index;
+	var noextra = true;
+	if(next < CurrentCuePos){
+		x =  Path[next][0];
+		y = Path[next][1];
+		cue_x = Cue[next][0];
+		cue_y = Cue[next][1]*-1;
+		cue_code = 10 * (cue_x + 2) + (cue_y + 2);
+		cue_index = findIndex(expectedDirection,cue_code);
+		CueLabels.push(DirectionLabels[cue_index]);
+		InputLabels.push(DirectionLabels[input_key]);
+	}
+	else{
+		noextra = false;
+		cue_index = -2;
+		ExtraResponse.push(DirectionLabels[input_key]);
+	}
+
+	if(input_key == cue_index){
+		IntervalTime = IntervalTime + (waitTime - CueTime )/1000;
+		CueTime = new Date().getTime();
+		count++;
+		Hit++;
+		if(VisualError && noextra){Maze[x][y] = 4 * (CueNo % 2) + 3;}
+	}
+	else{
+		IntervalTime = IntervalTime + (waitTime - CueTime)/1000;
+		CueTime = new Date().getTime();
+		if(AudioError){playError();}
+		Miss++;
+		count--;
+		if(VisualError && noextra){Maze[x][y] = 4 * (cueno % 2) + 4;}
+	}
+	drawMaze(Maze,MazeLength);
+	drawMetrics();
+	drawControls(input_key);
+	next++;
+}
+
+function isCompleteResponse(){
+	while(next<CurrentCuePos){
+		var x =  Path[next][0];
+		var y = Path[next][1];
+		var cue_x = Cue[next][0];
+		var cue_y = Cue[next][1]*-1;
+		var cue_code = 10 * (cue_x + 2) + (cue_y + 2);
+		var cue_index = findIndex(expectedDirection,cue_code);
+		CueLabels.push(DirectionLabels[cue_index]);
+		InputLabels.push('NoInput');
+		if(VisualError){Maze[x][y] = 4 * (CueNo % 2) + 4;}
+		Miss++;
+		count--;
+		next++;
+	}
+	for(var i=CueLabels.length;i<=WM_SETSIZE;i++){
+		CueLabels.push('empty');
+		InputLabels.push('empty');
+		InputTime.push('0.0');
+	}
+}
+
+function isCompleteMap(){
+	if(CurrentCuePos==TotalSteps && PopNextFunction == 0){ // pop next function for new Maps
+		if(Staircase){
+			var recallPercent;
+			for(var isi = 0; isi < ISI_Recall.length; isi++){
+				recallPercent = (ISI_Recall[isi]/ISI_Trial)*100;
+				recallPercent = recallPercent >= StaircaseAccuracy?1:0;
+			}
+			BestISI = Math.max.apply(Math,ISI_Recall);
+			FamiliarRecall = Recall;
+			FamiliarISI = FamiliarRecall>=maxRecall?ISIList[ISICounter-1]:FamiliarISI;
+			maxRecall =  FamiliarRecall>=maxRecall?FamiliarRecall:maxRecall;
+		}
+		drawMaze(Maze,MazeLength);
+		drawMetrics();
+		if(CurrentMode == 'InCorrectVisualCue'){
+			drawCorrectMaze(MazeLength,Path);
+		}
+		var canvas = document.getElementById('Maze_Canvas');
+		var savecanvas = document.createElement('a');
+		savecanvas.href = canvas.toDataURL('image/png').replace('image/png');
+		savecanvas.download= USERID + "_" + CurrentMode + "_Dir_" + Direction + "_Map_" + CurrentMapNo +"_PL_" + TotalSteps + "_FI_" + FileIndex + ".png";
+		document.body.appendChild(savecanvas);
+		savecanvas.click();
+
+		if(RandomOrder){
+			Level = RandomorderCue.toString();
+		}
+		if(Familirization){
+			Level = FamiliarCue.toString();
+		}
+		var currentAccuracy = 100*Hit/(TotalSteps);
+		AvgAccuracy = ((CurrentMapNo - 1)*AvgAccuracy + currentAccuracy)/CurrentMapNo;
+		console.log(AvgAccuracy);
+		ExperimentResults.push([FileIndex,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(TotalSteps),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfMaps,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval,AvgAccuracy]);
+		var KeyExp = ExperimentList[CurrentMode];
+		console.log('Accuracy Flag :'+AccuracyFlag);
+		if(CurrentMapNo>5 && KeyExp < 5){
+			if(currentAccuracy >= AccuracyThreshold){
+				AccuracyFlag = AccuracyFlag -1;
+			}
+			else{
+				AccuracyFlag = 3;
+			}
+		}
+		else{
+			AccuracyFlag = 3;
+		}
+		if(AccuracyFlag <= 0){
+			console.log("Accuracy for three consecutive map is greater than threshold ,switching to another mode");
+			var i = CurrentMapNo;
+			while(i<NMaps){
+				FQCounter--;
+				FileIndex++;
+				FunctionQueue.shift();
+				console.log("Spliced the function call");
+				i++;
+			}
+		}
+		else{
+			if(CurrentMapNo==NMaps && KeyExp < 5){
+				ExperimentEnd = 1;
+				// clear the polling variable
+				alert('Avg Accuracy of three consecutive Maps less than Accuracy Threshold '+ AccuracyThreshold +' After '+NMaps + ' Maps.\nTerminating Experiment');
+				while(i<NMaps){
+					FQCounter--;
+					FileIndex++;
+					FunctionQueue.shift();
+					console.log("Spliced the function call");
+					i++;
+				}
+				clearInterval(checkFunctionQueue);
+				stopExperiment();
+			}
+		}
+
+		next = 0;
+		Hit = 0;
+		Miss = 0;
+		ResponseTime = 0;
+		CurrentCuePos = 0;
+		count=0;Recall=0;
+		CueNo = 0;
+		PopNextFunction = 1;
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 //globalID = requestAnimationFrame(joyStickResponse);
-
 function KeyBoardResponse(){
 	var waitTime = new Date().getTime();
 	if(!Sounds[counter] && counter>0){
@@ -349,7 +538,6 @@ function KeyBoardResponse(){
 }
 
 
-
 //$("#StartExp").on("click", function() {
 //});
 //
@@ -402,8 +590,3 @@ function KeyBoardResponse(){
 //
 //	}
 //}
-
-
-var inputDirection_a = [36,38,33,37,12,39,35,40,34,32];   //added 32 for spacebar
-var inputDirection_b = [103,104,105,100,101,102,97,98,99,32]; //added 32 for spacebar
-var expectedDirection = [13,23,33,12,22,32,11,21,31];

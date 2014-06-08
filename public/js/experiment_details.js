@@ -1,6 +1,6 @@
 var ExperimentMode,SelectedMode,InterStimulusInterval='',InterTrialInterval = '500',StartTime,StopTime,TotalTime,BestISI = '';
 var NoOfWMMaps = 3,NoOfDemoMaps = 2,NoOfTrainingMaps = 40, NoOfTestingMaps = 3;
-var WM_PathLength = 35, Training_PathLength = 10, Testing_PathLength = 50;
+var WM_PathLength = 35, Training_PathLength = 10, Testing_PathLength = 50,WM_SETSIZE = 8;
 var AccuracyThreshold = 90, ConsecutiveMap = 2;
 var Staircase, Staircase_PathLength = 210,NoOfStaircaseMaps = 1, StaircaseCueLength = 3,StaircaseAccuracy = 80;
 var StaircaseDistance = 100,Collision_PathLength = 30, CollisionMap = 1, Collision = false;
@@ -9,8 +9,8 @@ var BreakTime = 2; //2 minutes break between each switch
 var ISID_Head = "USERID,InterStimulusInterval,TimeStamp",
 	  ExperimentDetails_Head = "USERID,GROUPID,PHASENO,EXPERIMENT_MODE,#_of_Maps,Trial_per_Map,Total_Trials,ISI,ITI," +
 															"StartTime,StopTime,TotalTime,BreakTime",
-		ExperimentData_Head = "USERID,GROUPID,PHASENO,EXPERIMENT_MODE,TRIAL_NO,MAP_NO,TRIAL_LENGTH,S1,S2,S3,S4,S5," +
-													"S6,S7,S8,R1,R2,R3,R4,R5,R6,R7,R8,T1,T2,T3,T4,T5,T6,T7,T8,TotalResponseTime,HIT,MISS,RECALL",
+		ExperimentData_Head = "USERID,GROUPID,PHASENO,EXPERIMENT_MODE,TRIAL_NO,MAP_NO,TRIAL_LENGTH,ISI,S1,S2,S3,S4,S5," +
+													"S6,S7,S8,R1,R2,R3,R4,R5,R6,R7,R8,TotalStimuliTime,T1,T2,T3,T4,T5,T6,T7,T8,TotalResponseTime,HIT,MISS,Recall,Weight,ExtraResponse",
 		ParticipantDetails_Head = "USER_ID,GROUP_ID,FIRST_NAME,LAST_NAME, AGE,EDUCATION,MODE_OF_COMMUNICATION,GENDER," +
 			"PARTICIPANT_TYPE,MUSICAL_TRAINING,MUSIC_KIND,HEARING_PROBLEM,USER_CONTROL,PHASE NUMBER,Given Consent,TimeStamp";
 var ISID_Filename = 'ISI_Details.csv',ExperimentDetails_Filename = 'ExperimentDetails.csv';

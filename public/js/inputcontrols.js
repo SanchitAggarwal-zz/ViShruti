@@ -36,8 +36,7 @@ var inputDirection_a = [36,38,33,37,12,39,35,40,34,32];   //added 32 for spaceba
 var inputDirection_b = [103,104,105,100,101,102,97,98,99,32]; //added 32 for spacebar
 var expectedDirection = [13,23,33,12,22,32,11,21,31];
 var DirectionLabels = ['NW',' N','NE',' W',' C',' E','SW',' S','SE','Space'];
-var joyStick, joyStickDetected = false,oldJoyStick,ExtraResponse = [];
-var TotalResponseTime;
+var joyStick, joyStickDetected = false,oldJoyStick;
 var Buttons = {
 												FACE_1: 0,
 												FACE_2: 1,
@@ -185,9 +184,10 @@ function playNextTrial(){
 			ISI_Recall[ISI_Index[InterStimulusInterval]]++;
 		}
 	}
+	TimeStamp = new Date().toString();
 	ExperimentData = [];
-	ExperimentData.push(USERID,GROUPID,PHASENO,EXPERIMENT_MODE,TRIAL_NO,MAP_NO,TRIAL_LENGTH,InterStimulusInterval);
-	ExperimentData.push(CueLabels.join(','),InputLabels.join(','),InputTime.join(','),TotalResponseTime,Hit,Miss,Recall,TRIAL_LENGTH*Recall,ExtraResponse.join(' '));
+	ExperimentData.push(USERID,GROUPID,PHASENO,EXPERIMENT_MODE,TrialNo,MAP_NO,TRIAL_LENGTH,InterStimulusInterval);
+	ExperimentData.push(TrialLabels.join(','),ResponseLabels.join(','),TrialTime,ResponseTime.join(','),TotalResponseTime,Hit,Miss,Recall,TRIAL_LENGTH*Recall,ExtraResponse.join(' '),TimeStamp);
 	save(ExperimentData_Filename,ExperimentData);
 	count=0;
 	next = CurrentCuePos;
@@ -201,14 +201,14 @@ function playNextTrial(){
 		// play next audio sequence
 		NextCue();
 		playSounds();
-		CueTime =  new Date().getTime();
+		TrialTime =  new Date().getTime();
 	}
 	drawMaze(Maze,MazeLength);
 	drawMetrics();
 	drawControls(DirectionIndex.NextTrial);
 }
 
-function checkResponse(input_key){
+function checkResponse(response_key){
 	var x, y,cue_x,cue_y,cue_index;
 	var noextra = true;
 	if(next < CurrentCuePos){
@@ -218,33 +218,33 @@ function checkResponse(input_key){
 		cue_y = Cue[next][1]*-1;
 		cue_code = 10 * (cue_x + 2) + (cue_y + 2);
 		cue_index = findIndex(expectedDirection,cue_code);
-		CueLabels.push(DirectionLabels[cue_index]);
-		InputLabels.push(DirectionLabels[input_key]);
+		TrialLabels.push(DirectionLabels[cue_index]);
+		ResponseLabels.push(DirectionLabels[response_key]);
 	}
 	else{
 		noextra = false;
 		cue_index = -2;
-		ExtraResponse.push(DirectionLabels[input_key]);
+		ExtraResponse.push(DirectionLabels[response_key]);
 	}
 
-	if(input_key == cue_index){
-		IntervalTime = IntervalTime + (waitTime - CueTime )/1000;
-		CueTime = new Date().getTime();
+	if(response_key == cue_index){
+		IntervalTime = IntervalTime + (waitTime - TrialTime )/1000;
+		TrialTime = new Date().getTime();
 		count++;
 		Hit++;
-		if(VisualError && noextra){Maze[x][y] = 4 * (CueNo % 2) + 3;}
+		if(VisualError && noextra){Maze[x][y] = 4 * (TrialNo % 2) + 3;}
 	}
 	else{
-		IntervalTime = IntervalTime + (waitTime - CueTime)/1000;
-		CueTime = new Date().getTime();
+		IntervalTime = IntervalTime + (waitTime - TrialTime)/1000;
+		TrialTime = new Date().getTime();
 		if(AudioError){playError();}
 		Miss++;
 		count--;
-		if(VisualError && noextra){Maze[x][y] = 4 * (cueno % 2) + 4;}
+		if(VisualError && noextra){Maze[x][y] = 4 * (TrialNo % 2) + 4;}
 	}
 	drawMaze(Maze,MazeLength);
 	drawMetrics();
-	drawControls(input_key);
+	drawControls(response_key);
 	next++;
 }
 
@@ -256,17 +256,17 @@ function isCompleteResponse(){
 		var cue_y = Cue[next][1]*-1;
 		var cue_code = 10 * (cue_x + 2) + (cue_y + 2);
 		var cue_index = findIndex(expectedDirection,cue_code);
-		CueLabels.push(DirectionLabels[cue_index]);
-		InputLabels.push('NoInput');
-		if(VisualError){Maze[x][y] = 4 * (CueNo % 2) + 4;}
+		TrialLabels.push(DirectionLabels[cue_index]);
+		ResponseLabels.push('NoInput');
+		if(VisualError){Maze[x][y] = 4 * (TrialNo % 2) + 4;}
 		Miss++;
 		count--;
 		next++;
 	}
-	for(var i=CueLabels.length;i<=WM_SETSIZE;i++){
-		CueLabels.push('empty');
-		InputLabels.push('empty');
-		InputTime.push('0.0');
+	for(var i=TrialLabels.length;i<=WM_SETSIZE;i++){
+		TrialLabels.push('empty');
+		ResponseLabels.push('empty');
+		ResponseTime.push('0.0');
 	}
 }
 
@@ -276,35 +276,21 @@ function isCompleteMap(){
 			var recallPercent;
 			for(var isi = 0; isi < ISI_Recall.length; isi++){
 				recallPercent = (ISI_Recall[isi]/ISI_Trial)*100;
-				recallPercent = recallPercent >= StaircaseAccuracy?1:0;
+				if(recallPercent >= StaircaseAccuracy){
+					candidateISI.push(ISI_Value[isi]);
+				}
 			}
-			BestISI = Math.max.apply(Math,ISI_Recall);
-			FamiliarRecall = Recall;
-			FamiliarISI = FamiliarRecall>=maxRecall?ISIList[ISICounter-1]:FamiliarISI;
-			maxRecall =  FamiliarRecall>=maxRecall?FamiliarRecall:maxRecall;
+			isStaircaseCollision();
 		}
+
 		drawMaze(Maze,MazeLength);
 		drawMetrics();
-		if(CurrentMode == 'InCorrectVisualCue'){
-			drawCorrectMaze(MazeLength,Path);
-		}
-		var canvas = document.getElementById('Maze_Canvas');
-		var savecanvas = document.createElement('a');
-		savecanvas.href = canvas.toDataURL('image/png').replace('image/png');
-		savecanvas.download= USERID + "_" + CurrentMode + "_Dir_" + Direction + "_Map_" + CurrentMapNo +"_PL_" + TotalSteps + "_FI_" + FileIndex + ".png";
-		document.body.appendChild(savecanvas);
-		savecanvas.click();
+		SaveCanvasImage();
 
-		if(RandomOrder){
-			Level = RandomorderCue.toString();
-		}
-		if(Familirization){
-			Level = FamiliarCue.toString();
-		}
 		var currentAccuracy = 100*Hit/(TotalSteps);
 		AvgAccuracy = ((CurrentMapNo - 1)*AvgAccuracy + currentAccuracy)/CurrentMapNo;
 		console.log(AvgAccuracy);
-		ExperimentResults.push([FileIndex,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(TotalSteps),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfMaps,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval,AvgAccuracy]);
+		ExperimentResults.push([FileIndex,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(TotalSteps),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfMaps,ResponseTime.toString(),TrialLabels.toString(),ResponseLabels.toString(),InterStimulusInterval,AvgAccuracy]);
 		var KeyExp = ExperimentList[CurrentMode];
 		console.log('Accuracy Flag :'+AccuracyFlag);
 		if(CurrentMapNo>5 && KeyExp < 5){
@@ -352,7 +338,7 @@ function isCompleteMap(){
 		ResponseTime = 0;
 		CurrentCuePos = 0;
 		count=0;Recall=0;
-		CueNo = 0;
+		TrialNo = 0;
 		PopNextFunction = 1;
 		return true;
 	}
@@ -361,6 +347,57 @@ function isCompleteMap(){
 	}
 }
 
+function isStaircaseCollision(){
+	var CollisionList = [];
+	if(candidateISI.length == 0){
+		Collision = 2;
+	}else{
+		BestISI = candidateISI[0];  //as minimum isi value is always at top
+	}
+	for(var i =0 ; i <candidateISI.length-1;i++){
+			if(parseInt(candidateISI[i+1])-parseInt(candidateISI[i])>StaircaseDistance && Collision == 0){
+				CollisionList.push(candidateISI[0]);
+				CollisionList.push(candidateISI[0]);
+				CollisionList.push(candidateISI[0]);
+				CollisionList.push(candidateISI[0]);
+				CollisionList.push(candidateISI[0]);
+				CollisionList.push(candidateISI[i+1]);
+				CollisionList.push(candidateISI[i+1]);
+				CollisionList.push(candidateISI[i+1]);
+				CollisionList.push(candidateISI[i+1]);
+				CollisionList.push(candidateISI[i+1]);
+				Collision++;
+				break;
+			}
+	}
+	console.log('candidate ISI: '+ candidateISI + 'Collision:' + Collision);
+	switch(Collision){
+		case 0: FQCounter--;
+						FileIndex++;
+						FunctionQueue.shift();
+						console.log("Spliced the Collision Staircase function call");
+						break;
+		case 1: ISIList = CollisionList;
+						ISI_Trial = CollisionList.length/2;
+						ISICounter = 0;
+						ISI_Recall = [0,0,0,0,0,0,0];
+						candidateISI = [];
+						break;
+		case 2: console.log('For None of the ISI value, Recall > ' + StaircaseAccuracy +', Terminating Experiment');
+						ExperimentEnd = 1;
+						clearInterval(checkFunctionQueue);
+						stopExperiment();
+	}
+}
+
+function SaveCanvasImage(){
+	var canvas = document.getElementById('Maze_Canvas');
+	var savecanvas = document.createElement('a');
+	savecanvas.href = canvas.toDataURL('image/png').replace('image/png');
+	savecanvas.download= USERID + "_" + CurrentMode + "_Dir_" + Direction + "_Map_" + CurrentMapNo +"_PL_" + TotalSteps + "_FI_" + FileIndex + ".png";
+	document.body.appendChild(savecanvas);
+	savecanvas.click();
+}
 //globalID = requestAnimationFrame(joyStickResponse);
 function KeyBoardResponse(){
 	var waitTime = new Date().getTime();
@@ -385,18 +422,18 @@ function KeyBoardResponse(){
 					var cue_y = Cue[next][1]*-1;
 					var cue_code = 10 * (cue_x + 2) + (cue_y + 2);
 					var cue_index = findIndex(expectedDirection,cue_code);
-					CueLabels.push(DirectionLabels[cue_index]);
-					InputLabels.push('NoInput');
-					if(VisualError){Maze[x][y] = 4 * (CueNo % 2) + 4;}
+					TrialLabels.push(DirectionLabels[cue_index]);
+					ResponseLabels.push('NoInput');
+					if(VisualError){Maze[x][y] = 4 * (TrialNo % 2) + 4;}
 					Miss++;
 					count--;
 					next++;
 				}
 				// Add marker in input and cue labels
-				CueLabels.push(DirectionLabels[key_index_a]);
-				InputLabels.push(DirectionLabels[key_index_a]);
+				TrialLabels.push(DirectionLabels[key_index_a]);
+				ResponseLabels.push(DirectionLabels[key_index_a]);
 				if(count==TrialLength){Recall++;}
-				InputTime.push(IntervalTime);
+				ResponseTime.push(IntervalTime);
 				ResponseTime = ResponseTime + IntervalTime;
 				IntervalTime = 0;
 				count=0;
@@ -428,7 +465,7 @@ function KeyBoardResponse(){
 					var currentAccuracy = 100*Hit/(TotalStimuli);
 					AvgAccuracy = ((CurrentMapNo - 1)*AvgAccuracy + currentAccuracy)/CurrentMapNo;
 					console.log(AvgAccuracy);
-					ExperimentResults.push([FileIndex,Direction,TrialLength,CurrentMode,AccuracyThreshold,TotalStimuli,Hit,Miss,100*Hit/(TotalStimuli),Recall,ResponseTime,ResponseTime/TotalStimuli,NoOfMaps,InputTime.toString(),CueLabels.toString(),InputLabels.toString(),InterStimulusInterval,AvgAccuracy]);
+					ExperimentResults.push([FileIndex,Direction,TrialLength,CurrentMode,AccuracyThreshold,TotalStimuli,Hit,Miss,100*Hit/(TotalStimuli),Recall,ResponseTime,ResponseTime/TotalStimuli,NoOfMaps,ResponseTime.toString(),TrialLabels.toString(),ResponseLabels.toString(),InterStimulusInterval,AvgAccuracy]);
 					var KeyExp = ExperimentList[CurrentMode];
 					console.log('Accuracy Flag :'+AccuracyFlag);
 					if(CurrentMapNo>5 && KeyExp < 5){
@@ -476,7 +513,7 @@ function KeyBoardResponse(){
 					ResponseTime = 0;
 					CurrentCuePos = 0;
 					count=0;Recall=0;
-					CueNo = 0;
+					TrialNo = 0;
 					PopNextFunction = 1;
 				}
 				else{ //play next cues
@@ -488,7 +525,7 @@ function KeyBoardResponse(){
 					// play next audio sequence
 					NextCue();
 					playSounds();
-					CueTime =  new Date().getTime();
+					TrialTime =  new Date().getTime();
 				}
 				drawMaze(Maze,MazeLength);
 				drawMetrics();
@@ -504,29 +541,29 @@ function KeyBoardResponse(){
 					cue_y = Cue[next][1]*-1;
 					cue_code = 10 * (cue_x + 2) + (cue_y + 2);
 					cue_index = findIndex(expectedDirection,cue_code);
-					CueLabels.push(DirectionLabels[cue_index]);
+					TrialLabels.push(DirectionLabels[cue_index]);
 				}
 				else{
 					noextra = false;
 					cue_index = -2;
-					CueLabels.push('NoCues');
+					TrialLabels.push('NoCues');
 				}
 				var input_index = key_index_a > key_index_b ? key_index_a:key_index_b;
-				InputLabels.push(DirectionLabels[input_index]);
+				ResponseLabels.push(DirectionLabels[input_index]);
 				if(key_index_a == cue_index || key_index_b == cue_index){
-					IntervalTime = IntervalTime + (waitTime - CueTime )/1000;
-					CueTime = new Date().getTime();
+					IntervalTime = IntervalTime + (waitTime - TrialTime )/1000;
+					TrialTime = new Date().getTime();
 					count++;
 					Hit++;
-					if(VisualError && noextra){Maze[x][y] = 4 * (CueNo % 2) + 3;}
+					if(VisualError && noextra){Maze[x][y] = 4 * (TrialNo % 2) + 3;}
 				}
 				else{
-					IntervalTime = IntervalTime + (waitTime - CueTime)/1000;
-					CueTime = new Date().getTime();
+					IntervalTime = IntervalTime + (waitTime - TrialTime)/1000;
+					TrialTime = new Date().getTime();
 					if(AudioError){playError();}
 					Miss++;
 					count--;
-					if(VisualError && noextra){Maze[x][y] = 4 * (CueNo % 2) + 4;}
+					if(VisualError && noextra){Maze[x][y] = 4 * (TrialNo % 2) + 4;}
 				}
 				drawMaze(Maze,MazeLength);
 				drawMetrics();

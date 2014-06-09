@@ -13,7 +13,7 @@ var ExperimentList = {'Visual_Error_FeedBack_Training':1,
 											'Staircase':7,
 											'Demo':8
 										 };
-var InstructionFlag = false; AccuracyFlag = ConsecutiveMap;
+var InstructionFlag = false;
 var InstructionFolder = "/audio/instructions/", AlertMessage = '';
 var InstructionFile = '', Instructions = [], InsCounter = 0, SilenceFile;
 var ISICounter = 0,ISI_Recall = [0,0,0,0,0,0,0],ISI_Trial = 10, candidateISI = [],UniqueISI = 7;
@@ -51,7 +51,7 @@ var TrialTime = 0,InterResponseTime = 0,TotalResponseTime = 0,ResponseTime = [],
 var Hit = 0,Miss = 0,Recall = 0,count= 0,TotalRecall = 0;
 var Sounds = [];
 var CurrentCuePos = 0,TrialNo = 0,next = 0;// For Next move
-var counter = 0,AvgAccuracy = 0,FileIndex = 0;
+var counter = 0,consecutiveMapAccuracy = 0,FileIndex = 0,currentAccuracy = 0, consecutiveMapChunk = 0;
 var checkJoyStickEvent;
 function startExperiment(){
 	document.getElementById("StopExp").disabled = false;
@@ -141,12 +141,12 @@ function addExperimentMode(){
 function setDisplayAndError(Key){
 	switch(Key){
 		case 1 : DisplayGrid = 1; VisualError = 1; AudioError = 0; break;
-		case 2 :
+		case 2 : DisplayGrid = 0; VisualError = 1; AudioError = 1; break;
 		case 3 :
 		case 4 :
 		case 5 :
 		case 6 :
-		case 7 : DisplayGrid = 0; VisualError = 1; AudioError = 1; break;
+		case 7 : DisplayGrid = 0; VisualError = 1; AudioError = 0; break;
 		case 8 : if(SelectedMode == 'Visual_Error_FeedBack_Training'){
 							DisplayGrid = 1;VisualError = 1; AudioError = 0; break;
 						}
@@ -431,7 +431,7 @@ function playSounds(){
 	else{
 		TrialTime = (new Date().getTime() - TrialTime)/1000;
 		waitTime = new Date().getTime();
-		startexp = true;
+		StartExp = true;
 	}
 }
 
@@ -609,7 +609,7 @@ function generateMaze(){
 	next = 0;
 	Hit = 0;
 	Miss = 0;
-	ResponseTime = 0;
+	ResponseTime = [];
 	CurrentCuePos = 0;
 	count = 0;
 	Recall = 0;
@@ -736,12 +736,12 @@ function drawMetrics(){
 	context.fillText(text, text_width, 85);
 
 	text_width = width;
-	text = "Response Time: ";
+	text = "Total Response Time: ";
 	metrics = context.measureText(text);
 	context.fillText(text, text_width, 105);
 	text_width = text_width + metrics.width + 2;
 
-	text = ResponseTime.toFixed(3);
+	text = TotalResponseTime.toFixed(3);
 	metrics = context.measureText(text);
 	context.fillText(text, text_width, 105);
 	text_width = text_width + metrics.width + 2;
@@ -751,12 +751,12 @@ function drawMetrics(){
 	context.fillText(text, text_width, 105);
 
 	text_width = width;
-	text = "Average Accuracy:";
+	text = "Map Accuracy:";
 	metrics = context.measureText(text);
 	context.fillText(text, text_width, 125);
 	text_width = text_width + metrics.width + 2;
 
-	text = AvgAccuracy.toFixed(3);
+	text = currentAccuracy.toFixed(3);
 	metrics = context.measureText(text);
 	context.fillText(text, text_width, 125);
 

@@ -120,8 +120,8 @@ function participantDetails(){
 					  USERID = select.options[select.selectedIndex].text;
 					  //alert('Please Note Your USER_ID for future reference: ' + USERID);
 				  }
-			    ParticipantDetails.push([USERID,GROUPID,FIRSTNAME,LASTNAME, AGE, EDUCATION, MODEOFCOMM, GENDER, PARTICIPANT_TYPE, MUSICAL_TRAINING,
-					  MUSIC_KIND, HEARING_PROBLEM, USERCONTROL,PHASENO, "YES",TimeStamp]);
+			    ParticipantDetails.push(USERID,GROUPID,FIRSTNAME,LASTNAME, AGE, EDUCATION, MODEOFCOMM, GENDER, PARTICIPANT_TYPE, MUSICAL_TRAINING,
+					  MUSIC_KIND, HEARING_PROBLEM, USERCONTROL,PHASENO, "YES",TimeStamp);
 				  $('#contactModal').modal('hide');
 				  if ($(".fa-user").hasClass('detailsAdded') == false) {
 					  $(".fa-user").addClass('detailsAdded');
@@ -144,20 +144,21 @@ function participantDetails(){
 
 // function to save data into file
 function save (filename,data){
-	var csvRows = [];
-	for(var i=0, l=data.length; i<l; ++i){
-		csvRows.push(data[i].join(','));
-	}
-	var csvString = csvRows.join("\n");
-
+//	var csvRows = [];
+//	for(var i=0, l=data.length; i<l; ++i){
+//		console.log(data[i]);
+//		csvRows.push(data[i].join(','));
+//	}
+//	var csvString = csvRows.join("\n");
+	var csvString = data.join(',');
 	$.ajax({
 		type: 'POST',
 		data: {'data': csvString,
 					 'Name' : filename},
 		url: url+write,
 		success: function(data) {
-			console.log('success');
-			alert(data);
+			console.log('success: ' + data);
+			//alert(data);
 		}
 	});
 }

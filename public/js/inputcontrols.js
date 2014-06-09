@@ -139,7 +139,7 @@ function onUserInput() {
 
 // with continuous axis and FACE_1 for Next Trial
 function joyStickResponse(){
-	if(startexp && !ExperimentEnd){
+	if(StartExp && !ExperimentEnd){
 		console.log('Checking Joystick Response');
 		//console.log(joyStick);
 		oldJoyStick = JSON.parse(JSON.stringify(joyStick));
@@ -187,8 +187,8 @@ function playNextTrial(){
 		}
 		TimeStamp = new Date().toString();
 		ExperimentData = [];
-		ExperimentData.push(USERID,GROUPID,PHASENO,EXPERIMENT_MODE,TrialNo,MAP_NO,TRIAL_LENGTH,InterStimulusInterval);
-		ExperimentData.push(TrialLabels.join(','),ResponseLabels.join(','),TrialTime,ResponseTime.join(','),TotalResponseTime,Hit,Miss,Recall,TRIAL_LENGTH*Recall,ExtraResponse.join(' '),TimeStamp);
+		ExperimentData.push(USERID,GROUPID,PHASENO,CurrentMode,TrialNo,CurrentMapNo,TrialLength,Direction,InterStimulusInterval);
+		ExperimentData.push(TrialLabels.join(','),ResponseLabels.join(','),TrialTime,ResponseTime.join(','),TotalResponseTime,Hit,Miss,Recall,TrialLength*Recall,ExtraResponse.join(' '),TimeStamp);
 		save(ExperimentData_Filename,ExperimentData);
 	}
 	count=0;
@@ -228,9 +228,8 @@ function checkResponse(response_key){
 	else{
 		noextra = false;
 		cue_index = -2;
-		ExtraResponse.push(DirectionLabels[response_key]);
+		ExtraResponse.push(DirectionLabels[response_key]+" : " + InterResponseTime);
 	}
-
 	if(response_key == cue_index){
 		count++;
 		Hit++;
@@ -246,8 +245,6 @@ function checkResponse(response_key){
 	drawMetrics();
 	drawControls(response_key);
 	next++;
-	IntervalTime = IntervalTime + (waitTime - TrialTime)/1000;
-	TrialTime = new Date().getTime();
 }
 
 function isCompleteResponse(){
@@ -273,7 +270,7 @@ function isCompleteResponse(){
 }
 
 function isCompleteMap(){
-	if(CurrentCuePos==TotalSteps && PopNextFunction == 0){ // pop next function for new Maps
+	if(CurrentCuePos==TotalStimuli && PopNextFunction == 0){ // pop next function for new Maps
 		if(Staircase){
 			var recallPercent;
 			for(var isi = 0; isi < ISI_Recall.length; isi++){
@@ -288,52 +285,7 @@ function isCompleteMap(){
 		drawMaze(Maze,MazeLength);
 		drawMetrics();
 		SaveCanvasImage();
-
-		var currentAccuracy = 100*Hit/(TotalSteps);
-		AvgAccuracy = ((CurrentMapNo - 1)*AvgAccuracy + currentAccuracy)/CurrentMapNo;
-		console.log(AvgAccuracy);
-		ExperimentResults.push([FileIndex,Direction,Level,CurrentMode,AccuracyThreshold,TotalSteps,Hit,Miss,100*Hit/(TotalSteps),Recall,ResponseTime,ResponseTime/TotalSteps,NoOfMaps,ResponseTime.toString(),TrialLabels.toString(),ResponseLabels.toString(),InterStimulusInterval,AvgAccuracy]);
-		var KeyExp = ExperimentList[CurrentMode];
-		console.log('Accuracy Flag :'+AccuracyFlag);
-		if(CurrentMapNo>5 && KeyExp < 5){
-			if(currentAccuracy >= AccuracyThreshold){
-				AccuracyFlag = AccuracyFlag -1;
-			}
-			else{
-				AccuracyFlag = 3;
-			}
-		}
-		else{
-			AccuracyFlag = 3;
-		}
-		if(AccuracyFlag <= 0){
-			console.log("Accuracy for three consecutive map is greater than threshold ,switching to another mode");
-			var i = CurrentMapNo;
-			while(i<NMaps){
-				FQCounter--;
-				FileIndex++;
-				FunctionQueue.shift();
-				console.log("Spliced the function call");
-				i++;
-			}
-		}
-		else{
-			if(CurrentMapNo==NMaps && KeyExp < 5){
-				ExperimentEnd = 1;
-				// clear the polling variable
-				alert('Avg Accuracy of three consecutive Maps less than Accuracy Threshold '+ AccuracyThreshold +' After '+NMaps + ' Maps.\nTerminating Experiment');
-				while(i<NMaps){
-					FQCounter--;
-					FileIndex++;
-					FunctionQueue.shift();
-					console.log("Spliced the function call");
-					i++;
-				}
-				clearInterval(checkFunctionQueue);
-				stopExperiment();
-			}
-		}
-
+		isConsecutiveMapAccuracy();
 		next = 0;
 		Hit = 0;
 		Miss = 0;
@@ -352,12 +304,12 @@ function isCompleteMap(){
 function isStaircaseCollision(){
 	var CollisionList = [];
 	if(candidateISI.length == 0){
+		BestISI = '';
 		Collision = 2;
-	}else{
-		BestISI = candidateISI[0];  //as minimum isi value is always at top
 	}
-	for(var i =0 ; i <candidateISI.length-1;i++){
-			if(parseInt(candidateISI[i+1])-parseInt(candidateISI[i])>StaircaseDistance && Collision == 0){
+	else if(Collision == 0){
+		for(var i =0 ; i <candidateISI.length-1;i++){
+			if(parseInt(candidateISI[i+1])-parseInt(candidateISI[i])>StaircaseDistance){
 				CollisionList.push(candidateISI[0]);
 				CollisionList.push(candidateISI[0]);
 				CollisionList.push(candidateISI[0]);
@@ -371,6 +323,11 @@ function isStaircaseCollision(){
 				Collision++;
 				break;
 			}
+		}
+	}
+else{
+		Collision = 3;
+		BestISI = candidateISI[0];  //as minimum isi value is always at top
 	}
 	console.log('candidate ISI: '+ candidateISI + 'Collision:' + Collision);
 	switch(Collision){
@@ -378,6 +335,8 @@ function isStaircaseCollision(){
 						FileIndex++;
 						FunctionQueue.shift();
 						console.log("Spliced the Collision Staircase function call");
+						TimeStamp = new Date().toString();
+						save(ISID_Filename,[USERID,BestISI,TimeStamp]);
 						break;
 		case 1: ISIList = CollisionList;
 						ISI_Trial = CollisionList.length/2;
@@ -390,13 +349,15 @@ function isStaircaseCollision(){
 						ExperimentEnd = 1;
 						clearInterval(checkFunctionQueue);
 						stopExperiment();
+		case 3: TimeStamp = new Date().toString();
+						save(ISID_Filename,[USERID,BestISI,TimeStamp]);
 	}
 }
 
 function SaveCanvasImage(){
 	var canvas = document.getElementById('Maze_Canvas');
-	var imageURL = canvas.toDataURL('image/png').replace('image/png');
-	var filename = User_DataFolder + CurrentMode + "_Dir_" + Direction + "_Map_" + CurrentMapNo + "_FI_" + FileIndex + ".png";
+	var imageURL = canvas.toDataURL('image/png');
+	var filename = User_DataFolder + USERID + CurrentMode + "_Dir_" + Direction + "_Map_" + CurrentMapNo + "_FI_" + FileIndex + ".png";
 	$.ajax({
 		type: 'POST',
 		data: {'Name': filename,
@@ -411,6 +372,45 @@ function SaveCanvasImage(){
 //	savecanvas.download= USERID + "_" + CurrentMode + "_Dir_" + Direction + "_Map_" + CurrentMapNo +"_PL_" + TotalSteps + "_FI_" + FileIndex + ".png";
 //	document.body.appendChild(savecanvas);
 //	savecanvas.click();
+}
+
+function isConsecutiveMapAccuracy(){
+	currentAccuracy = 100*Hit/(TotalStimuli);
+	consecutiveMapAccuracy = (consecutiveMapAccuracy + currentAccuracy)/ConsecutiveMap;
+	console.log('Consecutive Map Accuracy: ' + consecutiveMapAccuracy);
+	var EM = ExperimentList[CurrentMode];
+	if(CurrentMapNo-MinimumTrainingMap-consecutiveMapChunk>=ConsecutiveMap && EM <= 3){
+		if(consecutiveMapAccuracy >= AccuracyThreshold){
+			console.log("Accuracy for "+ ConsecutiveMap + " consecutive map is greater than " + AccuracyThreshold + "% threshold ,switching to another mode");
+			var i = CurrentMapNo;
+			while(i<NoOfMaps){
+				FQCounter--;
+				FileIndex++;
+				FunctionQueue.shift();
+				console.log("Spliced the function call");
+				i++;
+			}
+		}
+		else{
+			consecutiveMapChunk++;
+			consecutiveMapAccuracy = 0;
+		}
+	}
+	else if(CurrentMapNo==NoOfMaps && EM <= 3){
+		ExperimentMsg = "Accuracy for "+ ConsecutiveMap + " consecutive map is less than " + AccuracyThreshold + "% threshold , Terminating Experiment";
+		console.log(ExperimentMsg);
+		ExperimentEnd = 1;
+		var i = CurrentMapNo;
+		while(i<NoOfMaps){
+				FQCounter--;
+				FileIndex++;
+				FunctionQueue.shift();
+				console.log("Spliced the function call");
+				i++;
+			}
+			clearInterval(checkFunctionQueue);
+			stopExperiment();
+		}
 }
 //globalID = requestAnimationFrame(joyStickResponse);
 function KeyBoardResponse(){

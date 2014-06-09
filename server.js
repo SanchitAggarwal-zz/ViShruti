@@ -125,7 +125,7 @@ app.post('/saveImage',function(req,res){
 	var buf = new Buffer(data, 'base64');
 	fs.writeFile(path, buf,function(err){
 		if (err) console.error("Error occurred while saving image: "+err);
-		else console.log( "Image "+ path + "is saved" );
+		else console.log( "Image "+ path + " is saved" );
 	});
 });
 /* serves all the static files */

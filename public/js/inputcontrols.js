@@ -125,18 +125,16 @@ function getQuadrant(angle){
 }
 
 function onUserInput() {
-	if(!Sounds[counter] && counter>0){
-		startexp = true;
-		if(USERCONTROL == 'JoyStick' && joyStickDetected ){
-			joyStickResponse();
-		}
-		else if(USERCONTROL == 'JoyStick' && !joyStickDetected){
-			initJoyStick();
-		}
-		else{
-			KeyBoardResponse();
-		}
+	if(USERCONTROL == 'JoyStick' && joyStickDetected ){
+		joyStickResponse();
 	}
+	else if(USERCONTROL == 'JoyStick' && !joyStickDetected){
+		initJoyStick();
+	}
+	else{
+		KeyBoardResponse();
+	}
+
 }
 
 // with continuous axis and FACE_1 for Next Trial
@@ -161,6 +159,8 @@ function joyStickResponse(){
 			oldquad = DirectionIndex.Center;
 		}
 		if(stickDistanceMoved(Axes_X,Axes_Y) && quad != oldquad){
+			InterResponseTime = (new Date().getTime() - waitTime)/1000;
+			waitTime = new Date().getTime();
 			oldquad = quad;
 			console.log(Theta);
 			console.log("Response Recorded: ");
@@ -176,19 +176,21 @@ function joyStickResponse(){
 }
 
 function playNextTrial(){
-	isCompleteResponse();
-	if(count==TrialLength){
-		Recall = 1;
-		TotalRecall++;
-		if(Staircase){
-			ISI_Recall[ISI_Index[InterStimulusInterval]]++;
+	if(next>0){
+		isCompleteResponse();
+		if(count==TrialLength){
+			Recall = 1;
+			TotalRecall++;
+			if(Staircase){
+				ISI_Recall[ISI_Index[InterStimulusInterval]]++;
+			}
 		}
+		TimeStamp = new Date().toString();
+		ExperimentData = [];
+		ExperimentData.push(USERID,GROUPID,PHASENO,EXPERIMENT_MODE,TrialNo,MAP_NO,TRIAL_LENGTH,InterStimulusInterval);
+		ExperimentData.push(TrialLabels.join(','),ResponseLabels.join(','),TrialTime,ResponseTime.join(','),TotalResponseTime,Hit,Miss,Recall,TRIAL_LENGTH*Recall,ExtraResponse.join(' '),TimeStamp);
+		save(ExperimentData_Filename,ExperimentData);
 	}
-	TimeStamp = new Date().toString();
-	ExperimentData = [];
-	ExperimentData.push(USERID,GROUPID,PHASENO,EXPERIMENT_MODE,TrialNo,MAP_NO,TRIAL_LENGTH,InterStimulusInterval);
-	ExperimentData.push(TrialLabels.join(','),ResponseLabels.join(','),TrialTime,ResponseTime.join(','),TotalResponseTime,Hit,Miss,Recall,TRIAL_LENGTH*Recall,ExtraResponse.join(' '),TimeStamp);
-	save(ExperimentData_Filename,ExperimentData);
 	count=0;
 	next = CurrentCuePos;
 	if(!isCompleteMap()){
@@ -220,6 +222,8 @@ function checkResponse(response_key){
 		cue_index = findIndex(expectedDirection,cue_code);
 		TrialLabels.push(DirectionLabels[cue_index]);
 		ResponseLabels.push(DirectionLabels[response_key]);
+		ResponseTime.push(InterResponseTime);
+		TotalResponseTime = TotalResponseTime + InterResponseTime;
 	}
 	else{
 		noextra = false;
@@ -228,15 +232,11 @@ function checkResponse(response_key){
 	}
 
 	if(response_key == cue_index){
-		IntervalTime = IntervalTime + (waitTime - TrialTime )/1000;
-		TrialTime = new Date().getTime();
 		count++;
 		Hit++;
 		if(VisualError && noextra){Maze[x][y] = 4 * (TrialNo % 2) + 3;}
 	}
 	else{
-		IntervalTime = IntervalTime + (waitTime - TrialTime)/1000;
-		TrialTime = new Date().getTime();
 		if(AudioError){playError();}
 		Miss++;
 		count--;
@@ -246,6 +246,8 @@ function checkResponse(response_key){
 	drawMetrics();
 	drawControls(response_key);
 	next++;
+	IntervalTime = IntervalTime + (waitTime - TrialTime)/1000;
+	TrialTime = new Date().getTime();
 }
 
 function isCompleteResponse(){
@@ -383,7 +385,8 @@ function isStaircaseCollision(){
 						ISI_Recall = [0,0,0,0,0,0,0];
 						candidateISI = [];
 						break;
-		case 2: console.log('For None of the ISI value, Recall > ' + StaircaseAccuracy +', Terminating Experiment');
+		case 2: ExperimentMsg = 'For None of the ISI value, '+ ISI_Recall + ' Recall > ' + StaircaseAccuracy +', Terminating Experiment'
+						console.log(ExperimentMsg);
 						ExperimentEnd = 1;
 						clearInterval(checkFunctionQueue);
 						stopExperiment();
@@ -392,11 +395,22 @@ function isStaircaseCollision(){
 
 function SaveCanvasImage(){
 	var canvas = document.getElementById('Maze_Canvas');
-	var savecanvas = document.createElement('a');
-	savecanvas.href = canvas.toDataURL('image/png').replace('image/png');
-	savecanvas.download= USERID + "_" + CurrentMode + "_Dir_" + Direction + "_Map_" + CurrentMapNo +"_PL_" + TotalSteps + "_FI_" + FileIndex + ".png";
-	document.body.appendChild(savecanvas);
-	savecanvas.click();
+	var imageURL = canvas.toDataURL('image/png').replace('image/png');
+	var filename = User_DataFolder + CurrentMode + "_Dir_" + Direction + "_Map_" + CurrentMapNo + "_FI_" + FileIndex + ".png";
+	$.ajax({
+		type: 'POST',
+		data: {'Name': filename,
+			'image': imageURL},
+		url: url + saveImage,
+		success: function(data) {
+			console.log(data);
+		}
+	});
+//	var savecanvas = document.createElement('a');
+//	savecanvas.href = canvas.toDataURL('image/png').replace('image/png');
+//	savecanvas.download= USERID + "_" + CurrentMode + "_Dir_" + Direction + "_Map_" + CurrentMapNo +"_PL_" + TotalSteps + "_FI_" + FileIndex + ".png";
+//	document.body.appendChild(savecanvas);
+//	savecanvas.click();
 }
 //globalID = requestAnimationFrame(joyStickResponse);
 function KeyBoardResponse(){

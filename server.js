@@ -117,6 +117,17 @@ app.post('/createUser',function(req,res){
 	});
 });
 
+app.post('/saveImage',function(req,res){
+	var path = __dirname + '/ParticipantData/' + req.body.Name;
+	var img = req.body.image;
+	// strip off the data: url prefix to get just the base64-encoded bytes
+	var data = img.replace(/^data:image\/\w+;base64,/, "");
+	var buf = new Buffer(data, 'base64');
+	fs.writeFile(path, buf,function(err){
+		if (err) console.error("Error occurred while saving image: "+err);
+		else console.log( "Image "+ path + "is saved" );
+	});
+});
 /* serves all the static files */
 app.get(/^(.+)$/, function(req, res){
 	console.log('static file request : ' + req.params[0]);

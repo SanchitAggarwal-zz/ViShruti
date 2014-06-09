@@ -1,7 +1,7 @@
 var FORM_PD,PHASENO,USERID,PARTICIPANT_TYPE,FIRSTNAME,LASTNAME,GROUPID;
 var AGE,EDUCATION,MODEOFCOMM,GENDER,MUSICAL_TRAINING,MUSIC_KIND,HEARING_PROBLEM,USERCONTROL;
 var ParticipantDetails = [], PD = [], TimeStamp, PD_FileName = 'ParticipantDetails.csv';
-var url = 'http://localhost:3000', read = '/read', write = '/write', createuser = '/createUser', createfile = '/createFile';
+var url = 'http://localhost:3000', read = '/read', write = '/write', createuser = '/createUser', createfile = '/createFile', saveImage = '/saveImage';
 
 // For inserting dummy data in participant details form
 function DummyData(){

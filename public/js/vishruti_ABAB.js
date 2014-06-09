@@ -1,6 +1,6 @@
 var FunctionQueue = [],checkFunctionQueue,FQCounter,PopNextFunction = 1,FileIndex = 0;
 var DisplayGrid = 0,VisualError = 0,AudioError = 0,VisualCue = 0;  // Flag for Visual or Error Feedback and DisplayGrid
-var ExperimentEnd = 0,StartExp = false;
+var ExperimentEnd = 0,StartExp = false, ExperimentMsg ='';
 var WM = false,WM_CueLength = [2,3,4,5,6,7,8],Cue_index = 0;
 var NoOfMaps,TrialLength,Direction,TotalStimuli,CurrentMapNo,CurrentMode;
 var Maze,Path,Cue,MazeLength;
@@ -22,7 +22,6 @@ var ISIList = [ '25','50','100','200','300','400','500','25','50','100','200','3
 								'25','50','100','200','300','400','500','25','50','100','200','300','400','500',
 								'25','50','100','200','300','400','500','25','50','100','200','300','400','500',
 								'25','50','100','200','300','400','500','25','50','100','200','300','400','500'];
-
 var ISI_Index = {
 								"25":0,
 								"50":1,
@@ -43,12 +42,12 @@ var ISI_Value = {
 								6:"500"
 
 }
-var TrialLabels = [],ResponseLabels = [],ResponseTime = [],ExtraResponse = [];
+var TrialLabels = [],ResponseLabels = [],ExtraResponse = [];
 var start_x,start_y,inc_sx,inc_sy;
 var pitch = [440,880,1760];   //predefined notes in hz
 var rate = 44100; //sample per sec
 var volume = 50; //amplitude of sine wave
-var ResponseTime = 0, TrialTime = 0,IntervalTime = 0,TotalResponseTime;
+var TrialTime = 0,InterResponseTime = 0,TotalResponseTime = 0,ResponseTime = [], waitTime = 0;
 var Hit = 0,Miss = 0,Recall = 0,count= 0,TotalRecall = 0;
 var Sounds = [];
 var CurrentCuePos = 0,TrialNo = 0,next = 0;// For Next move
@@ -428,6 +427,11 @@ function playSounds(){
 		audioEl.play();
 		//console.log("played"+Sounds[counter]);
 		counter++;
+	}
+	else{
+		TrialTime = (new Date().getTime() - TrialTime)/1000;
+		waitTime = new Date().getTime();
+		startexp = true;
 	}
 }
 

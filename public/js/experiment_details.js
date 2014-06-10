@@ -9,7 +9,7 @@ var BreakTime = 2; //2 minutes break between each switch
 var ISID_Head = "USERID,InterStimulusInterval,TimeStamp",
 	  ExperimentDetails_Head = "USERID,GROUPID,PHASENO,EXPERIMENT_MODE,#_of_Maps,Trial_per_Map,Total_Trials,ISI,ITI," +
 															"StartTime,StopTime,TotalTime,BreakTime,Remarks,TimeStamp",
-		ExperimentData_Head = "USERID,GROUPID,PHASENO,EXPERIMENT_MODE,TRIAL_NO,MAP_NO,TRIAL_LENGTH,DIRECTION,InterStimuliInterval,S1,S2,S3,S4,S5," +
+		ExperimentData_Head = "USERID,GROUPID,PHASENO,EXPERIMENT_MODE,DIRECTION,FILE_INDEX,MAP_NO,TRIAL_NO,TRIAL_LENGTH,InterStimuliInterval,S1,S2,S3,S4,S5," +
 													"S6,S7,S8,R1,R2,R3,R4,R5,R6,R7,R8,TotalTrialTime,T1,T2,T3,T4,T5,T6,T7,T8,TotalResponseTime,HIT,MISS,Recall,Weight,ExtraResponse,TimeStamp",
 		ParticipantDetails_Head = "USER_ID,GROUP_ID,FIRST_NAME,LAST_NAME, AGE,EDUCATION,MODE_OF_COMMUNICATION,GENDER," +
 			"PARTICIPANT_TYPE,MUSICAL_TRAINING,MUSIC_KIND,HEARING_PROBLEM,USER_CONTROL,PHASE NUMBER,Given Consent,TimeStamp";
@@ -136,7 +136,6 @@ function validateExperimentDetails(){
 			ExperimentData_Filename = GROUPID + '_' + PHASENO + '.csv';
 			User_DataFolder = GROUPID + '/' + USERID + '/';
 			initialize(ExperimentData_Filename,ExperimentData_Head,url+createfile);
-			save(PD_FileName,ParticipantDetails);
 			initialize(User_DataFolder,'',url+createuser);
 			startExperiment();
 		}

@@ -27,10 +27,15 @@ app.post('/writeParticipantDetails',function(req,res){
 	req.on('end', function() {
 		console.log(path);
 		fs.appendFile(path, data+'\n', function (err) {
-			if (err) throw err;
-			console.log('The data is saved into file');
+			if (err){
+				console.log('Error Occurred '+err);
+				res.end('Error Occurred '+err);
+			}
+			else{
+				console.log('The data is saved into file');
+				res.end('The data is saved into file');
+			}
 		});
-		res.end('The data is saved into file');
 	});
 });
 
@@ -55,6 +60,7 @@ app.get('/read',function(req,res){
 		}
 		else{
 			console.log( path + "File is not there" );
+			res.end(path + "File is not there");
 		}
 	});
 });
@@ -64,9 +70,14 @@ app.post('/write',function(req,res){
 	var path = __dirname + '/ParticipantData/' + req.body.Name;
 	var data = req.body.data;
 	fs.appendFile(path, data+'\n', function (err) {
-		if (err) throw err;
-		console.log('The data is saved into file:' + path);
-		res.end('The data is saved into file:' + path)
+		if (err){
+			console.log('Error Occurred '+err);
+			res.end('Error Occurred '+err);
+		}
+		else{
+			console.log('The data is saved into file:' + path);
+			res.end('The data is saved into file:' + path)
+		}
 	});
 });
 
@@ -81,6 +92,7 @@ app.post('/createFile',function(req,res){
 			fs.readFile(path, 'utf8', function (err, data) {
 				if (err){
 					console.log('Error Occurred '+err);
+					res.end('Error Occurred '+err);
 				}else{
 					console.log('Data Read:\n'+ data);
 					if(data == '' || data == 'undefined'){
@@ -91,12 +103,17 @@ app.post('/createFile',function(req,res){
 		}
 		else{
 			console.log( "File is not there" );
+			res.end('"File is not there"');
 		}
 		if(!exists || flag){
 			fs.appendFile(path, header+'\n', function (err) {
-				if (err) throw err;
-				console.log(path + 'File is created with headers.');
-				res.end(path + 'File is created with headers.')
+				if (err){
+					console.log('Error Occurred '+err);
+					res.end('Error Occurred '+err);
+				}else{
+					console.log(path + 'File is created with headers.');
+					res.end(path + 'File is created with headers.')
+				}
 			});
 		}
 	});
@@ -107,11 +124,18 @@ app.post('/createUser',function(req,res){
 	fs.exists(path, function( exists ) {
 		if(exists){
 			console.log("Folder already Exists");
+			res.end('"Folder already Exists"');
 		}
 		else{
 			mkdirp(path, function (err) {
-				if (err) console.error("Error occurred while creating Folder: "+err);
-				else console.log( "Folder "+ path + "is created" );
+				if (err){
+					console.error("Error occurred while creating Folder: "+err);
+					res.end("Error occurred while creating Folder: "+err);
+				}
+				else {
+					console.log( "Folder "+ path + "is created" );
+					res.end( "Folder "+ path + "is created");
+				}
 		});
 		}
 	});
@@ -124,8 +148,14 @@ app.post('/saveImage',function(req,res){
 	var data = img.replace(/^data:image\/\w+;base64,/, "");
 	var buf = new Buffer(data, 'base64');
 	fs.writeFile(path, buf,function(err){
-		if (err) console.error("Error occurred while saving image: "+err);
-		else console.log( "Image "+ path + " is saved" );
+		if (err){
+			console.error("Error occurred while saving image: "+err);
+			res.end("Error occurred while saving image: "+err);
+		}
+		else {
+			console.log( "Image "+ path + " is saved" );
+			res.end( "Image "+ path + " is saved");
+		}
 	});
 });
 /* serves all the static files */
@@ -136,5 +166,5 @@ app.get(/^(.+)$/, function(req, res){
 });
 
 http.createServer(app).listen(app.get('port'), function(){
-	console.log('Express server listening on port ' + app.get('port'));
+	console.log('Express server listening on port ' + app.get('port') + "and server: http:localhost:3000/");
 });

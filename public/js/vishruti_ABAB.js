@@ -42,13 +42,13 @@ var ISI_Value = {
 								6:"500"
 
 }
-var TrialLabels = [],ResponseLabels = [],ExtraResponse = [];
+var TrialLabels = [],ResponseLabels = [],ExtraResponse = [' '];
 var start_x,start_y,inc_sx,inc_sy;
 var pitch = [440,880,1760];   //predefined notes in hz
 var rate = 44100; //sample per sec
 var volume = 50; //amplitude of sine wave
-var TrialTime = 0,InterResponseTime = 0,TotalResponseTime = 0,ResponseTime = [], waitTime = 0;
-var Hit = 0,Miss = 0,Recall = 0,count= 0,TotalRecall = 0;
+var TrialTime = 0,InterResponseTime = 0,TotalResponseTime = 0,ResponseTime = [], waitTime = 0,AverageResponseTime = 0;
+var Hit = 0,Miss = 0,Recall = 0,count= 0,TotalRecall = 0, TotalHit = 0, TotalMiss = 0;
 var Sounds = [];
 var CurrentCuePos = 0,TrialNo = 0,next = 0;// For Next move
 var counter = 0,consecutiveMapAccuracy = 0,FileIndex = 0,currentAccuracy = 0, consecutiveMapChunk = 0;
@@ -66,6 +66,8 @@ function startExperiment(){
 	$('#StartExp').addClass('btn-default');
 	$('#StopExp').removeClass('btn-default');
 	$('#StopExp').addClass('btn-primary');
+	save(PD_FileName,ParticipantDetails);
+	InstructionFolder = InstructionFolder.concat(MODEOFCOMM,'/');
 	addExperimentMode();
 	checkFunctionQueue = setInterval(function(){callNextFunction()},3000);  //Check function queue after every 3 seconds
 	FQCounter = FunctionQueue.length;
@@ -193,7 +195,6 @@ function run_Map(MapNo,CueLength,PathLength,Dir,Mode,Map){
 	if(Dir != Direction || Mode != CurrentMode){
 		WM = false;
 		InstructionFlag = true;
-		AccuracyFlag = ConsecutiveMap;
 		SetInstruction(ExperimentList[Mode],Dir);
 	}
 	else{
@@ -216,7 +217,6 @@ function shuffle(o){ //v1.0
 };
 
 function SetInstruction(IKey,Dir){
-	InstructionFolder = InstructionFolder.concat(MODEOFCOMM,'/');
 	AlertMessage = '';
 	InstructionFile = '';
 	console.log(IKey);
@@ -372,13 +372,10 @@ function playMap(){
 		Staircase = false;
 	}
 	setDisplayAndError(EM);
-	console.log('TrialLength '+TrialLength+'Staircase '+Staircase);
+	console.log('TrialLength: '+TrialLength+' Staircase: '+Staircase);
 	var MazeDiv = document.getElementById('MazeDiv');
 	if(DisplayGrid==0){ MazeDiv.style.visibility = 'hidden';} // hide, but let the element keep its size
 	else{ MazeDiv.style.visibility = 'visible';}
-	TrialLabels = [];
-	ResponseLabels = [];
-	ResponseTime = [];
 	generateMaze();
 	drawMaze(Maze,MazeLength);
 	drawMetrics();
@@ -401,7 +398,6 @@ function NextCue(){
 	}
 	var str1 = "audio/silence_wav/silence";
 	SilenceFile = str1.concat(InterStimulusInterval,'.wav');
-	console.log('TrialLength '+TrialLength);
 	for(var i=0;i<TrialLength;i++){
 		var cue_x = Cue[next+i][0];
 		var cue_y = Cue[next+i][1]*-1;
@@ -413,6 +409,7 @@ function NextCue(){
 		drawMaze(Maze,MazeLength);
 	}
 	CurrentCuePos = CurrentCuePos + TrialLength;
+	console.log('TrialLength: ' + TrialLength + 'Current Cue Position: ' + CurrentCuePos + 'Next:' + next);
 }
 
 function playSounds(){
@@ -675,7 +672,7 @@ function drawMetrics(){
 	text_width = text_width + metrics.width + 10;
 
 	text_width = width;
-	text = "CueLength: ";
+	text = "Trial Length: ";
 	metrics = context.measureText(text);
 	context.fillText(text, text_width, 45);
 	text_width = text_width + metrics.width + 2;
@@ -711,7 +708,7 @@ function drawMetrics(){
 	context.fillText(text, text_width, 85);
 	text_width = text_width + metrics.width + 2;
 
-	text = Hit.toString();
+	text = TotalHit.toString();
 	metrics = context.measureText(text);
 	context.fillText(text, text_width, 85);
 	text_width = text_width + metrics.width + 10;
@@ -721,7 +718,7 @@ function drawMetrics(){
 	context.fillText(text, text_width, 85);
 	text_width = text_width + metrics.width + 2;
 
-	text = Miss.toString();
+	text = TotalMiss.toString();
 	metrics = context.measureText(text);
 	context.fillText(text, text_width, 85);
 	text_width = text_width + metrics.width + 10;
@@ -731,17 +728,17 @@ function drawMetrics(){
 	context.fillText(text, text_width, 85);
 	text_width = text_width + metrics.width + 2;
 
-	text = Recall.toString();
+	text = TotalRecall.toString();
 	metrics = context.measureText(text);
 	context.fillText(text, text_width, 85);
 
 	text_width = width;
-	text = "Total Response Time: ";
+	text = "Averager Response Time: ";
 	metrics = context.measureText(text);
 	context.fillText(text, text_width, 105);
 	text_width = text_width + metrics.width + 2;
 
-	text = TotalResponseTime.toFixed(3);
+	text = AverageResponseTime.toFixed(3);
 	metrics = context.measureText(text);
 	context.fillText(text, text_width, 105);
 	text_width = text_width + metrics.width + 2;

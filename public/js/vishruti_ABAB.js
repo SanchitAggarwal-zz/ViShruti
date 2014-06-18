@@ -11,7 +11,8 @@ var ExperimentList = {'Visual_Error_FeedBack_Training':1,
 											'Testing':5,
 											'Working_Memory':6,
 											'Staircase':7,
-											'Demo':8
+											'Training_Demo':8,
+											'WM_Demo':9
 										 };
 var InstructionFlag = false;
 var InstructionFolder = "/audio/instructions/", AlertMessage = '';
@@ -53,6 +54,7 @@ var Sounds = [];
 var CurrentCuePos = 0,TrialNo = 0,next = 0;// For Next move
 var counter = 0,consecutiveMapAccuracy = 0,FileIndex = 0,currentAccuracy = 0, consecutiveMapChunk = 0;
 var checkJoyStickEvent;
+var NeighbourCount = [];
 function startExperiment(){
 	document.getElementById("StopExp").disabled = false;
 	document.getElementById("StartExp").disabled = true;
@@ -112,29 +114,29 @@ function addExperimentMode(){
 	var EM = ExperimentList[ExperimentMode];
 	setDisplayAndError(EM);
 	if(EM <=3){
-		runMode(1,Training_PathLength,4,NoOfDemoMaps,"Demo");
+		runMode(1,Training_PathLength,4,NoOfDemoMaps,"Training_Demo");
 		runMode(1,Training_PathLength,4,NoOfTrainingMaps,ExperimentMode);
-		runMode(1,Training_PathLength,8,NoOfDemoMaps,"Demo");
-		runMode(1,Training_PathLength,8,NoOfTrainingMaps,ExperimentMode);
+		runMode(1,2*Training_PathLength,8,NoOfDemoMaps,"Training_Demo");
+		runMode(1,2*Training_PathLength,8,NoOfTrainingMaps,ExperimentMode);
 		runMode(1,Testing_PathLength,4,NoOfTestingMaps,"Testing");
-		runMode(1,Testing_PathLength,8,NoOfTestingMaps,"Testing");
+		runMode(1,2*Testing_PathLength,8,NoOfTestingMaps,"Testing");
 	}
 	else if(EM == 4 || EM == 5){
 		runMode(1,Testing_PathLength,4,NoOfTestingMaps,ExperimentMode);
-		runMode(1,Testing_PathLength,8,NoOfTestingMaps,ExperimentMode);
+		runMode(1,2*Testing_PathLength,8,NoOfTestingMaps,ExperimentMode);
 	}
 	else if(EM == 6){
 		if(Staircase){
 			runMode(StaircaseCueLength,Staircase_PathLength,4,NoOfStaircaseMaps,"Staircase");
 			runMode(StaircaseCueLength,Collision_PathLength,4,CollisionMap,"Staircase");
 		}
-		runMode(0,WM_PathLength,4,NoOfDemoMaps,"Demo");
+		runMode(-1,Demo_PathLength,4,NoOfDemoMaps,"WM_Demo");
 		runMode(0,WM_PathLength,4,NoOfWMMaps,ExperimentMode);
-		runMode(0,WM_PathLength,8,NoOfDemoMaps,"Demo");
+		runMode(-2,Demo_PathLength,8,NoOfDemoMaps,"WM_Demo");
 		runMode(0,WM_PathLength,8,NoOfWMMaps,ExperimentMode);
-		runMode(0,WM_PathLength,4,NoOfDemoMaps,"Demo");
+		runMode(-1,Demo_PathLength,4,NoOfDemoMaps,"WM_Demo");
 		runMode(0,WM_PathLength,4,NoOfWMMaps,ExperimentMode);
-		runMode(0,WM_PathLength,8,NoOfDemoMaps,"Demo");
+		runMode(-2,Demo_PathLength,8,NoOfDemoMaps,"WM_Demo");
 		runMode(0,WM_PathLength,8,NoOfWMMaps,ExperimentMode);
 	}
 }
@@ -208,7 +210,15 @@ function run_Map(MapNo,CueLength,PathLength,Dir,Mode,Map){
 	TotalStimuli = PathLength;
 	CurrentMapNo = MapNo;
 	CurrentMode = Mode;
-	if(TrialLength == 0){WM = true;}
+	// To add demo trial only 2,5/3,4 in demo for working memory.
+	if(TrialLength <= 0){
+		WM = true;
+		switch(TrialLength){
+			case 0 : WM_CueLength = [2,3,4,5,6,7,8]; break;
+			case -1:WM_CueLength = [2,5,2,5]; break;
+			case -2:WM_CueLength = [3,4,3,4]; break;
+		}
+	}
 }
 
 function shuffle(o){ //v1.0
@@ -324,15 +334,29 @@ function SetInstruction(IKey,Dir){
 
 		case 8: InstructionFile = InstructionFolder.concat('4Familiar.wav');
 			if(Dir == 4){
-				AlertMessage = AlertMessage.concat('This is 4 direction Demo experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
+				AlertMessage = AlertMessage.concat('This is 4 direction Training Demo experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
 				AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
 			}
 			else{
-				AlertMessage = AlertMessage.concat('This is 8 direction Demo experiment.\nIn this audio for North,South, East, West, North-East, North-West, South East and South-West Directions will be given.\n');
+				AlertMessage = AlertMessage.concat('This is 8 direction Training Demo experiment.\nIn this audio for North,South, East, West, North-East, North-West, South East and South-West Directions will be given.\n');
 				AlertMessage = AlertMessage.concat('Use Number pad for Controls.\n');
 				AlertMessage = AlertMessage.concat('Press 7 Key for North-West, 8 Key for North, 9 key for North-East, 4 for West, 6 for east, 1 for south-west, 2 for south, 3 for south east.\n');
 			}
-			AlertMessage = AlertMessage.concat('You will hear 1-8 sounds, Remember the sounds and press the corresponding Keys\n');
+			AlertMessage = AlertMessage.concat('You will hear a sound, Remember the sound and press the corresponding Key\n');
+			AlertMessage = AlertMessage.concat('Press Spacebar for Next set of sounds.\n');
+			AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
+			break;
+		case 9: InstructionFile = InstructionFolder.concat('4Familiar.wav');
+			if(Dir == 4){
+				AlertMessage = AlertMessage.concat('This is 4 direction Working Memory Demo experiment.\nIn this audio for North,South, East and West Directions will be given.\n');
+				AlertMessage = AlertMessage.concat('Press Up-Arrow key for North, Down Arrow key for South, Right Arrow key for East and Left Arrow Key for West.\n');
+			}
+			else{
+				AlertMessage = AlertMessage.concat('This is 8 direction Working Memory Demo experiment.\nIn this audio for North,South, East, West, North-East, North-West, South East and South-West Directions will be given.\n');
+				AlertMessage = AlertMessage.concat('Use Number pad for Controls.\n');
+				AlertMessage = AlertMessage.concat('Press 7 Key for North-West, 8 Key for North, 9 key for North-East, 4 for West, 6 for east, 1 for south-west, 2 for south, 3 for south east.\n');
+			}
+			AlertMessage = AlertMessage.concat('You will hear 2-5 sounds, Remember the sounds and press the corresponding Keys\n');
 			AlertMessage = AlertMessage.concat('Press Spacebar for Next set of sounds.\n');
 			AlertMessage = AlertMessage.concat('Get ready with Controls, Press Enter Key to start the Experiment.');
 			break;
@@ -376,7 +400,15 @@ function playMap(){
 	var MazeDiv = document.getElementById('MazeDiv');
 	if(DisplayGrid==0){ MazeDiv.style.visibility = 'hidden';} // hide, but let the element keep its size
 	else{ MazeDiv.style.visibility = 'visible';}
-	generateMaze();
+	if(EM<=3 || EM == 8){
+		generateTrainingMaze();
+	}
+	else if(EM == 5 || EM == 4){
+		generateTestingMaze();
+	}
+	else{
+		generateMaze();
+	}
 	drawMaze(Maze,MazeLength);
 	drawMetrics();
 	drawControls(-1);
@@ -442,6 +474,7 @@ function getNeighbours(Direction){
 				[-1,0],
 				[0,-1]
 			];
+			NeighbourCount = [0,0,0,0];
 			break;
 		case 2://8 Neighbours
 			Neighbour = [
@@ -454,6 +487,7 @@ function getNeighbours(Direction){
 				[0,-1],
 				[1,-1]
 			];
+			NeighbourCount = [0,0,0,0,0,0,0,0];
 			break;
 	}
 	return Neighbour;
@@ -585,6 +619,267 @@ function generateMaze(){
 							//        alert('Draw Maze');
 							//drawMaze(Maze,MazeLength);
 							//alert('Steps Left '+StepsLeft);
+						}
+					}
+				}
+			}
+		}
+	}while(flag);
+
+	for (var i = 0; i < MazeLength; i++){
+		for (var j = 0; j < MazeLength; j++){
+			if(Maze[i][j] == 6){
+				Maze[i][j] = 1;
+			}
+		}
+	}
+	Maze[prev_pos_x][prev_pos_y] = 6;
+	//alert('Draw Maze');
+	drawMaze(Maze,MazeLength);
+	drawMetrics();
+	next = 0;
+	Hit = 0;
+	Miss = 0;
+	ResponseTime = [];
+	CurrentCuePos = 0;
+	count = 0;
+	Recall = 0;
+	counter = 0;
+	Sounds = [];
+	if(VisualCue == 0){
+		for (var i = 0; i < MazeLength; i++){
+			for (var j = 0; j < MazeLength; j++){
+				Maze[i][j] = 6;
+			}
+		}
+		Maze[start_x][start_y]=5;
+		drawMaze(Maze,MazeLength);
+	}
+	//alert("Maze Generated");
+}
+
+function generateTrainingMaze(){
+	var Blocks = 4 * TotalStimuli;
+	MazeLength = Math.ceil(Math.sqrt(Blocks));
+	var flag = 0;
+	do{
+		flag = 0;
+		var Neighbour = getNeighbours(Direction/4);
+		var NoOfNbr = Neighbour.length;
+		Maze = new Array(MazeLength);
+		for(var i = 0; i<MazeLength;i++){
+			Maze[i] = new Array(MazeLength);
+			for(var j = 0; j<MazeLength;j++){
+				Maze[i][j] = 6;
+			}
+		}
+		Path =  new Array(TotalStimuli);
+		Cue = new Array(TotalStimuli);
+		for(var i = 0; i<TotalStimuli;i++){
+			Path[i] = new Array(2);
+			Cue[i] = new Array(2);
+		}
+		//alert('Draw Maze');
+		//drawMaze(Maze,MazeLength);
+		var Steps = 0;
+		var prev_pos_x = Math.floor(Math.random()*MazeLength);
+		var prev_pos_y = Math.floor(Math.random()*MazeLength);
+		//alert('prev_pos_x ' + prev_pos_x + ' prev_pos_y ' + prev_pos_y );
+		var new_pos_x,new_pos_y,new_pos_x1,new_pos_y1;
+		Maze[prev_pos_x][prev_pos_y] = 5;     //Starting Cell
+		start_x = prev_pos_x;
+		start_y = prev_pos_y;
+		inc_sx = prev_pos_x;
+		inc_sy = prev_pos_y;
+		var NextNbr = 0,pos_x,pos_y;
+		while(Steps < TotalStimuli && flag == 0){
+			flag = 1;
+			for(var nbr=0;nbr<NoOfNbr;nbr++){
+				pos_x = prev_pos_x + Neighbour[nbr][0];
+				pos_y = prev_pos_y + Neighbour[nbr][1];
+				if(pos_x >= 0 && pos_x < MazeLength){
+					if(pos_y >= 0 && pos_y < MazeLength){
+						if(Maze[pos_x][pos_y] == 6){
+							flag = 0;
+						}
+					}
+				}
+			}
+			if(flag == 0){
+				NextNbr =  Math.floor(Math.random()*NoOfNbr);
+				if(NeighbourCount[NextNbr] <= TotalStimuli/Direction){
+					//alert('Next Neighbour ' + NextNbr);
+					new_pos_x = prev_pos_x + Neighbour[NextNbr][0];
+					new_pos_y = prev_pos_y + Neighbour[NextNbr][1];
+					new_pos_x1 = new_pos_x + Neighbour[NextNbr][0];
+					new_pos_y1 = new_pos_y + Neighbour[NextNbr][1];
+					//alert('new_pos_x ' + new_pos_x + ' new_pos_y ' + new_pos_y );
+					if(new_pos_x >= 0 && new_pos_x < MazeLength && new_pos_x1 >= 0 && new_pos_x1 < MazeLength){
+						if(new_pos_y >= 0 && new_pos_y < MazeLength && new_pos_y1 >= 0 && new_pos_y1 < MazeLength){
+							if(Maze[new_pos_x][new_pos_y] == 6 && Maze[new_pos_x1][new_pos_y1] == 6){
+								Maze[new_pos_x][new_pos_y] = 0;
+								Maze[new_pos_x1][new_pos_y1] = 0;
+
+								Path[Steps][0] = new_pos_x;
+								Path[Steps][1] = new_pos_y;
+								Cue[Steps][0] = Neighbour[NextNbr][0];
+								Cue[Steps][1] = Neighbour[NextNbr][1];
+								Path[Steps+1][0] = new_pos_x1;
+								Path[Steps+1][1] = new_pos_y1;
+								Cue[Steps+1][0] = Neighbour[NextNbr][0];
+								Cue[Steps+1][1] = Neighbour[NextNbr][1];
+								Steps = Steps+2;
+								NeighbourCount[NextNbr] = NeighbourCount[NextNbr] + 2;
+								for(var nbr=0;nbr<NoOfNbr;nbr++){
+									pos_x = prev_pos_x + Neighbour[nbr][0];
+									pos_y = prev_pos_y + Neighbour[nbr][1];
+									if(pos_x >= 0 && pos_x < MazeLength){
+										if(pos_y >= 0 && pos_y < MazeLength){
+											if(Maze[pos_x][pos_y] == 6){
+												Maze[pos_x][pos_y] = 1;
+											}
+										}
+									}
+								}
+								for(var nbr=0;nbr<NoOfNbr;nbr++){
+									pos_x = new_pos_x + Neighbour[nbr][0];
+									pos_y = new_pos_y + Neighbour[nbr][1];
+									if(pos_x >= 0 && pos_x < MazeLength){
+										if(pos_y >= 0 && pos_y < MazeLength){
+											if(Maze[pos_x][pos_y] == 6){
+												Maze[pos_x][pos_y] = 1;
+											}
+										}
+									}
+								}
+								prev_pos_x = new_pos_x1;
+								prev_pos_y = new_pos_y1;
+
+								//        alert('Draw Maze');
+								//drawMaze(Maze,MazeLength);
+								//alert('Steps Left '+StepsLeft);
+							}
+						}
+					}
+				}
+			}
+		}
+	}while(flag);
+
+	for (var i = 0; i < MazeLength; i++){
+		for (var j = 0; j < MazeLength; j++){
+			if(Maze[i][j] == 6){
+				Maze[i][j] = 1;
+			}
+		}
+	}
+	Maze[prev_pos_x][prev_pos_y] = 6;
+	//alert('Draw Maze');
+	drawMaze(Maze,MazeLength);
+	drawMetrics();
+	next = 0;
+	Hit = 0;
+	Miss = 0;
+	ResponseTime = [];
+	CurrentCuePos = 0;
+	count = 0;
+	Recall = 0;
+	counter = 0;
+	Sounds = [];
+	if(VisualCue == 0){
+		for (var i = 0; i < MazeLength; i++){
+			for (var j = 0; j < MazeLength; j++){
+				Maze[i][j] = 6;
+			}
+		}
+		Maze[start_x][start_y]=5;
+		drawMaze(Maze,MazeLength);
+	}
+	//alert("Maze Generated");
+}
+
+function generateTestingMaze(){
+	var Blocks = 4 * TotalStimuli;
+	MazeLength = Math.ceil(Math.sqrt(Blocks));
+	var flag = 0;
+	do{
+		flag = 0;
+		var Neighbour = getNeighbours(Direction/4);
+		var NoOfNbr = Neighbour.length;
+		Maze = new Array(MazeLength);
+		for(var i = 0; i<MazeLength;i++){
+			Maze[i] = new Array(MazeLength);
+			for(var j = 0; j<MazeLength;j++){
+				Maze[i][j] = 6;
+			}
+		}
+		Path =  new Array(TotalStimuli);
+		Cue = new Array(TotalStimuli);
+		for(var i = 0; i<TotalStimuli;i++){
+			Path[i] = new Array(2);
+			Cue[i] = new Array(2);
+		}
+		//alert('Draw Maze');
+		//drawMaze(Maze,MazeLength);
+		var Steps = 0;
+		var prev_pos_x = Math.floor(Math.random()*MazeLength);
+		var prev_pos_y = Math.floor(Math.random()*MazeLength);
+		//alert('prev_pos_x ' + prev_pos_x + ' prev_pos_y ' + prev_pos_y );
+		var new_pos_x,new_pos_y;
+		Maze[prev_pos_x][prev_pos_y] = 5;     //Starting Cell
+		start_x = prev_pos_x;
+		start_y = prev_pos_y;
+		inc_sx = prev_pos_x;
+		inc_sy = prev_pos_y;
+		var NextNbr = 0,pos_x,pos_y;
+		while(Steps < TotalStimuli && flag == 0){
+			flag = 1;
+			for(var nbr=0;nbr<NoOfNbr;nbr++){
+				pos_x = prev_pos_x + Neighbour[nbr][0];
+				pos_y = prev_pos_y + Neighbour[nbr][1];
+				if(pos_x >= 0 && pos_x < MazeLength){
+					if(pos_y >= 0 && pos_y < MazeLength){
+						if(Maze[pos_x][pos_y] == 6){
+							flag = 0;
+						}
+					}
+				}
+			}
+			if(flag == 0){
+				NextNbr =  Math.floor(Math.random()*NoOfNbr);
+				if(NeighbourCount[NextNbr] <= TotalStimuli/Direction){
+					//alert('Next Neighbour ' + NextNbr);
+					new_pos_x = prev_pos_x + Neighbour[NextNbr][0];
+					new_pos_y = prev_pos_y + Neighbour[NextNbr][1];
+					//alert('new_pos_x ' + new_pos_x + ' new_pos_y ' + new_pos_y );
+					if(new_pos_x >= 0 && new_pos_x < MazeLength ){
+						if(new_pos_y >= 0 && new_pos_y < MazeLength ){
+							if(Maze[new_pos_x][new_pos_y] == 6 ){
+								Maze[new_pos_x][new_pos_y] = 0;
+								Path[Steps][0] = new_pos_x;
+								Path[Steps][1] = new_pos_y;
+								Cue[Steps][0] = Neighbour[NextNbr][0];
+								Cue[Steps][1] = Neighbour[NextNbr][1];
+								Steps = Steps+1;
+								NeighbourCount[NextNbr] = NeighbourCount[NextNbr] + 1;
+								for(var nbr=0;nbr<NoOfNbr;nbr++){
+									pos_x = prev_pos_x + Neighbour[nbr][0];
+									pos_y = prev_pos_y + Neighbour[nbr][1];
+									if(pos_x >= 0 && pos_x < MazeLength){
+										if(pos_y >= 0 && pos_y < MazeLength){
+											if(Maze[pos_x][pos_y] == 6){
+												Maze[pos_x][pos_y] = 1;
+											}
+										}
+									}
+								}
+								prev_pos_x = new_pos_x;
+								prev_pos_y = new_pos_y;
+
+								//        alert('Draw Maze');
+								//drawMaze(Maze,MazeLength);
+								//alert('Steps Left '+StepsLeft);
+							}
 						}
 					}
 				}

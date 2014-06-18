@@ -1,12 +1,12 @@
 var ExperimentMode,SelectedMode,InterStimulusInterval='',InterTrialInterval = '500',StartTime,StopTime,TotalTime,BestISI = '';
-var NoOfWMMaps = 3,NoOfDemoMaps = 2,NoOfTrainingMaps = 40, NoOfTestingMaps = 3;
-var WM_PathLength = 35, Training_PathLength = 10, Testing_PathLength = 50,WM_SETSIZE = 8;
+var NoOfWMMaps = 3,NoOfDemoMaps = 1,NoOfTrainingMaps = 20, NoOfTestingMaps = 1;
+var WM_PathLength = 35, Training_PathLength = 16, Testing_PathLength = 40,WM_SETSIZE = 8, Demo_PathLength = 14;
 var AccuracyThreshold = 90, ConsecutiveMap = 2, MinimumTrainingMap = 2;
 var Staircase, Staircase_PathLength = 210,NoOfStaircaseMaps = 1, StaircaseCueLength = 3,StaircaseAccuracy = 80;
 var StaircaseDistance = 100,Collision_PathLength = 30, CollisionMap = 1, Collision = 0;
 var	ExperimentDetails = [],ISID = [],ExperimentData = [];
 var BreakTime = 2; //2 minutes break between each switch
-var ISID_Head = "USERID,InterStimulusInterval,TimeStamp",
+var ISID_Head = "USERID,InterStimulusInterval,PHASENO,TimeStamp",
 	  ExperimentDetails_Head = "USERID,GROUPID,PHASENO,EXPERIMENT_MODE,#_of_Maps,Trial_per_Map,Total_Trials,ISI,ITI," +
 															"StartTime,StopTime,TotalTime,BreakTime,Remarks,TimeStamp",
 		ExperimentData_Head = "USERID,GROUPID,PHASENO,EXPERIMENT_MODE,DIRECTION,FILE_INDEX,MAP_NO,TRIAL_NO,TRIAL_LENGTH,InterStimuliInterval,S1,S2,S3,S4,S5," +
@@ -28,8 +28,8 @@ function disableED(flag){
 	document.getElementById("SavePD").disabled = !flag;
 	document.getElementById("Staircase").checked = false;
 	document.getElementById("NoOfWMMaps").value = 3;
-	document.getElementById("NoOfDemoMaps").value = 2;
-	document.getElementById("NoOfTrainingMaps").value = 40;
+	document.getElementById("NoOfDemoMaps").value = 1;
+	document.getElementById("NoOfTrainingMaps").value = 20;
 	document.getElementById("AccuracyThreshold").value = 90;
 }
 
@@ -118,16 +118,17 @@ function validateExperimentDetails(){
 	NoOfDemoMaps = parseInt(document.getElementById("NoOfDemoMaps").value);
 	NoOfTrainingMaps = parseInt(document.getElementById("NoOfTrainingMaps").value);
 	AccuracyThreshold = parseInt(document.getElementById("AccuracyThreshold").value);
-	if(PHASENO == 'Phase_1' && !Staircase)
+//	if(PHASENO == 'Phase_1' && !Staircase)
+	if(PHASENO != 'Phase_2' && !Staircase)  // Now ISI in both Phase 1 and Phase 3
     { alert("Please check ISI Staircase for selection of Inter Stimulus Interval");}
-	else{
-		getISI();
-		if(BestISI == '' && PHASENO == 'Phase_3' && !Staircase)
-		{alert("Please check ISI Staircase for selection of Inter Stimulus Interval");}
-		else if(ExperimentMode=="" || isNaN(NoOfWMMaps) || isNaN(NoOfDemoMaps) || isNaN(NoOfTrainingMaps)|| isNaN(AccuracyThreshold) || NoOfWMMaps <3 || AccuracyThreshold <60 || NoOfDemoMaps <2 || NoOfTrainingMaps <20){
-			alert("Please Enter Valid Experiment Parameters");
-		}
-		else {
+//	else{
+//		getISI();
+//		if(BestISI == '' && PHASENO == 'Phase_3' && !Staircase)
+//		{alert("Please check ISI Staircase for selection of Inter Stimulus Interval");}
+	else if(ExperimentMode=="" || isNaN(NoOfWMMaps) || isNaN(NoOfDemoMaps) || isNaN(NoOfTrainingMaps)|| isNaN(AccuracyThreshold) || NoOfWMMaps <3 || AccuracyThreshold <60 || NoOfDemoMaps <1 || NoOfTrainingMaps <20){
+		alert("Please Enter Valid Experiment Parameters");
+	}
+	else {
 			StartTime = new Date().getTime();
 			if(BestISI == ''){BestISI = InterTrialInterval;console.log("BEST ISI value: "+BestISI);}
 			initialize(PD_FileName,ParticipantDetails_Head,url+createfile);
@@ -138,8 +139,8 @@ function validateExperimentDetails(){
 			initialize(ExperimentData_Filename,ExperimentData_Head,url+createfile);
 			initialize(User_DataFolder,'',url+createuser);
 			startExperiment();
-		}
 	}
+	//}
 }
 
 // to create file and folder for the user

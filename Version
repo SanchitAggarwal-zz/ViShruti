@@ -25,7 +25,20 @@ ViShruti Version Information:
 		2.	Modified On : 15th May 2014
 		3. 	Main Features:
 		        a) ABAB design for WM phases. To check fatigue and break boredom, increased no of maps for both 4 direction and 8 direction to 6 each.
-		        b) randomized stair casing for selection of ISI interval
+		        	 3 for A1, 3 for A2, 3 for B1 and 3 for B2 where A and B represents 4 direction and B 8 Direction
+		        	 blocks respectively.
+		        b) randomized stair casing for selection of ISI interval with fixed stimuli (#3) per trial.
+		        	 10 trials for each (25,50,100,200,300,400 and 500) ms intervals.
+               Minimum ISI for which recall is >80% is selected as Best ISI on which the rest of the experiment is
+               conducted.
+               In case, there are two ISI with recall >80% and are 100 ms apart then again 5-5 trial are presented to
+                select the best among the two.
+                case 1) For eg. 100,500 comes to the candidate ISI,
+                then in order to select the best ISI, 5-5 trial for both are given and then the minimum with recall
+                >80 is selected among the two.
+                case 2) For eg. 100,200,400 , Best ISI = 100.
+            c) Demo added before each block.
+               Each Demo will have
 		        c) Consistent 2 Minutes gaps between each phase and between each switch
-		        d) changes in database recordings,  implemented mongoDb to store per trial input/response
+		        d) changes in database recordings,  implemented node js to store per trial input/response
 		        e) Joystick controls added

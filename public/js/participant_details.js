@@ -24,8 +24,8 @@ function DummyData(){
 	  document.getElementById("Consent").checked = true;
     document.getElementById("ExperimentMode").value = 'Working_Memory';
     document.getElementById("NoOfWMMaps").value = '3';
-	  document.getElementById("NoOfDemoMaps").value = '2';
-	  document.getElementById("NoOfTrainingMaps").value = '40';
+	  document.getElementById("NoOfDemoMaps").value = '1';
+	  document.getElementById("NoOfTrainingMaps").value = '20';
     document.getElementById("AccuracyThreshold").value = '90';
     document.getElementById("Staircase").disabled = true;
     document.getElementById("Staircase").checked = true;

@@ -371,7 +371,7 @@ else{
 						clearInterval(checkFunctionQueue);
 						stopExperiment();
 		case 3: TimeStamp = new Date().toString();
-						save(ISID_Filename,[USERID,BestISI,TimeStamp]);
+						save(ISID_Filename,[USERID,BestISI,PHASENO,TimeStamp]);
 	}
 }
 

@@ -1,6 +1,6 @@
 var ExperimentMode,SelectedMode,InterStimulusInterval='',InterTrialInterval = '500',StartTime,StopTime,TotalTime,BestISI = '';
-var NoOfWMMaps = 3,NoOfDemoMaps = 1,NoOfTrainingMaps = 20, NoOfTestingMaps = 1;
-var WM_PathLength = 35, Training_PathLength = 16, Testing_PathLength = 40,WM_SETSIZE = 8, Demo_PathLength = 14;
+var NoOfWMMaps = 3,NoOfDemoMaps = 1,NoOfTrainingMaps = 20, NoOfTestingMaps = 5;
+var WM_PathLength = 35, Training_PathLength = 16, Testing_PathLength = 20,WM_SETSIZE = 8, Demo_PathLength = 14;
 var AccuracyThreshold = 90, ConsecutiveMap = 2, MinimumTrainingMap = 2;
 var Staircase, Staircase_PathLength = 210,NoOfStaircaseMaps = 1, StaircaseCueLength = 3,StaircaseAccuracy = 80;
 var StaircaseDistance = 100,Collision_PathLength = 30, CollisionMap = 1, Collision = 0;

@@ -396,11 +396,10 @@ function SaveCanvasImage(){
 }
 
 function isConsecutiveMapAccuracy(){
-	consecutiveMapAccuracy = (consecutiveMapAccuracy + currentAccuracy)/ConsecutiveMap;
-	console.log('Consecutive Map Accuracy: ' + consecutiveMapAccuracy);
+	consecutiveMapAccuracy = (previousMapAccuracy + currentAccuracy)/ConsecutiveMap;
+	console.log('Consecutive Map Accuracy: ' + consecutiveMapAccuracy + ' Current Map Accuracy: ' + currentAccuracy);
 	var EM = ExperimentList[CurrentMode];
-	if(CurrentMapNo-MinimumTrainingMap-consecutiveMapChunk>=ConsecutiveMap && EM <= 3){
-		if(consecutiveMapAccuracy >= AccuracyThreshold){
+	if(CurrentMapNo > MinimumTrainingMap && EM <= 3 && consecutiveMapAccuracy >= AccuracyThreshold){
 			console.log("Accuracy for "+ ConsecutiveMap + " consecutive map is greater than " + AccuracyThreshold + "% threshold ,switching to another mode");
 			var i = CurrentMapNo;
 			while(i<NoOfMaps){
@@ -411,11 +410,6 @@ function isConsecutiveMapAccuracy(){
 				i++;
 			}
 		}
-		else{
-			consecutiveMapChunk++;
-			consecutiveMapAccuracy = 0;
-		}
-	}
 	else if(CurrentMapNo==NoOfMaps && EM <= 3){
 		ExperimentMsg = "Accuracy for "+ ConsecutiveMap + " consecutive map is less than " + AccuracyThreshold + "% threshold , Terminating Experiment";
 		console.log(ExperimentMsg);
@@ -431,6 +425,9 @@ function isConsecutiveMapAccuracy(){
 			clearInterval(checkFunctionQueue);
 			stopExperiment();
 		}
+	else{
+		previousMapAccuracy = currentAccuracy;
+	}
 }
 //globalID = requestAnimationFrame(joyStickResponse);
 function KeyBoardResponse(){

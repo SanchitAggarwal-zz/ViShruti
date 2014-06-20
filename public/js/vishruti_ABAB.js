@@ -697,6 +697,7 @@ function generateTrainingMaze(){
 		DirectionSet.splice(index,1);
 		NoOfNbr = DirectionSet.length;
 		NextNbr =  DirectionSet[Math.floor(Math.random()*NoOfNbr)];
+		console.log("NextNbr:" + NextNbr + " DirectionSet: " + DirectionSet + " Remaining set:" + RemainingDirectionSet);
 		flag = 1;
 		pos_x = prev_pos_x + Neighbour[NextNbr][0];
 		pos_y = prev_pos_y + Neighbour[NextNbr][1];
@@ -749,6 +750,7 @@ function generateTrainingMaze(){
 				}
 			}
 			Steps = Steps + 2;
+			NeighbourCount[NextNbr] = NeighbourCount[NextNbr] + 2;
 			prev_pos_x = new_pos_x1;
 			prev_pos_y = new_pos_y1;
 			if(index<99){DirectionSet.push(OppositeNbr);}
@@ -759,9 +761,18 @@ function generateTrainingMaze(){
 		else{
 			RemainingDirectionSet =  RemainingDirectionSet.concat(DirectionSet.splice(DirectionSet.indexOf(NextNbr),1)); //remove the next nbr from Direction set
 		}
+		if(NeighbourCount[NextNbr]>=TotalStimuli/Direction){
+			index = DirectionSet.indexOf(NextNbr);     //removing NextNbr from Direction Set, for the firstime none to remove
+			index = index<0?99:index;
+			DirectionSet.splice(index,1);
+			index = RemainingDirectionSet.indexOf(NextNbr);     //removing NextNbr from Direction Set, for the firstime none to remove
+			index = index<0?99:index;
+			RemainingDirectionSet.splice(index,1);
+		}
+		console.log('Generated Direction Sequence is '+DirectionSequence);
 	}while(Steps<TotalStimuli);
 
-	console.log('Generated Direction Sequence is '+DirectionSequence);
+
 	for (var i = 0; i < MazeLength; i++){
 		for (var j = 0; j < MazeLength; j++){
 			if(Maze[i][j] == 6){

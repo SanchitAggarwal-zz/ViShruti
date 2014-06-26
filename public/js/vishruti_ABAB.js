@@ -661,9 +661,9 @@ function generateMaze(){
 function generateTrainingMaze(){
 	//Stimuli of same direction given consecutively two time so to have better association
 	//Total Stimuli should be 8 or 16 only, For 8 Maze is 7X7 and for 16 Maze is 10x10
-	var Blocks = 7 * TotalStimuli;
+	var Blocks = 8 * TotalStimuli;
 	MazeLength = Math.ceil(Math.sqrt(Blocks));
-	MazeLength = MazeLength%2?MazeLength:MazeLength+1;
+	MazeLength = MazeLength%2?MazeLength+2:MazeLength+4;
 	var Neighbour = getNeighbours(Direction/4);
 	var DirectionSequence = new Array(TotalStimuli);
 	var DirectionSet = Direction==4?[0,1,2,3]:[0,1,2,3,4,5,6,7];
@@ -682,8 +682,10 @@ function generateTrainingMaze(){
 		Cue[i] = new Array(2);
 	}
 	var Steps = 0;
-	var prev_pos_x = Math.floor(MazeLength/2);  //start from middle of the maze
-	var prev_pos_y = Math.floor(MazeLength/2);
+//	var prev_pos_x = Math.floor(MazeLength/2);  //start from middle of the maze
+//	var prev_pos_y = Math.floor(MazeLength/2);
+	var prev_pos_x = Math.floor(MazeLength/2);  //start from top left block of the maze
+	var prev_pos_y = 2;
 	var new_pos_x,new_pos_y,pos_x,pos_y,new_pos_x1,new_pos_y1,flag;
 	Maze[prev_pos_x][prev_pos_y] = 5;     //Starting Cell
 	start_x = prev_pos_x;
@@ -692,42 +694,45 @@ function generateTrainingMaze(){
 	inc_sy = prev_pos_y;
 	var OppositeNbr = 99,NextNbr,NoOfNbr,index;
 	do{
+		drawMaze(Maze,MazeLength);
 		index = DirectionSet.indexOf(OppositeNbr);     //removing OppositeNbr from Direction Set, for the firstime none to remove
 		index = index<0?99:index;
-		DirectionSet.splice(index,1);
+		RemainingDirectionSet =  RemainingDirectionSet.concat(DirectionSet.splice(index,1));
 		NoOfNbr = DirectionSet.length;
 		NextNbr =  DirectionSet[Math.floor(Math.random()*NoOfNbr)];
-		console.log("NextNbr:" + NextNbr + " DirectionSet: " + DirectionSet + " Remaining set:" + RemainingDirectionSet);
+		console.log("NextNbr:" + NextNbr + " DirectionSet: " + DirectionSet + " Remaining set:" + RemainingDirectionSet + " DirectionsSeq: " + DirectionSequence);
 		flag = 1;
 		pos_x = prev_pos_x + Neighbour[NextNbr][0];
 		pos_y = prev_pos_y + Neighbour[NextNbr][1];
-		if(pos_x < 0 || pos_x >= MazeLength || pos_y < 0 || pos_y >= MazeLength || Maze[pos_x][pos_y] != 6){
+		if(pos_x < 1 || pos_x >= MazeLength-1 || pos_y < 1 || pos_y >= MazeLength-1 || Maze[pos_x][pos_y] != 6){
 					flag = 0;
-		}else{
-			pos_x = pos_x + Neighbour[NextNbr][0];
-			pos_y = pos_y + Neighbour[NextNbr][1];
-			if(pos_x < 0 || pos_x >= MazeLength || pos_y < 0 || pos_y >= MazeLength || Maze[pos_x][pos_y] != 6){
-				flag = 0;
-			}
 		}
+//		else{
+//			pos_x = pos_x + Neighbour[NextNbr][0];
+//			pos_y = pos_y + Neighbour[NextNbr][1];
+//			if(pos_x < 0 || pos_x >= MazeLength || pos_y < 0 || pos_y >= MazeLength || Maze[pos_x][pos_y] != 6){
+//				flag = 0;
+//			}
+//		}
 		if(flag){
 			DirectionSequence[Steps] = NextNbr;
-			DirectionSequence[Steps+1] = NextNbr;
+
 			new_pos_x = prev_pos_x + Neighbour[NextNbr][0];
 			new_pos_y = prev_pos_y + Neighbour[NextNbr][1];
-			new_pos_x1 = new_pos_x + Neighbour[NextNbr][0];
-			new_pos_y1 = new_pos_y + Neighbour[NextNbr][1];
 			Maze[new_pos_x][new_pos_y] = 0;
-			Maze[new_pos_x1][new_pos_y1] = 0;
 			Path[Steps][0] = new_pos_x;
 			Path[Steps][1] = new_pos_y;
 			Cue[Steps][0] = Neighbour[NextNbr][0];
 			Cue[Steps][1] = Neighbour[NextNbr][1];
-			Path[Steps+1][0] = new_pos_x1;
-			Path[Steps+1][1] = new_pos_y1;
-			Cue[Steps+1][0] = Neighbour[NextNbr][0];
-			Cue[Steps+1][1] = Neighbour[NextNbr][1];
-			for(var nbr=0;nbr<NoOfNbr;nbr++){
+//			DirectionSequence[Steps+1] = NextNbr;
+//			new_pos_x1 = new_pos_x + Neighbour[NextNbr][0];
+//			new_pos_y1 = new_pos_y + Neighbour[NextNbr][1];
+//			Maze[new_pos_x1][new_pos_y1] = 0;
+//			Path[Steps+1][0] = new_pos_x1;
+//			Path[Steps+1][1] = new_pos_y1;
+//			Cue[Steps+1][0] = Neighbour[NextNbr][0];
+//			Cue[Steps+1][1] = Neighbour[NextNbr][1];
+			for(var nbr=0;nbr<Direction;nbr++){
 				pos_x = prev_pos_x + Neighbour[nbr][0];
 				pos_y = prev_pos_y + Neighbour[nbr][1];
 				if(pos_x >= 0 && pos_x < MazeLength){
@@ -738,40 +743,42 @@ function generateTrainingMaze(){
 					}
 				}
 			}
-			for(var nbr=0;nbr<NoOfNbr;nbr++){
-				pos_x = new_pos_x + Neighbour[nbr][0];
-				pos_y = new_pos_y + Neighbour[nbr][1];
-				if(pos_x >= 0 && pos_x < MazeLength){
-					if(pos_y >= 0 && pos_y < MazeLength){
-						if(Maze[pos_x][pos_y] == 6){
-							Maze[pos_x][pos_y] = 1;
-						}
-					}
-				}
-			}
-			Steps = Steps + 2;
-			NeighbourCount[NextNbr] = NeighbourCount[NextNbr] + 2;
-			prev_pos_x = new_pos_x1;
-			prev_pos_y = new_pos_y1;
-			if(index<99){DirectionSet.push(OppositeNbr);}
+//			for(var nbr=0;nbr<NoOfNbr;nbr++){
+//				pos_x = new_pos_x + Neighbour[nbr][0];
+//				pos_y = new_pos_y + Neighbour[nbr][1];
+//				if(pos_x >= 0 && pos_x < MazeLength){
+//					if(pos_y >= 0 && pos_y < MazeLength){
+//						if(Maze[pos_x][pos_y] == 6){
+//							Maze[pos_x][pos_y] = 1;
+//						}
+//					}
+//				}
+//			}
+//			Steps = Steps + 2;
+			Steps = Steps + 1;
+			NeighbourCount[NextNbr] = NeighbourCount[NextNbr] + 1;
+//			prev_pos_x = new_pos_x1;
+//			prev_pos_y = new_pos_y1;
+			prev_pos_x = new_pos_x;
+			prev_pos_y = new_pos_y;
 			OppositeNbr = NextNbr%2==0?NextNbr+1:NextNbr-1;  //see ordering of Neighbours to see how opposite nbrs are arranged, eg E,W (0:1) , N,S (2,3), NE,SW (4,5) NW,SE(6,7)
 			DirectionSet = DirectionSet.concat(RemainingDirectionSet);
 			RemainingDirectionSet = [];
 		}
 		else{
+			OppositeNbr = 99;
 			RemainingDirectionSet =  RemainingDirectionSet.concat(DirectionSet.splice(DirectionSet.indexOf(NextNbr),1)); //remove the next nbr from Direction set
 		}
-		if(NeighbourCount[NextNbr]>=TotalStimuli/Direction){
-			index = DirectionSet.indexOf(NextNbr);     //removing NextNbr from Direction Set, for the firstime none to remove
+		if(NeighbourCount[NextNbr]>=Math.ceil(TotalStimuli/Direction)){
+			index = DirectionSet.indexOf(NextNbr);     //removing NextNbr from Direction Set
 			index = index<0?99:index;
 			DirectionSet.splice(index,1);
-			index = RemainingDirectionSet.indexOf(NextNbr);     //removing NextNbr from Direction Set, for the firstime none to remove
+			index = RemainingDirectionSet.indexOf(NextNbr);     //removing NextNbr from Direction Set
 			index = index<0?99:index;
 			RemainingDirectionSet.splice(index,1);
 		}
-		console.log('Generated Direction Sequence is '+DirectionSequence);
 	}while(Steps<TotalStimuli);
-
+	alert(DirectionSequence);
 
 	for (var i = 0; i < MazeLength; i++){
 		for (var j = 0; j < MazeLength; j++){

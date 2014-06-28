@@ -396,10 +396,10 @@ function SaveCanvasImage(){
 }
 
 function isConsecutiveMapAccuracy(){
-	consecutiveMapAccuracy = (previousMapAccuracy + currentAccuracy)/ConsecutiveMap;
-	console.log('Consecutive Map Accuracy: ' + consecutiveMapAccuracy + ' Current Map Accuracy: ' + currentAccuracy);
+//	consecutiveMapAccuracy = (previousMapAccuracy + currentAccuracy)/ConsecutiveMap;
+//	console.log('Consecutive Map Accuracy: ' + consecutiveMapAccuracy + ' Current Map Accuracy: ' + currentAccuracy);
 	var EM = ExperimentList[CurrentMode];
-	if(CurrentMapNo > MinimumTrainingMap && EM <= 3 && consecutiveMapAccuracy >= AccuracyThreshold){
+	if(CurrentMapNo > MinimumTrainingMap && EM <= 3 && currentAccuracy >= AccuracyThreshold){
 			console.log("Accuracy for "+ ConsecutiveMap + " consecutive map is greater than " + AccuracyThreshold + "% threshold ,switching to another mode");
 			var i = CurrentMapNo;
 			while(i<NoOfMaps){

@@ -133,7 +133,6 @@ function onUserInput() {
 		initJoyStick();
 	}
 	else{
-		//console.log('KeyBoard Control');
 		KeyBoard = true;
 
 	}
@@ -436,8 +435,9 @@ function KeyBoardResponse(){
 		var key_index_a = findIndex(inputDirection_a,key_code);
 		var key_index_b = findIndex(inputDirection_b,key_code);
 		var input_index = key_index_a > key_index_b ? key_index_a:key_index_b;
+		console.log("Key "+ key_code + " Pressed");
 		if(key_index_a == 9 ||key_index_b==9){
-			console.log("Key Pressed, Play Next Trial");
+			console.log("Space bar is pressed, Play Next Trial");
 			playNextTrial();
 		}
 		else if(key_index_a == -1 && key_index_b == -1){
@@ -446,13 +446,12 @@ function KeyBoardResponse(){
 		else{
 			InterResponseTime = (new Date().getTime() - waitTime)/1000;
 			waitTime = new Date().getTime();
-			console.log(input_index);
-			console.log("Response Recorded: ");
+			console.log("Response "+ input_index +" Recorded: ");
 			checkResponse(input_index);
 		}
 	}
 	else{
-		console.log('No Input');
+		console.log('Playing Next Trial, Input Not allowed');
 	}
 }
 

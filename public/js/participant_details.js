@@ -113,7 +113,7 @@ function participantDetails(){
 				  TimeStamp = new Date().toString();
 
 				  if(USERID == "NewParticipant") {
-				    USERID = GROUPID + '_' + GENDER[0] + '_' + FIRSTNAME + '_' + (PD.length + 1).toString(16);
+				    USERID = GROUPID + '_' + GENDER[0] + '_' + FIRSTNAME + '_' + LASTNAME + '_' + PD.length;
 					  alert('Please Note Your USER_ID for future reference: ' + USERID);
 				  }
 				  else{

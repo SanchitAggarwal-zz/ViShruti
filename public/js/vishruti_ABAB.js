@@ -460,6 +460,7 @@ function playSounds(){
 	else{
 		TrialTime = (new Date().getTime() - TrialTime)/1000;
 		waitTime = new Date().getTime();
+		console.log("sound ended");
 		StartExp = true;
 	}
 }
@@ -847,8 +848,6 @@ function generateTestingMaze(){
 		var Steps = 0;
 		var prev_pos_x = 1+Math.floor(Math.random()*MazeLength-2);
 		var prev_pos_y = 1+Math.floor(Math.random()*MazeLength-2);
-//		var prev_pos_x = Math.floor(MazeLength/2);  //start from top left block of the maze
-//		var prev_pos_y = 2;
 		var new_pos_x,new_pos_y,pos_x,pos_y,new_pos_x1,new_pos_y1,flag;
 		Maze[prev_pos_x][prev_pos_y] = 5;     //Starting Cell
 		start_x = prev_pos_x;
@@ -875,13 +874,6 @@ function generateTestingMaze(){
 			if(pos_x < 1 || pos_x >= MazeLength-1 || pos_y < 1 || pos_y >= MazeLength-1 || Maze[pos_x][pos_y] != 6){
 				flag = 0;
 			}
-			//		else{
-			//			pos_x = pos_x + Neighbour[NextNbr][0];
-			//			pos_y = pos_y + Neighbour[NextNbr][1];
-			//			if(pos_x < 0 || pos_x >= MazeLength || pos_y < 0 || pos_y >= MazeLength || Maze[pos_x][pos_y] != 6){
-			//				flag = 0;
-			//			}
-			//		}
 			if(flag){
 				DirectionSequence[Steps] = NextNbr;
 
@@ -892,14 +884,6 @@ function generateTestingMaze(){
 				Path[Steps][1] = new_pos_y;
 				Cue[Steps][0] = Neighbour[NextNbr][0];
 				Cue[Steps][1] = Neighbour[NextNbr][1];
-				//			DirectionSequence[Steps+1] = NextNbr;
-				//			new_pos_x1 = new_pos_x + Neighbour[NextNbr][0];
-				//			new_pos_y1 = new_pos_y + Neighbour[NextNbr][1];
-				//			Maze[new_pos_x1][new_pos_y1] = 0;
-				//			Path[Steps+1][0] = new_pos_x1;
-				//			Path[Steps+1][1] = new_pos_y1;
-				//			Cue[Steps+1][0] = Neighbour[NextNbr][0];
-				//			Cue[Steps+1][1] = Neighbour[NextNbr][1];
 				for(var nbr=0;nbr<Direction;nbr++){
 					pos_x = prev_pos_x + Neighbour[nbr][0];
 					pos_y = prev_pos_y + Neighbour[nbr][1];
@@ -911,22 +895,8 @@ function generateTestingMaze(){
 						}
 					}
 				}
-				//			for(var nbr=0;nbr<NoOfNbr;nbr++){
-				//				pos_x = new_pos_x + Neighbour[nbr][0];
-				//				pos_y = new_pos_y + Neighbour[nbr][1];
-				//				if(pos_x >= 0 && pos_x < MazeLength){
-				//					if(pos_y >= 0 && pos_y < MazeLength){
-				//						if(Maze[pos_x][pos_y] == 6){
-				//							Maze[pos_x][pos_y] = 1;
-				//						}
-				//					}
-				//				}
-				//			}
-				//			Steps = Steps + 2;
 				Steps = Steps + 1;
 				NeighbourCount[NextNbr] = NeighbourCount[NextNbr] + 1;
-				//			prev_pos_x = new_pos_x1;
-				//			prev_pos_y = new_pos_y1;
 				prev_pos_x = new_pos_x;
 				prev_pos_y = new_pos_y;
 				OppositeNbr = NextNbr%2==0?NextNbr+1:NextNbr-1;  //see ordering of Neighbours to see how opposite nbrs are arranged, eg E,W (0:1) , N,S (2,3), NE,SW (4,5) NW,SE(6,7)
@@ -979,7 +949,6 @@ function generateTestingMaze(){
 		Maze[start_x][start_y]=5;
 		drawMaze(Maze,MazeLength);
 	}
-	//alert("Maze Generated");
 }
 
 
